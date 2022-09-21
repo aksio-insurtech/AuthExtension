@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 
 ####################################
-# Cratis Server
 # Build runtime image
 ####################################
 ARG VERSION

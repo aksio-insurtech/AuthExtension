@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 
 ####################################
-# Cratis Server
 # Build runtime image
 ####################################
 FROM mcr.microsoft.com/dotnet/runtime:6.0.1-focal
