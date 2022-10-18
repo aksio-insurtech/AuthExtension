@@ -117,8 +117,8 @@ jobs:
           file: ./Docker/Production/Dockerfile
           push: true
           tags: |
-            aksioinsurtech/authextension:${{ needs.release.outputs.version }}
-            aksioinsurtech/authextension:latest
+            aksioinsurtech/nginxmiddleware:${{ needs.release.outputs.version }}
+            aksioinsurtech/nginxmiddleware:latest
           build-args: |
             VERSION=${{ needs.release.outputs.version }}
 
@@ -173,7 +173,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            aksioinsurtech/authextension:${{ needs.release.outputs.version }}-development
-            aksioinsurtech/authextension:latest-development
+            aksioinsurtech/nginxmiddleware:${{ needs.release.outputs.version }}-development
+            aksioinsurtech/nginxmiddleware:latest-development
           build-args: |
             VERSION=${{ needs.release.outputs.version }}
