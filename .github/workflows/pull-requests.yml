@@ -4,7 +4,7 @@ env:
   NUGET_OUTPUT: ./Artifacts/NuGet
   NUGET_SOURCE: https://nuget.pkg.github.com/aksio-insurtech/index.json
   DOTNET_VERSION: "6.0.400"
-  NGINX_MIDDLEWARE_CACHE: "output-cache-${{ github.sha }}"
+  NGINX_MIDDLEWARE_CACHE: "nginx-middleware-cache-${{ github.sha }}"
 
 on:
   pull_request:
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/cache@v3
         id: nginx-middleware-output
         with:
-          path: ./Source//out
+          path: ./Source/out
           key: ${{ env.NGINX_MIDDLEWARE_CACHE }}
 
       - name: Set up QEMU
