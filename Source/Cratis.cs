@@ -7,7 +7,7 @@ namespace Aksio.NginxMiddleware;
 
 public static class Cratis
 {
-    const string TenantsConfigFile = "tenants.json";
+    const string TenantsConfigFile = "./config/tenants.json";
 
     static readonly IDictionary<Guid, IEnumerable<string>> _tenantConfig;
 
