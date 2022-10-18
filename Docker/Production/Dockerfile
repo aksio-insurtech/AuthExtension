@@ -14,9 +14,9 @@ RUN echo Version = ${VERSION}
 
 EXPOSE 80 11111 30000
 
-COPY ./Source/Kernel/Server/out/x64/*.dll .
-COPY ./Source/Kernel/Server/out/x64/*.json .
-COPY ./Source/Kernel/Server/out/x64/*.so .
-COPY ./Source/Kernel/Server/out/x64/NginxMiddleware .
+COPY ./Source/out/x64/*.dll .
+COPY ./Source/out/x64/*.json .
+COPY ./Source/out/x64/*.so .
+COPY ./Source/out/x64/NginxMiddleware .
 
 ENTRYPOINT ["./NginxMiddleware"]

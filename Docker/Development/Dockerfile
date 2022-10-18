@@ -52,7 +52,7 @@ RUN chmod +x ./entrypoint.sh
 COPY Docker/copy-server-files.sh ./copy-server-files.sh
 RUN chmod +x ./copy-server-files.sh
 
-COPY ./Source/Kernel/Server/out ./out
+COPY ./Source/out ./out
 
 RUN echo $PWD
 RUN ./copy-server-files.sh

@@ -6,15 +6,11 @@ on:
       - "main"
     paths:
       - "Source/**"
-      - "!Source/Node/**"
-      - "!Source/Workbench/**"
   pull_request:
     branches:
       - "**"
     paths:
       - "Source/**"
-      - "!Source/Node/**"
-      - "!Source/Workbench/**"
 
 jobs:
   dotnet-build:
