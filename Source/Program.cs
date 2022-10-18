@@ -8,6 +8,7 @@ var app = builder.Build();
 
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
-    await Trudesk.HandleRequest(request, response);
     await Cratis.HandleRequest(request, response);
 });
+
+app.Run();

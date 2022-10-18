@@ -32,7 +32,3 @@ jobs:
       - name: Build & run tests for root
         run: dotnet test --configuration Release
 
-      - name: Build & run tests for bank sample
-        working-directory: ./Samples/Banking/Bank
-        run: dotnet test --configuration Release
-
