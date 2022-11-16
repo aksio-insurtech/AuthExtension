@@ -10,7 +10,6 @@ var configurationBuilder = new ConfigurationBuilder();
 configurationBuilder.AddJsonFile("./config/config.json", optional: false, reloadOnChange: true);
 var configuration = configurationBuilder.Build();
 
-
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
     var config = configuration.Get<Config>();
