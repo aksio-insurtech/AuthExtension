@@ -51,7 +51,7 @@ Below is the target flow it has been designed for:
 ![](./Images/idporten-flow.jpg)
 
 You can read more about the `onbehalfof` support for Id-porten [here](https://docs.digdir.no/docs/idporten/oidc/oidc_api_admin_leverandør.html#1-onbehalfof-i-id-porten) (Norwegian,
-English OIDC summary can be found [here](https://docs.digdir.no/docs/idporten/oidc/oidc_guide_english).
+English OIDC summary can be found [here](https://docs.digdir.no/docs/idporten/oidc/oidc_guide_english)).
 
 ## Config File
 
