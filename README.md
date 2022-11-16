@@ -24,7 +24,9 @@ This will give you a reverse proxy set up on port 8080. Navigate your browser to
 
 ## Auth
 
-The middleware is meant to be plugged into reverse proxy solutions such as Nginx. By leveraging something like the [auth capability of Nginx](https://nginx.org/en/docs/http/ngx_http_auth_request_module.html) the middleware will be called on every request going in and will then mutate the response if needed.
+The middleware is meant to be plugged into reverse proxy solutions such as Nginx. By leveraging something like the
+[auth capability of Nginx](https://nginx.org/en/docs/http/ngx_http_auth_request_module.html) the middleware will be
+called on every request going in and will then mutate the response if needed.
 
 ## Tenant-ID
 
@@ -45,7 +47,8 @@ Below is the target flow it has been designed for:
 
 ![](./Images/idporten-flow.jpg)
 
-You can read more about the `onbehalfof` support for Id-porten [here](https://docs.digdir.no/docs/idporten/oidc/oidc_api_admin_leverandør.html#1-onbehalfof-i-id-porten).
+You can read more about the `onbehalfof` support for Id-porten [here](https://docs.digdir.no/docs/idporten/oidc/oidc_api_admin_leverandør.html#1-onbehalfof-i-id-porten) (Norwegian,
+English OIDC summary can be found [here](https://docs.digdir.no/docs/idporten/oidc/oidc_guide_english).
 
 ## Config File
 
