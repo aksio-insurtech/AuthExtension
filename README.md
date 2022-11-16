@@ -72,7 +72,7 @@ Its format is:
     },
     "tenants": {
         "<tenant guid>": {
-            "domain": "<host string>",
+            "domain": "fully qualified host string",
             "onBehalfOf": "Value to use for id-porten as behalf of"
         }
     }
