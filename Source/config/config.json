@@ -7,7 +7,7 @@
         "clientSecret": "31a2fe01-11f1-4b5d-88ca-523337b7e825",
         "authName": "idporten"
     },
-    "Tenants": {
+    "tenants": {
         "3f5baba5-65d7-4058-886c-aa6fab261a8c": {
             "domain": "ingress.happytree-3d654b41.norwayeast.azurecontainerapps.io",
             "onBehalfOf": "vpk"
