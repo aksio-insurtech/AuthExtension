@@ -1,3 +1,15 @@
+# [v2.0.0] - 2022-11-16 [PR: #6](https://github.com/aksio-insurtech/IngressMiddleware/pull/6)
+
+
+### Added
+
+- Introducing support for Norwegian **Id-porten** as an Identity provider with a custom flow to work with Azure Container App.
+
+### Changed
+
+- Configuration file format changed completely.
+
+
 # [v1.0.2] - 2022-10-18 [PR: #3](https://github.com/aksio-insurtech/NginxMiddleware/pull/3)
 
 ### Fixed
