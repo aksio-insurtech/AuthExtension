@@ -1,3 +1,10 @@
+# [v2.0.1] - 2022-11-16 [PR: #7](https://github.com/aksio-insurtech/IngressMiddleware/pull/7)
+
+### Changed
+
+- Renaming from NginxMiddleware to IngressMiddleware
+
+
 
 # [v2.0.0] - 2022-11-16 [PR: #6](https://github.com/aksio-insurtech/IngressMiddleware/pull/6)
 
