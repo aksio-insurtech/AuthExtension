@@ -1,34 +1,14 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Text.Json;
-
 namespace Aksio.NginxMiddleware;
 
 public static class Cratis
 {
-    const string TenantsConfigFile = "./config/tenants.json";
-
-    static readonly IDictionary<Guid, IEnumerable<string>> _tenantConfig;
-
-    static Cratis()
+    public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response)
     {
-        if (File.Exists(TenantsConfigFile))
-        {
-            var json = File.ReadAllText(TenantsConfigFile);
-            _tenantConfig = JsonSerializer.Deserialize<IDictionary<Guid, IEnumerable<string>>>(json)!;
-        }
-        else
-        {
-            _tenantConfig = new Dictionary<Guid, IEnumerable<string>>();
-        }
-    }
-
-    public static async Task HandleRequest(HttpRequest request, HttpResponse response)
-    {
-        var tenant = _tenantConfig.FirstOrDefault(_ => _.Value.Contains(request.Host.Host));
-        var tenantId = tenant.Key;
-        response.Headers["Tenant-ID"] = tenantId.ToString();
+        var tenant = config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host));
+        response.Headers["Tenant-ID"] = tenant.Key;
         await Task.CompletedTask;
     }
 }

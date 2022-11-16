@@ -1,0 +1,20 @@
+{
+    "idPorten": {
+        "callback": "http://localhost:5000/id-porten/login/callback",
+        "authorizationEndpoint": "https://oidc-ver2.difi.no/idporten-oidc-provider/authorize",
+        "tokenEndpoint": "https://oidc-ver2.difi.no/idporten-oidc-provider/token",
+        "clientId": "064941e7-4bca-47bd-ac7d-9cd39b5c71b8",
+        "clientSecret": "31a2fe01-11f1-4b5d-88ca-523337b7e825",
+        "authName": "idporten"
+    },
+    "Tenants": {
+        "3f5baba5-65d7-4058-886c-aa6fab261a8c": {
+            "domain": "ingress.happytree-3d654b41.norwayeast.azurecontainerapps.io",
+            "onBehalfOf": "vpk"
+        },
+        "eb681eb3-f7ca-4c0b-b309-92625bff5a59": {
+            "domain": "arentdal.opensjon.no",
+            "onBehalfOf": "arendal"
+        }
+    }
+}
