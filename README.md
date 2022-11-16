@@ -1,8 +1,8 @@
-# Aksio NginxMiddleware
+# Aksio IngressMiddleware
 
-[![C# Build](https://github.com/aksio-insurtech/nginxmiddleware/actions/workflows/dotnet-build.yml/badge.svg)](https://github.com/aksio-insurtech/nginxmiddleware/actions/workflows/dotnet-build.yml)
-[![Publish](https://github.com/aksio-insurtech/nginxmiddleware/actions/workflows/publish.yml/badge.svg)](https://github.com/aksio-insurtech/nginxmiddleware/actions/workflows/publish.yml)
-[![Docker](https://img.shields.io/docker/v/aksioinsurtech/nginxmiddleware?label=NginxMiddleware&logo=docker&sort=semver)](https://hub.docker.com/r/aksioinsurtech/nginxmiddleware)
+[![C# Build](https://github.com/aksio-insurtech/IngressMiddleware/actions/workflows/dotnet-build.yml/badge.svg)](https://github.com/aksio-insurtech/IngressMiddleware/actions/workflows/dotnet-build.yml)
+[![Publish](https://github.com/aksio-insurtech/IngressMiddleware/actions/workflows/publish.yml/badge.svg)](https://github.com/aksio-insurtech/IngressMiddleware/actions/workflows/publish.yml)
+[![Docker](https://img.shields.io/docker/v/aksioinsurtech/ingressmiddleware?label=IngressMiddleware&logo=docker&sort=semver)](https://hub.docker.com/r/aksioinsurtech/ingressmiddleware)
 
 This repository holds a middleware used in the hosted environment @ Aksio.
 

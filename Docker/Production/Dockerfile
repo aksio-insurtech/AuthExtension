@@ -17,6 +17,6 @@ EXPOSE 80 11111 30000
 COPY ./Source/out/x64/*.dll .
 COPY ./Source/out/x64/*.json .
 COPY ./Source/out/x64/*.so .
-COPY ./Source/out/x64/NginxMiddleware .
+COPY ./Source/out/x64/IngressMiddleware .
 
-ENTRYPOINT ["./NginxMiddleware"]
+ENTRYPOINT ["./IngressMiddleware"]
