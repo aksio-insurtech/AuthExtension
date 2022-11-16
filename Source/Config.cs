@@ -1,0 +1,9 @@
+// Copyright (c) Aksio Insurtech. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+namespace Aksio.NginxMiddleware;
+
+public class Config
+{
+    public IdPortenConfig IdPorten { get; set; } = new IdPortenConfig();
+    public TenantsConfig Tenants { get; set; } = new TenantsConfig();
+}
