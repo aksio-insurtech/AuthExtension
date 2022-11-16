@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Aksio.NginxMiddleware;
+namespace Aksio.IngressMiddleware;
 
 public static class IdPorten
 {

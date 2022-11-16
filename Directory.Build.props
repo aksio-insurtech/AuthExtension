@@ -10,8 +10,8 @@
         <Copyright>Copyright Aksio Insurtech</Copyright>
         <Authors>all contributors</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/aksio-insurtech/NginxMiddleware</RepositoryUrl>
-        <PackageProjectUrl>https://github.com/aksio-insurtech/NginxMiddleware</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/aksio-insurtech/IngressMiddleware</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/aksio-insurtech/IngressMiddleware</PackageProjectUrl>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
 

@@ -33,4 +33,4 @@ RUN echo $PWD
 RUN ./copy-server-files.sh
 
 EXPOSE 80 11111 30000
-ENTRYPOINT ["dotnet", "./NginxMiddleware.dll"]
+ENTRYPOINT ["dotnet", "./IngressMiddleware.dll"]

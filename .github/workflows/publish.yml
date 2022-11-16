@@ -110,8 +110,8 @@ jobs:
           file: ./Docker/Production/Dockerfile
           push: true
           tags: |
-            aksioinsurtech/nginxmiddleware:${{ needs.release.outputs.version }}
-            aksioinsurtech/nginxmiddleware:latest
+            aksioinsurtech/ingressmiddleware:${{ needs.release.outputs.version }}
+            aksioinsurtech/ingressmiddleware:latest
           build-args: |
             VERSION=${{ needs.release.outputs.version }}
 
@@ -160,7 +160,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            aksioinsurtech/nginxmiddleware:${{ needs.release.outputs.version }}-development
-            aksioinsurtech/nginxmiddleware:latest-development
+            aksioinsurtech/ingressmiddleware:${{ needs.release.outputs.version }}-development
+            aksioinsurtech/ingressmiddleware:latest-development
           build-args: |
             VERSION=${{ needs.release.outputs.version }}
