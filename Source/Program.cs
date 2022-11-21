@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 var configurationBuilder = new ConfigurationBuilder();
-configurationBuilder.AddJsonFile("./config/config.json", optional: false, reloadOnChange: true);
+configurationBuilder.AddJsonFile("./config/config.json", optional: true, reloadOnChange: true);
 var configuration = configurationBuilder.Build();
 
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
