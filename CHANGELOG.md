@@ -1,3 +1,10 @@
+# [v2.0.2] - 2022-11-21 [PR: #8](https://github.com/aksio-insurtech/IngressMiddleware/pull/8)
+
+### Fixed
+
+- Making configuration optional.
+
+
 # [v2.0.1] - 2022-11-16 [PR: #7](https://github.com/aksio-insurtech/IngressMiddleware/pull/7)
 
 ### Changed
