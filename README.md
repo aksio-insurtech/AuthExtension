@@ -62,6 +62,10 @@ Its format is:
 
 ```json
 {
+    "azureAd": {
+        "issuer": "The actual issuer of the configuration . e.g. https://login.microsoftonline.com/v2.0/<tenant id>",
+        "authorizeEndpoint": "The replacement authorize endpoint to modify Well Known config with"
+    },
     "idPorten": {
         "callback": "Callback url to tell Id-porten to call back to",
         "authorizationEndpoint": "The Id-porten authorization endpoint",
