@@ -4,6 +4,7 @@ namespace Aksio.IngressMiddleware;
 
 public class Config
 {
-    public IdPortenConfig IdPorten { get; set; } = new IdPortenConfig();
+    public AzureAdConfig AzureAd { get; set; } = new AzureAdConfig();
+    public IdPortenConfig IdPorten { get; set; } = new IdPortenConfig();
     public TenantsConfig Tenants { get; set; } = new TenantsConfig();
 }
