@@ -82,3 +82,5 @@ Its format is:
     }
 }
 ```
+
+> Note: The specific identity provider configurations are optional. You can have either or all.
