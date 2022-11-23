@@ -38,7 +38,6 @@ public static class IdPorten
         await Task.CompletedTask;
     }
 
-
     public static async Task HandleCallback(Config config, HttpRequest request, HttpResponse response)
     {
         request.Query.TryGetValue("code", out var code);
