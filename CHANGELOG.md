@@ -1,3 +1,10 @@
+# [v2.1.0] - 2022-11-23 [PR: #9](https://github.com/aksio-insurtech/IngressMiddleware/pull/9)
+
+### Added
+
+- Added a way to proxy Azure AD requests and providing a modified `.well-known/openid-configuration` document with authorization url.
+
+
 # [v2.0.2] - 2022-11-21 [PR: #8](https://github.com/aksio-insurtech/IngressMiddleware/pull/8)
 
 ### Fixed
