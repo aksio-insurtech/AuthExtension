@@ -15,7 +15,7 @@ public static class AzureAd
         var json = await result.Content.ReadAsStringAsync();
 
         var document = (JsonNode.Parse(json) as JsonObject)!;
-        document["authorization_endpoint"] = config.AuthorizeUrl;
+        document["authorization_endpoint"] = config.AzureAd.AuthorizeEndpoint;
         await response.WriteAsJsonAsync(document);
     }
 }
