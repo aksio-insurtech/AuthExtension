@@ -17,6 +17,12 @@ app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
     await IdPorten.HandleZumoHeader(config, request, response);
 });
 
+app.MapGet("/azuread/.well-known/openid-configuration", async (HttpRequest request, HttpResponse response) =>
+{
+    var config = configuration.Get<Config>();
+    await AzureAd.HandleWellKnownConfiguration(config, request, response);
+});
+
 app.MapGet("/id-porten/authorize/", async (HttpRequest request, HttpResponse response) =>
 {
     var config = configuration.Get<Config>();
