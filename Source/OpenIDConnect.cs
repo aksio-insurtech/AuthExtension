@@ -9,6 +9,8 @@ public static class OpenIDConnect
 {
     public static async Task<Tokens> ExchangeCodeForAccessToken(OpenIDConnectConfig config, string code)
     {
+        Globals.Logger.LogInformation("ExchangeCodeForAccessToken");
+
         var requestContent = new Dictionary<string, string?>
         {
             {"grant_type", "authorization_code"},
@@ -21,6 +23,9 @@ public static class OpenIDConnect
         var url = QueryHelpers.AddQueryString(config.TokenEndpoint, requestContent);
         var formContent = new FormUrlEncodedContent(requestContent);
         var tokens = await HttpHelper.PostAsync(url, formContent);
+
+        Globals.Logger.LogInformation($"Token result : {tokens.RootElement}");
+
         var accessToken = tokens.RootElement.GetProperty("access_token").GetString()!;
         var idToken = tokens.RootElement.GetProperty("id_token").GetString()!;
         return new Tokens(idToken, accessToken);
