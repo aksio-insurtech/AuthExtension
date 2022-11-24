@@ -4,13 +4,15 @@
 using Aksio.IngressMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
+var loggerFactory = builder.Host.UseDefaultLogging();
 var app = builder.Build();
 
 var configurationBuilder = new ConfigurationBuilder();
 configurationBuilder.AddJsonFile("./config/config.json", optional: true, reloadOnChange: true);
 var configuration = configurationBuilder.Build();
 
-Globals.Logger = app.Services.GetService<ILogger>()!;
+Globals.Logger = loggerFactory.CreateLogger("Default");
+Globals.Logger.LogInformation("Setting up routes");
 
 // https://main-ingress-compositionfc07bcef.salmonbush-348730a4.norwayeast.azurecontainerapps.io
 
