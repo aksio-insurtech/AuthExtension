@@ -10,6 +10,8 @@ var configurationBuilder = new ConfigurationBuilder();
 configurationBuilder.AddJsonFile("./config/config.json", optional: true, reloadOnChange: true);
 var configuration = configurationBuilder.Build();
 
+Globals.Logger = app.Services.GetService<ILogger>()!;
+
 // https://main-ingress-compositionfc07bcef.salmonbush-348730a4.norwayeast.azurecontainerapps.io
 
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
