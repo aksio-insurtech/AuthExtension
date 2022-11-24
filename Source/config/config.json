@@ -1,7 +1,9 @@
 {
     "azureAd": {
         "issuer": "https://login.microsoftonline.com/1042fa82-e1c7-40a8-9c61-a7831ef3f10a/v2.0",
-        "authorizationEndpoint": "https://auth.aksio.app/.aksio/azuread/authorize"
+        "authorizationEndpoint": "https://auth.manager.aksio.app/.aksio/azuread/authorize",
+        "callback": "https://auth.manager.aksio.app/.aksio/azuread/login/callback",
+        "targetAuthorizationEndpoint": "https://login.microsoftonline.com/1042fa82-e1c7-40a8-9c61-a7831ef3f10a/oauth2/v2.0/authorize"
     },
     "idPorten": {
         "callback": "http://localhost:5000/id-porten/login/callback",

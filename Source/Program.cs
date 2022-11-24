@@ -14,10 +14,22 @@ app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
     var config = configuration.Get<Config>();
     await Cratis.HandleRequest(config, request, response);
-    await IdPorten.HandleZumoHeader(config, request, response);
+    await AzureContainerAppAuth.HandleZumoHeader(config, request, response);
 });
 
-app.MapGet("/azuread/.well-known/openid-configuration", async (HttpRequest request, HttpResponse response) =>
+app.MapGet("/aad/authorize", async (HttpRequest request, HttpResponse response) =>
+{
+    var config = configuration.Get<Config>();
+    await AzureAd.HandleAuthorize(config, request, response);
+});
+
+app.MapGet("/aad/login/callback", async (HttpRequest request, HttpResponse response) =>
+{
+    var config = configuration.Get<Config>();
+    await AzureAd.HandleCallback(config, request, response);
+});
+
+app.MapGet("/aad/.well-known/openid-configuration", async (HttpRequest request, HttpResponse response) =>
 {
     var config = configuration.Get<Config>();
     await AzureAd.HandleWellKnownConfiguration(config, request, response);

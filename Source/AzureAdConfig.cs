@@ -5,5 +5,7 @@ namespace Aksio.IngressMiddleware;
 public class AzureAdConfig
 {
     public string Issuer { get; set; } = string.Empty;
-    public string AuthorizeEndpoint { get; set; } = string.Empty;
+    public string AuthorizationEndpoint { get; set; } = string.Empty;
+    public string TargetAuthorizationEndpoint { get; set; } = string.Empty;
+    public string Callback { get; set; } = string.Empty;
 }

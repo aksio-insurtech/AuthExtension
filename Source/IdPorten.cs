@@ -10,8 +10,6 @@ namespace Aksio.IngressMiddleware;
 
 public static class IdPorten
 {
-    const string AuthenticationCookie = ".idporten-authentication";
-
     public static async Task HandleAuthorize(Config config, HttpRequest request, HttpResponse response)
     {
         var query = request.Query.Select(_ => _.Key switch
@@ -31,9 +29,7 @@ public static class IdPorten
         //query["response_mode"] = "form_post";
 
         var queryString = string.Join("&", query.Select(_ => string.Format($"{_.Key}={_.Value}")));
-
         var url = $"{config.IdPorten.AuthorizationEndpoint}?{queryString}";
-        //QueryHelpers.AddQueryString(config.IdPorten.AuthorizationEndpoint, query);
         response.Redirect(url);
         await Task.CompletedTask;
     }
@@ -49,40 +45,19 @@ public static class IdPorten
             new("client_secret", config.IdPorten.ClientSecret)
         });
 
-        var tokens = await PostAsync(url);
+        var tokens = await HttpHelper.PostAsync(url);
         var accessToken = tokens.RootElement.GetProperty("access_token").GetString()!;
         var idToken = tokens.RootElement.GetProperty("id_token").GetString()!;
         var accessTokenAsJWT = new JwtSecurityToken(accessToken);
         var onBehalfOf = accessTokenAsJWT.Claims.First(_ => _.Type == "client_onbehalfof").Value;
 
+        await AzureContainerAppAuth.Login(config.IdPorten, request, response, idToken, accessToken);
+
         var tenant = config.Tenants.First(_ => _.Value.OnBehalfOf == onBehalfOf);
-        var loginUrl = $"https://{tenant.Value.Domain}/.auth/login/{config.IdPorten.AuthName}";
-
-        var loginContent = new StringContent(tokens.RootElement.ToString(), Encoding.UTF8, "application/json");
-        var loginResult = await PostAsync(loginUrl, loginContent);
-
-        var authenticationToken = loginResult.RootElement.GetProperty("authenticationToken").GetString()!;
-        if (request.Cookies.ContainsKey(AuthenticationCookie))
-        {
-            response.Cookies.Delete(AuthenticationCookie);
-        }
-        response.Cookies.Append(AuthenticationCookie, authenticationToken);
-
         var uri = $"https://{tenant.Value.Domain}";
         response.Redirect(uri);
         await Task.CompletedTask;
     }
-
-    public static async Task HandleZumoHeader(Config config, HttpRequest request, HttpResponse response)
-    {
-        if (request.Cookies.TryGetValue(AuthenticationCookie, out var authenticationCookie))
-        {
-            response.Headers.Add("X-ZUMO-AUTH", authenticationCookie);
-        }
-
-        await Task.CompletedTask;
-    }
-
     static KeyValuePair<string, TenantConfig> GetTenantFrom(Config config, HttpRequest request)
     {
         return request.Query
@@ -93,14 +68,5 @@ public static class IdPorten
                 return config.Tenants.First(_ => _.Value.Domain.Equals(uri.Host));
             })
             .Single();
-    }
-
-    static async Task<JsonDocument> PostAsync(string url, HttpContent? httpContent = null)
-    {
-        httpContent ??= new FormUrlEncodedContent(new Dictionary<string, string>());
-        var client = new HttpClient();
-        var response = await client.PostAsync(url, httpContent);
-        var content = await response.Content.ReadAsStringAsync();
-        return JsonDocument.Parse(content);
     }
 }
