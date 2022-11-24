@@ -1,3 +1,10 @@
+# [v2.1.2] - 2022-11-24 [PR: #11](https://github.com/aksio-insurtech/IngressMiddleware/pull/11)
+
+### Fixed
+
+- Adding logging for code exchange
+
+
 # [v2.1.1] - 2022-11-24 [PR: #10](https://github.com/aksio-insurtech/IngressMiddleware/pull/10)
 
 ### Fixed
