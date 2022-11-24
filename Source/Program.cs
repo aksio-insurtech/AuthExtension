@@ -10,6 +10,8 @@ var configurationBuilder = new ConfigurationBuilder();
 configurationBuilder.AddJsonFile("./config/config.json", optional: true, reloadOnChange: true);
 var configuration = configurationBuilder.Build();
 
+// https://main-ingress-compositionfc07bcef.salmonbush-348730a4.norwayeast.azurecontainerapps.io
+
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
     var config = configuration.Get<Config>();

@@ -10,22 +10,21 @@ public static class AzureContainerAppAuth
 {
     public const string AuthenticationCookie = ".zumo-authentication";
 
-    public static async Task Login(OpenIDConnectConfig config, HttpRequest request, HttpResponse response, string idToken, string accessToken)
+    public static async Task Login(OpenIDConnectConfig config, HttpRequest request, HttpResponse response, Tokens tokens)
     {
-        var loginUrl = $"https://{config.LoginUrl}/.auth/login/{config.AuthName}";
+        var loginUrl = $"{config.LoginUrl}/.auth/login/{config.AuthName}";
 
-        var tokens = new
+        var loginTokens = new
         {
-            id_token = idToken,
-            access_token = accessToken
+            id_token = tokens.IdToken,
+            access_token = tokens.AccessToken
         };
-        var serializedTokens = JsonSerializer.Serialize(tokens);
+        var serializedTokens = JsonSerializer.Serialize(loginTokens);
         var loginContent = new StringContent(serializedTokens, Encoding.UTF8, "application/json");
         var loginResult = await HttpHelper.PostAsync(loginUrl, loginContent);
 
         var authenticationToken = loginResult.RootElement.GetProperty("authenticationToken").GetString()!;
         AddAuthenticationTokenAsCookie(request, response, authenticationToken);
-
     }
 
     public static void AddAuthenticationTokenAsCookie(HttpRequest request, HttpResponse response, string authenticationToken)
@@ -43,6 +42,7 @@ public static class AzureContainerAppAuth
         {
             response.Headers.Add("X-ZUMO-AUTH", authenticationCookie);
         }
+        response.Cookies.Delete(AuthenticationCookie);
 
         await Task.CompletedTask;
     }

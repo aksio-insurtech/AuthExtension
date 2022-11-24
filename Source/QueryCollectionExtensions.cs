@@ -7,7 +7,7 @@ namespace Aksio.IngressMiddleware;
 
 public static class QueryCollectionExtensions
 {
-    public static IQueryCollection ChangeScope(this IQueryCollection query, string scope) => 
+    public static IQueryCollection WithScope(this IQueryCollection query, string scope) =>
         new QueryCollection(
          query.Select(_ => _.Key switch
             {
@@ -16,7 +16,16 @@ public static class QueryCollectionExtensions
             }
         ).ToDictionary(_ => _.Key, _ => _.Value));
 
-    public static IQueryCollection SetRedirectUri(this IQueryCollection query, string redirectUri) =>
+    public static IQueryCollection WithResponseType(this IQueryCollection query, string responseType) =>
+        new QueryCollection(
+         query.Select(_ => _.Key switch
+            {
+                "response_type" => new(_.Key, responseType),
+                _ => _
+            }
+        ).ToDictionary(_ => _.Key, _ => _.Value));
+
+    public static IQueryCollection WithRedirectUri(this IQueryCollection query, string redirectUri) =>
         new QueryCollection(
          query.Select(_ => _.Key switch
             {

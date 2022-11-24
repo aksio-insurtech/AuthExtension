@@ -10,21 +10,19 @@ public static class AzureAd
     public static async Task HandleAuthorize(Config config, HttpRequest request, HttpResponse response)
     {
         var query = request.Query
-            .SetRedirectUri(config.AzureAd.Callback)
+            .WithRedirectUri(config.AzureAd.Callback)
             .ToDictionary(_ => _.Key, _ => _.Value);
         var queryString = query.ToQueryString();
-        var url = $"{config.AzureAd.TargetAuthorizationEndpoint}?{queryString}";
+        var url = $"{config.AzureAd.AuthorizationEndpoint}?{queryString}";
         response.Redirect(url);
         await Task.CompletedTask;
     }
 
     public static async Task HandleCallback(Config config, HttpRequest request, HttpResponse response)
     {
-        // Get Access Token
-        // Get Id Token
-
-        // await AzureContainerAppAuth.Login(config.IdPorten, request, response, idToken, accessToken);
-
+        request.Query.TryGetValue("code", out var code);
+        var tokens = await OpenIDConnect.ExchangeCodeForAccessToken(config.AzureAd, code);
+        await AzureContainerAppAuth.Login(config.AzureAd, request, response, tokens);
         response.RedirectToOrigin(request);
         await Task.CompletedTask;
     }

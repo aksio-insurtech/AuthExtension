@@ -4,6 +4,7 @@ namespace Aksio.IngressMiddleware;
 
 public class OpenIDConnectConfig
 {
+    public string Issuer { get; set; } = string.Empty;
     public string AuthorizationEndpoint { get; set; } = string.Empty;
     public string TokenEndpoint { get; set; } = string.Empty;
     public string Callback { get; set; } = string.Empty;
