@@ -1,3 +1,10 @@
+# [v2.1.3] - 2022-11-24 [PR: #12](https://github.com/aksio-insurtech/IngressMiddleware/pull/12)
+
+### Fixed
+
+- Adding Serilog Logging 
+
+
 # [v2.1.2] - 2022-11-24 [PR: #11](https://github.com/aksio-insurtech/IngressMiddleware/pull/11)
 
 ### Fixed
