@@ -10,8 +10,13 @@ public static class HttpHelper
     public static async Task<JsonDocument> PostAsync(string url, HttpContent? httpContent = null)
     {
         httpContent ??= new FormUrlEncodedContent(new Dictionary<string, string>());
-        var client = new HttpClient();
+        using var client = new HttpClient();
+
+        Globals.Logger.LogInformation($"Posting to '{url}'");
         var response = await client.PostAsync(url, httpContent);
+
+        Globals.Logger.LogInformation($"Status : {response.StatusCode}");
+        
         var content = await response.Content.ReadAsStringAsync();
         return JsonDocument.Parse(content);
     }
