@@ -17,7 +17,7 @@ public static class OpenIDConnect
             {"code", code},
             {"client_id", config.ClientId},
             {"client_secret", config.ClientSecret},
-            {"redirect_uri", "http://localhost:8080/.aksio/aad/login/callback"}
+            {"redirect_uri", config.Callback}
         };
 
         var url = QueryHelpers.AddQueryString(config.TokenEndpoint, requestContent);
