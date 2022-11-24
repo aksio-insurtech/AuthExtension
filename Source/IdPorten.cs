@@ -2,8 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace Aksio.IngressMiddleware;
@@ -12,23 +10,17 @@ public static class IdPorten
 {
     public static async Task HandleAuthorize(Config config, HttpRequest request, HttpResponse response)
     {
-        var query = request.Query.Select(_ => _.Key switch
-            {
-                // Id porten only supports the openid and profile scope, ignore anything else.
-                "scope" => new(_.Key, "openid+profile"),
-
-                // Change redirect URI to be configured callback - ourselves
-                "redirect_uri" => new(_.Key, Uri.EscapeDataString(config.IdPorten.Callback)),
-
-                _ => _
-            }
-        ).ToDictionary(_ => _.Key, _ => _.Value);
+        var query = request.Query
+                        // Id porten only supports the openid and profile scope, ignore anything else.
+                        .ChangeScope("openid+profile")
+                        .SetRedirectUri(config.IdPorten.Callback)
+                        .ToDictionary(_ => _.Key, _ => _.Value);
 
         var tenant = GetTenantFrom(config, request);
         query["onbehalfof"] = tenant.Value.OnBehalfOf;
         //query["response_mode"] = "form_post";
 
-        var queryString = string.Join("&", query.Select(_ => string.Format($"{_.Key}={_.Value}")));
+        var queryString = query.ToQueryString();
         var url = $"{config.IdPorten.AuthorizationEndpoint}?{queryString}";
         response.Redirect(url);
         await Task.CompletedTask;

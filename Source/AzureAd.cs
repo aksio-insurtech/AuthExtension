@@ -9,15 +9,10 @@ public static class AzureAd
 {
     public static async Task HandleAuthorize(Config config, HttpRequest request, HttpResponse response)
     {
-        var query = request.Query.Select(_ => _.Key switch
-            {
-                // Change redirect URI to be configured callback - ourselves
-                "redirect_uri" => new(_.Key, Uri.EscapeDataString(config.AzureAd.Callback)),
-
-                _ => _
-            }
-        ).ToDictionary(_ => _.Key, _ => _.Value);
-        var queryString = string.Join("&", query.Select(_ => string.Format($"{_.Key}={_.Value}")));
+        var query = request.Query
+            .SetRedirectUri(config.AzureAd.Callback)
+            .ToDictionary(_ => _.Key, _ => _.Value);
+        var queryString = query.ToQueryString();
         var url = $"{config.AzureAd.TargetAuthorizationEndpoint}?{queryString}";
         response.Redirect(url);
         await Task.CompletedTask;
@@ -25,11 +20,12 @@ public static class AzureAd
 
     public static async Task HandleCallback(Config config, HttpRequest request, HttpResponse response)
     {
-        if (request.Headers.ContainsKey("x-original-uri") &&
-            request.Headers.ContainsKey("x-ai-original-host"))
-        {
-        }
+        // Get Access Token
+        // Get Id Token
 
+        // await AzureContainerAppAuth.Login(config.IdPorten, request, response, idToken, accessToken);
+
+        response.RedirectToOrigin(request);
         await Task.CompletedTask;
     }
 
