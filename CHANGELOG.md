@@ -1,3 +1,10 @@
+# [v2.1.1] - 2022-11-24 [PR: #10](https://github.com/aksio-insurtech/IngressMiddleware/pull/10)
+
+### Fixed
+
+- Hooking up Azure AD as an OpenID Connect Provider.
+
+
 # [v2.1.0] - 2022-11-23 [PR: #9](https://github.com/aksio-insurtech/IngressMiddleware/pull/9)
 
 ### Added
