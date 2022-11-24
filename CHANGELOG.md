@@ -1,3 +1,10 @@
+# [v2.1.4] - 2022-11-24 [PR: #13](https://github.com/aksio-insurtech/IngressMiddleware/pull/13)
+
+### Fixed
+
+- Setting the correct callback for the code exchange.
+
+
 # [v2.1.3] - 2022-11-24 [PR: #12](https://github.com/aksio-insurtech/IngressMiddleware/pull/12)
 
 ### Fixed
