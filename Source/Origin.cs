@@ -27,7 +27,7 @@ public static class Origin
                 Expires = DateTimeOffset.UtcNow.AddHours(1),
                 MaxAge = TimeSpan.FromHours(1),
                 SameSite = SameSiteMode.None,
-                HttpOnly = false,
+                HttpOnly = true,
                 Secure = true,
                 IsEssential = true
             });

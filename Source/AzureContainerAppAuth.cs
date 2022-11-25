@@ -42,8 +42,6 @@ public static class AzureContainerAppAuth
         {
             response.Headers.Add("X-ZUMO-AUTH", authenticationCookie);
         }
-        response.Cookies.Delete(AuthenticationCookie);
-
         await Task.CompletedTask;
     }
 }
