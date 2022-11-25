@@ -16,7 +16,7 @@ public static class HttpHelper
         var response = await client.PostAsync(url, httpContent);
 
         Globals.Logger.LogInformation($"Status : {response.StatusCode}");
-        
+
         var content = await response.Content.ReadAsStringAsync();
         return JsonDocument.Parse(content);
     }
