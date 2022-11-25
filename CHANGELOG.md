@@ -1,3 +1,10 @@
+# [v2.1.9] - 2022-11-25 [PR: #18](https://github.com/aksio-insurtech/IngressMiddleware/pull/18)
+
+### Fixed
+
+- Removed deletion of zumo cookie.
+
+
 # [v2.1.8] - 2022-11-25 [PR: #17](https://github.com/aksio-insurtech/IngressMiddleware/pull/17)
 
 ### Fixed
