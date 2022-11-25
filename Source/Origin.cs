@@ -1,6 +1,8 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Web;
+
 namespace Aksio.IngressMiddleware;
 
 public static class Origin
@@ -32,7 +34,7 @@ public static class Origin
     {
         if (request.Cookies.ContainsKey(OriginCookie))
         {
-            response.Redirect(request.Cookies[OriginCookie]!);
+            response.Redirect(HttpUtility.UrlDecode(request.Cookies[OriginCookie]!));
         }
     }
 }
