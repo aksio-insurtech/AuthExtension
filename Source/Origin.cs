@@ -19,7 +19,12 @@ public static class Origin
         if (request.Headers.ContainsKey(OriginHeader))
         {
             Globals.Logger.LogInformation("Origin header found - adding origin cookie");
-            response.Cookies.Append(OriginCookie, request.Headers[OriginHeader], new() { Domain = config.CookieDomain });
+            response.Cookies.Append(OriginCookie, request.Headers[OriginHeader], new()
+            {
+                Domain = config.CookieDomain,
+                Expires = DateTimeOffset.UtcNow.AddHours(1),
+                IsEssential = true
+            });
         }
     }
 
