@@ -1,3 +1,10 @@
+# [v2.1.5] - 2022-11-25 [PR: #14](https://github.com/aksio-insurtech/IngressMiddleware/pull/14)
+
+### Fixed
+
+- Changing to cookies for holding which origin the first request is coming from. This is then used when we need to redirect after authentication.
+
+
 # [v2.1.4] - 2022-11-24 [PR: #13](https://github.com/aksio-insurtech/IngressMiddleware/pull/13)
 
 ### Fixed
