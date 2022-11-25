@@ -1,3 +1,10 @@
+# [v2.1.6] - 2022-11-25 [PR: #15](https://github.com/aksio-insurtech/IngressMiddleware/pull/15)
+
+### Fixed
+
+- Adding logging for origin information passing
+
+
 # [v2.1.5] - 2022-11-25 [PR: #14](https://github.com/aksio-insurtech/IngressMiddleware/pull/14)
 
 ### Fixed
