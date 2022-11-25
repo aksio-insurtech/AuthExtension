@@ -1,3 +1,10 @@
+# [v3.0.1] - 2022-11-25 [PR: #22](https://github.com/aksio-insurtech/IngressMiddleware/pull/22)
+
+### Fixed
+
+- Printing unhandled exceptions.
+
+
 # [v3.0.0] - 2022-11-25 [PR: #20](https://github.com/aksio-insurtech/IngressMiddleware/pull/20)
 
 ### Changed
