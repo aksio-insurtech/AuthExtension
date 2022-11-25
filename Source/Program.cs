@@ -19,6 +19,7 @@ Globals.Logger.LogInformation("Setting up routes");
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
     var config = configuration.Get<Config>();
+    Origin.Handle(config, request, response);
     await Cratis.HandleRequest(config, request, response);
     await AzureContainerAppAuth.HandleZumoHeader(config, request, response);
 });

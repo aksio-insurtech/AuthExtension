@@ -46,14 +46,4 @@ public static class AzureContainerAppAuth
 
         await Task.CompletedTask;
     }
-
-    public static void RedirectToOrigin(this HttpResponse response, HttpRequest request)
-    {
-        if (request.Headers.ContainsKey("x-original-uri") &&
-            request.Headers.ContainsKey("x-ai-original-host"))
-        {
-            var url = $"https://{request.Headers["x-ai-original-host"]}{request.Headers["x-original-uri"]}";
-            response.Redirect(url);
-        }
-    }
 }
