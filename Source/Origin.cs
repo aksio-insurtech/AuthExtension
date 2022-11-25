@@ -10,13 +10,15 @@ public static class Origin
 
     public static void Handle(Config config, HttpRequest request, HttpResponse response)
     {
+        if (request.Cookies.ContainsKey(OriginCookie))
+        {
+            Globals.Logger.LogInformation("Origin cookie already in place - returning");
+            return;
+        }
+
         if (request.Headers.ContainsKey(OriginHeader))
         {
-            if (request.Cookies.ContainsKey(OriginCookie))
-            {
-                return;
-            }
-
+            Globals.Logger.LogInformation("Origin header found - adding origin cookie");
             response.Cookies.Append(OriginCookie, request.Headers[OriginHeader], new() { Domain = config.CookieDomain });
         }
     }
