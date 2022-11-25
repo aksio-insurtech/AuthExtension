@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var loggerFactory = builder.Host.UseDefaultLogging();
@@ -13,6 +14,8 @@ var configuration = configurationBuilder.Build();
 
 Globals.Logger = loggerFactory.CreateLogger("Default");
 Globals.Logger.LogInformation("Setting up routes");
+
+AppDomain.CurrentDomain.UnhandledException += UnhandledExceptions;
 
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
@@ -33,3 +36,31 @@ app.MapGet("/id-porten/.well-known/openid-configuration", async (HttpRequest req
 });
 
 app.Run();
+
+static void UnhandledExceptions(object sender, UnhandledExceptionEventArgs args)
+{
+    if (args.ExceptionObject is Exception exception)
+    {
+        Log.Logger?.Error(exception, "Unhandled exception");
+        Log.CloseAndFlush();
+        Console.WriteLine("************ BEGIN UNHANDLED EXCEPTION ************");
+        PrintExceptionInfo(exception);
+
+        while (exception.InnerException != null)
+        {
+            Console.WriteLine("\n------------ BEGIN INNER EXCEPTION ------------");
+            PrintExceptionInfo(exception.InnerException);
+            exception = exception.InnerException;
+            Console.WriteLine("------------ END INNER EXCEPTION ------------\n");
+        }
+
+        Console.WriteLine("************ END UNHANDLED EXCEPTION ************ ");
+    }
+}
+
+static void PrintExceptionInfo(Exception exception)
+{
+    Console.WriteLine($"Exception type: {exception.GetType().FullName}");
+    Console.WriteLine($"Exception message: {exception.Message}");
+    Console.WriteLine($"Stack Trace: {exception.StackTrace}");
+}
