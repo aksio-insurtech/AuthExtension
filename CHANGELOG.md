@@ -1,3 +1,10 @@
+# [v3.0.2] - 2022-11-25 [PR: #23](https://github.com/aksio-insurtech/IngressMiddleware/pull/23)
+
+### Fixed
+
+- Code cleanup.
+
+
 # [v3.0.1] - 2022-11-25 [PR: #22](https://github.com/aksio-insurtech/IngressMiddleware/pull/22)
 
 ### Fixed
