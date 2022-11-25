@@ -29,12 +29,6 @@ app.MapGet("/id-porten/authorize/", async (HttpRequest request, HttpResponse res
     await IdPorten.HandleAuthorize(config, request, response);
 });
 
-app.MapGet("/id-porten/.well-known/openid-configuration", async (HttpRequest request, HttpResponse response) =>
-{
-    var config = configuration.Get<Config>();
-    await IdPorten.HandleWellKnownConfiguration(config, request, response);
-});
-
 app.Run();
 
 static void UnhandledExceptions(object sender, UnhandledExceptionEventArgs args)
