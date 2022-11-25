@@ -1,3 +1,10 @@
+# [v2.1.8] - 2022-11-25 [PR: #17](https://github.com/aksio-insurtech/IngressMiddleware/pull/17)
+
+### Fixed
+
+- Configuring origin cookie with more properties for testing.
+
+
 # [v2.1.7] - 2022-11-25 [PR: #16](https://github.com/aksio-insurtech/IngressMiddleware/pull/16)
 
 ### Fixed
