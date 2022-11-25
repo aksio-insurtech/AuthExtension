@@ -1,3 +1,11 @@
+# [v2.1.7] - 2022-11-25 [PR: #16](https://github.com/aksio-insurtech/IngressMiddleware/pull/16)
+
+### Fixed
+
+- Setting expires on origin cookie and making it an essential cookie.
+- URL Decode the content of the origin cookie.
+
+
 # [v2.1.6] - 2022-11-25 [PR: #15](https://github.com/aksio-insurtech/IngressMiddleware/pull/15)
 
 ### Fixed
