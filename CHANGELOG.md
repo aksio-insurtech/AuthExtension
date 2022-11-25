@@ -1,3 +1,10 @@
+# [v3.0.0] - 2022-11-25 [PR: #20](https://github.com/aksio-insurtech/IngressMiddleware/pull/20)
+
+### Changed
+
+- Taking a step back and simplifying the flows and not supporting a common **auth** endpoint independent of tenant. Instead letting Container App do most of the heavy lifting and just adding a modified `.well-known` document with correct auth endpoint.
+
+
 # [v2.1.9] - 2022-11-25 [PR: #18](https://github.com/aksio-insurtech/IngressMiddleware/pull/18)
 
 ### Fixed
