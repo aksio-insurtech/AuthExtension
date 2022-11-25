@@ -1,23 +1,8 @@
 {
-    "cookieDomain": ".localhost",
-    "azureAd": {
-        "issuer": "https://login.microsoftonline.com/1042fa82-e1c7-40a8-9c61-a7831ef3f10a/v2.0",
-        "authorizationEndpoint": "https://login.microsoftonline.com/1042fa82-e1c7-40a8-9c61-a7831ef3f10a/oauth2/v2.0/authorize",
-        "tokenEndpoint": "https://login.microsoftonline.com/1042fa82-e1c7-40a8-9c61-a7831ef3f10a/oauth2/v2.0/token",
-        "callback": "http://localhost:8080/.aksio/aad/login/callback",
-        "loginUrl": "https://main-ingress-compositionfc07bcef.salmonbush-348730a4.norwayeast.azurecontainerapps.io",
-        "clientId": "",
-        "clientSecret": "",
-        "authName": "azuread"
-    },
     "idPorten": {
-        "callback": "http://localhost:5000/id-porten/login/callback",
+        "issuer": "https://oidc-yt2.difi.eon.no/idporten-oidc-provider",
         "authorizationEndpoint": "https://oidc-ver2.difi.no/idporten-oidc-provider/authorize",
-        "tokenEndpoint": "https://oidc-ver2.difi.no/idporten-oidc-provider/token",
-        "clientId": "064941e7-4bca-47bd-ac7d-9cd39b5c71b8",
-        "clientSecret": "31a2fe01-11f1-4b5d-88ca-523337b7e825",
-        "loginUrl": "https://main-ingress-compositionfc07bcef.salmonbush-348730a4.norwayeast.azurecontainerapps.io",
-        "authName": "idporten"
+        "proxyAuthorizationEndpoint": "http://localhost:8080/.aksio/id-porten/authorize"
     },
     "tenants": {
         "3f5baba5-65d7-4058-886c-aa6fab261a8c": {
