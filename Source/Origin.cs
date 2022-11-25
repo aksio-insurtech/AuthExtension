@@ -25,6 +25,10 @@ public static class Origin
             {
                 Domain = config.CookieDomain,
                 Expires = DateTimeOffset.UtcNow.AddHours(1),
+                MaxAge = TimeSpan.FromHours(1),
+                SameSite = SameSiteMode.None,
+                HttpOnly = false,
+                Secure = true,
                 IsEssential = true
             });
         }
