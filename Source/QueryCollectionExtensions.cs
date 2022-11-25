@@ -25,6 +25,9 @@ public static class QueryCollectionExtensions
             }
         ).ToDictionary(_ => _.Key, _ => _.Value));
 
+    public static string GetRedirectUri(this IQueryCollection query) =>
+        query.SingleOrDefault(_ => _.Key == "redirect_uri").Value;
+
     public static IQueryCollection WithRedirectUri(this IQueryCollection query, string redirectUri) =>
         new QueryCollection(
          query.Select(_ => _.Key switch

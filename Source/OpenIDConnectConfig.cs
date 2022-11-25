@@ -3,14 +3,23 @@
 
 namespace Aksio.IngressMiddleware;
 
+/// <summary>
+/// Represents the configuration for an OpenID Connect identity provider.
+/// </summary>
 public class OpenIDConnectConfig
 {
+    /// <summary>
+    /// Gets or sets the issuer URL. Typically the well known configuration would be found at this URL + /.well-known/openid-configuration
+    /// </summary>
     public string Issuer { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the authorization endpoint for the middleware that will act as a proxy before we forward to the real endpoint.
+    /// </summary>
+    public string ProxyAuthorizationEndpoint { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the actual authorization endpoint for the identity provider.
+    /// </summary>
     public string AuthorizationEndpoint { get; set; } = string.Empty;
-    public string TokenEndpoint { get; set; } = string.Empty;
-    public string Callback { get; set; } = string.Empty;
-    public string ClientId { get; set; } = string.Empty;
-    public string ClientSecret { get; set; } = string.Empty;
-    public string LoginUrl { get; set; } = string.Empty;
-    public string AuthName { get; set; } = string.Empty;
 }

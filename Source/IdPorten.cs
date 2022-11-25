@@ -1,7 +1,7 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json.Nodes;
 
 namespace Aksio.IngressMiddleware;
 
@@ -11,8 +11,8 @@ public static class IdPorten
     {
         var query = request.Query
                         // Id porten only supports the openid and profile scope, ignore anything else.
-                        .WithScope("openid+profile")
-                        .WithRedirectUri(config.IdPorten.Callback)
+                        // .WithScope("openid+profile")
+                        // .WithRedirectUri(config.IdPorten.Callback)
                         .ToDictionary(_ => _.Key, _ => _.Value);
 
         var tenant = GetTenantFrom(config, request);
@@ -25,20 +25,18 @@ public static class IdPorten
         await Task.CompletedTask;
     }
 
-    public static async Task HandleCallback(Config config, HttpRequest request, HttpResponse response)
+    public static async Task HandleWellKnownConfiguration(Config config, HttpRequest request, HttpResponse response)
     {
-        request.Query.TryGetValue("code", out var code);
-        var tokens = await OpenIDConnect.ExchangeCodeForAccessToken(config.IdPorten, code);
-        var accessTokenAsJWT = new JwtSecurityToken(tokens.AccessToken);
-        var onBehalfOf = accessTokenAsJWT.Claims.First(_ => _.Type == "client_onbehalfof").Value;
+        var client = new HttpClient();
+        var url = $"{config.IdPorten.Issuer}/.well-known/openid-configuration";
+        var result = await client.GetAsync(url);
+        var json = await result.Content.ReadAsStringAsync();
 
-        await AzureContainerAppAuth.Login(config.IdPorten, request, response, tokens);
-
-        var tenant = config.Tenants.First(_ => _.Value.OnBehalfOf == onBehalfOf);
-        var uri = $"https://{tenant.Value.Domain}";
-        response.Redirect(uri);
-        await Task.CompletedTask;
+        var document = (JsonNode.Parse(json) as JsonObject)!;
+        document["authorization_endpoint"] = config.IdPorten.ProxyAuthorizationEndpoint;
+        await response.WriteAsJsonAsync(document);
     }
+
     static KeyValuePair<string, TenantConfig> GetTenantFrom(Config config, HttpRequest request)
     {
         return request.Query
