@@ -38,8 +38,10 @@ public static class AzureContainerAppAuth
 
     public static async Task HandleZumoHeader(Config config, HttpRequest request, HttpResponse response)
     {
+        Globals.Logger.LogInformation("HandleZumoHeader");
         if (request.Cookies.TryGetValue(AuthenticationCookie, out var authenticationCookie))
         {
+            Globals.Logger.LogInformation($"Authentication token available, adding header with token {authenticationCookie}");
             response.Headers.Add("X-ZUMO-AUTH", authenticationCookie);
         }
         await Task.CompletedTask;
