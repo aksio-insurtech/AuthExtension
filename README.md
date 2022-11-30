@@ -59,17 +59,10 @@ Its format is:
 
 ```json
 {
-    "azureAd": {
-        "issuer": "The actual issuer of the configuration . e.g. https://login.microsoftonline.com/v2.0/<tenant id>",
-        "authorizeEndpoint": "The replacement authorize endpoint to modify Well Known config with"
-    },
     "idPorten": {
-        "callback": "Callback url to tell Id-porten to call back to",
+        "issuer": "The URL for the issuer, typically where the /.well-known/openid-configuration sits",
         "authorizationEndpoint": "The Id-porten authorization endpoint",
-        "tokenEndpoint": "The Id-porten token endpoint",
-        "clientId": "The client Id to use for getting id/access tokens",
-        "clientSecret": "The client secret to use for getting id/access tokens",
-        "authName": "Name of auth in Container App"
+        "proxyAuthorizationEndpoint": "The proxy authorization endpoint, typically a https://..../.aksio/id-porten/authorize"
     },
     "tenants": {
         "<tenant guid>": {
