@@ -43,9 +43,6 @@ The support for Id-Porten is based on a container app setup of a custom ingress 
 Its purpose is to provide support for multi tenancy for this specific identity provider by adding on the custom `onbehalfof` based on
 a domain configuration for the tenant. It uses the domain name configured in the config as a basis to understand which value to set.
 
-This part of the middleware is designed to work with the [client-directed sign-in process](https://learn.microsoft.com/en-us/azure/container-apps/authentication#client-directed-sign-in)
-supported by the Container App sidecar container.
-
 Below is the target flow it has been designed for:
 
 ![](./Images/idporten-flow.jpg)
