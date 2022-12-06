@@ -7,5 +7,5 @@ public record TenantConfig
 {
     public string Domain { get; set; } = "localhost";
     public string OnBehalfOf { get; set; } = "";
-    public IEnumerable<string> TenantIdClaims { get; set; } = Enumerable.Empty<string>();
+    public string[] TenantIdClaims { get; set; } = new string[0];
 }
