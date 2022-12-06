@@ -1,3 +1,11 @@
+# [v3.1.0] - 2022-12-6 [PR: #27](https://github.com/aksio-insurtech/IngressMiddleware/pull/27)
+
+### Added
+
+- Adding support for setting Tenant-ID header based on TID claim.
+
+
+
 # [v3.0.2] - 2022-11-25 [PR: #23](https://github.com/aksio-insurtech/IngressMiddleware/pull/23)
 
 ### Fixed
