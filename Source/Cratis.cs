@@ -27,6 +27,7 @@ public static class Cratis
                     var tenantValueString = tenantValue.ToString();
                     var tenant = config.Tenants.FirstOrDefault(_ => _.Value.TenantIdClaims.Any(t => t == tenantValueString));
                     response.Headers[TenantIdHeader] = tenant.Key;
+                    Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured TID claim ({tenantValueString})");
                 }
             }
         }
@@ -34,6 +35,7 @@ public static class Cratis
         {
             var tenant = config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host));
             response.Headers[TenantIdHeader] = tenant.Key;
+            Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
         }
         await Task.CompletedTask;
     }
