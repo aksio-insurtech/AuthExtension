@@ -1,3 +1,10 @@
+# [v3.1.3] - 2022-12-6 [PR: #30](https://github.com/aksio-insurtech/IngressMiddleware/pull/30)
+
+### Fixed
+
+- Setting tenantId based on host if claims are not present.
+
+
 # [v3.1.2] - 2022-12-6 [PR: #29](https://github.com/aksio-insurtech/IngressMiddleware/pull/29)
 
 ### Fixed
