@@ -13,6 +13,7 @@ public static class Cratis
 
     public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response)
     {
+        var tenantId = string.Empty;
         if (request.Headers.ContainsKey(PrincipalHeader))
         {
             var token = Convert.FromBase64String(request.Headers[PrincipalHeader]);
@@ -26,17 +27,19 @@ public static class Cratis
                 {
                     var tenantValueString = tenantValue.ToString();
                     var tenant = config.Tenants.FirstOrDefault(_ => _.Value.TenantIdClaims.Any(t => t == tenantValueString));
-                    response.Headers[TenantIdHeader] = tenant.Key;
+                    tenantId = tenant.Key;
                     Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured TID claim ({tenantValueString})");
                 }
             }
         }
-        else
+
+        if (string.IsNullOrEmpty(tenantId))
         {
             var tenant = config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host));
-            response.Headers[TenantIdHeader] = tenant.Key;
+            tenantId = tenant.Key;
             Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
         }
+        response.Headers[TenantIdHeader] = tenantId;
         await Task.CompletedTask;
     }
 }
