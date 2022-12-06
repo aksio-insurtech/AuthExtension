@@ -1,3 +1,10 @@
+# [v3.1.2] - 2022-12-6 [PR: #29](https://github.com/aksio-insurtech/IngressMiddleware/pull/29)
+
+### Fixed
+
+- Fixing config type for Tenant Id claims so that it gets deserialized.
+
+
 # [v3.1.1] - 2022-12-6 [PR: #28](https://github.com/aksio-insurtech/IngressMiddleware/pull/28)
 
 ### Fixed
