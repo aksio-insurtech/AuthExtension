@@ -1,3 +1,10 @@
+# [v3.1.1] - 2022-12-6 [PR: #28](https://github.com/aksio-insurtech/IngressMiddleware/pull/28)
+
+### Fixed
+
+- Adding logging to see which Tenant-ID gets set for a request.
+
+
 # [v3.1.0] - 2022-12-6 [PR: #27](https://github.com/aksio-insurtech/IngressMiddleware/pull/27)
 
 ### Added
