@@ -1,3 +1,11 @@
+# [v3.2.0] - 2022-12-12 [PR: #31](https://github.com/aksio-insurtech/IngressMiddleware/pull/31)
+
+### Added
+
+- An additional middleware for all requests has been added to be able to call a given URL within an application to resolve identity details based on the incoming Azure app service HTTP headers for identity.
+
+
+
 # [v3.1.3] - 2022-12-6 [PR: #30](https://github.com/aksio-insurtech/IngressMiddleware/pull/30)
 
 ### Fixed
