@@ -6,4 +6,5 @@ public class Config
 {
     public OpenIDConnectConfig IdPorten { get; set; } = new OpenIDConnectConfig();
     public TenantsConfig Tenants { get; set; } = new TenantsConfig();
+    public string IdentityDetailsUrl { get; set; } = string.Empty;
 }

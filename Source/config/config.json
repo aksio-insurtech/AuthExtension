@@ -12,5 +12,6 @@
             "domain": "arentdal.opensjon.no",
             "onBehalfOf": "arendal"
         }
-    }
+    },
+    "identityDetailsUrl": "http://localhost:5100/.aksio/me"
 }

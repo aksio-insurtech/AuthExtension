@@ -61,16 +61,21 @@ Its format is:
 {
     "idPorten": {
         "issuer": "The URL for the issuer, typically where the /.well-known/openid-configuration sits",
-        "authorizationEndpoint": "The Id-porten authorization endpoint",
-        "proxyAuthorizationEndpoint": "The proxy authorization endpoint, typically a https://..../.aksio/id-porten/authorize"
+        "authorizationEndpoint": "The Id-porten authorization endpoint"
     },
     "tenants": {
         "<tenant guid>": {
             "domain": "fully qualified host string",
             "onBehalfOf": "Value to use for id-porten as behalf of"
         }
-    }
+    },
+    "identityProviderUrl": "The URL to call to get application details for the identity"
 }
 ```
 
 > Note: The specific identity provider configurations are optional. You can have either or all.
+
+### Identity Details
+
+The result coming from the application specific identity details endpoint called ends up as a cookie with the string representation of what was returned.
+The cookie name is `.aksio-identity`.
