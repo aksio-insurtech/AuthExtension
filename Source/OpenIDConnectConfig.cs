@@ -14,11 +14,6 @@ public class OpenIDConnectConfig
     public string Issuer { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the authorization endpoint for the middleware that will act as a proxy before we forward to the real endpoint.
-    /// </summary>
-    public string ProxyAuthorizationEndpoint { get; set; } = string.Empty;
-
-    /// <summary>
     /// Gets or sets the actual authorization endpoint for the identity provider.
     /// </summary>
     public string AuthorizationEndpoint { get; set; } = string.Empty;

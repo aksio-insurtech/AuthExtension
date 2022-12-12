@@ -1,8 +1,7 @@
 {
     "idPorten": {
         "issuer": "https://oidc-yt2.difi.eon.no/idporten-oidc-provider",
-        "authorizationEndpoint": "https://oidc-ver2.difi.no/idporten-oidc-provider/authorize",
-        "proxyAuthorizationEndpoint": "http://localhost:8080/.aksio/id-porten/authorize"
+        "authorizationEndpoint": "https://oidc-ver2.difi.no/idporten-oidc-provider/authorize"
     },
     "tenants": {
         "3f5baba5-65d7-4058-886c-aa6fab261a8c": {
@@ -13,5 +12,6 @@
             "domain": "arentdal.opensjon.no",
             "onBehalfOf": "arendal"
         }
-    }
+    },
+    "identityDetailsUrl": "http://localhost:5100/.aksio/me"
 }

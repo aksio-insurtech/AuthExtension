@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Text;
-using System.Text.Json.Nodes;
 using Aksio.IngressMiddleware;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpClient();
 var loggerFactory = builder.Host.UseDefaultLogging();
 var app = builder.Build();
 
@@ -19,10 +18,13 @@ Globals.Logger.LogInformation("Setting up routes");
 
 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptions;
 
+var httpClientFactory = app.Services.GetService<IHttpClientFactory>()!;
+
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
     var config = configuration.Get<Config>();
     await Cratis.HandleRequest(config, request, response);
+    await Identity.HandleRequest(config, request, response, httpClientFactory);
 });
 
 app.MapGet("/id-porten/authorize/", async (HttpRequest request, HttpResponse response) =>

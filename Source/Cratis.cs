@@ -8,15 +8,12 @@ namespace Aksio.IngressMiddleware;
 
 public static class Cratis
 {
-    const string PrincipalHeader = "x-ms-client-principal";
-    const string TenantIdHeader = "Tenant-ID";
-
     public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response)
     {
         var tenantId = string.Empty;
-        if (request.Headers.ContainsKey(PrincipalHeader))
+        if (request.Headers.ContainsKey(Headers.Principal))
         {
-            var token = Convert.FromBase64String(request.Headers[PrincipalHeader]);
+            var token = Convert.FromBase64String(request.Headers[Headers.Principal]);
             var decodedToken = Encoding.Default.GetString(token);
 
             var node = JsonNode.Parse(token) as JsonObject;
@@ -39,7 +36,7 @@ public static class Cratis
             tenantId = tenant.Key;
             Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
         }
-        response.Headers[TenantIdHeader] = tenantId;
+        response.Headers[Headers.TenantId] = tenantId;
         await Task.CompletedTask;
     }
 }
