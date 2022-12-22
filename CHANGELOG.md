@@ -1,3 +1,12 @@
+# [v3.2.1] - 2022-12-22 [PR: #32](https://github.com/aksio-insurtech/IngressMiddleware/pull/32)
+
+### Fixed
+
+- Content of identity details are now a Base64 encoded string. This was an oversight.
+- When identity provider returns 403, the entire middleware request will also return 403.
+
+
+
 # [v3.2.0] - 2022-12-12 [PR: #31](https://github.com/aksio-insurtech/IngressMiddleware/pull/31)
 
 ### Added
