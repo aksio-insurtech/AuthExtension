@@ -18,5 +18,6 @@ COPY ./Source/out/x64/*.dll .
 COPY ./Source/out/x64/*.json .
 COPY ./Source/out/x64/*.so .
 COPY ./Source/out/x64/IngressMiddleware .
+COPY ./Source/wwwroot ./wwwroot
 
 ENTRYPOINT ["./IngressMiddleware"]
