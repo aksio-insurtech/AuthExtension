@@ -1,3 +1,10 @@
+# [v3.3.1] - 2022-12-23 [PR: #34](https://github.com/aksio-insurtech/IngressMiddleware/pull/34)
+
+### Fixed
+
+- Adding the static files for the toolbar into the development image.
+
+
 # [v3.3.0] - 2022-12-23 [PR: #33](https://github.com/aksio-insurtech/IngressMiddleware/pull/33)
 
 ### Added
