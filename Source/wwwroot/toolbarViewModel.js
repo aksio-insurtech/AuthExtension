@@ -42,6 +42,7 @@ if (view) {
         document.cookie = `aksiodevprincipalid=${identity.id}`;
         document.cookie = `aksiodevprincipalname=${identity.name}`;
         document.cookie = `aksiodevprincipal=${btoa(JSON.stringify(identity))}`;
+        document.cookie = ".aksio-identity=;expires="+ new Date(0).toUTCString();
         location.reload();
     };
 
