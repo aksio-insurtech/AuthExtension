@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
 var loggerFactory = builder.Host.UseDefaultLogging();
 var app = builder.Build();
+app.UseStaticFiles();
 
 var configurationBuilder = new ConfigurationBuilder();
 configurationBuilder.AddJsonFile("./config/config.json", optional: true, reloadOnChange: true);
