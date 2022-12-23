@@ -1,3 +1,11 @@
+# [v3.3.0] - 2022-12-23 [PR: #33](https://github.com/aksio-insurtech/IngressMiddleware/pull/33)
+
+### Added
+
+- A developer toolbar for easily selecting current tenant and identity.
+
+
+
 # [v3.2.1] - 2022-12-22 [PR: #32](https://github.com/aksio-insurtech/IngressMiddleware/pull/32)
 
 ### Fixed
