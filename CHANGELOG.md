@@ -1,3 +1,10 @@
+# [v3.3.2] - 2022-12-23 [PR: #35](https://github.com/aksio-insurtech/IngressMiddleware/pull/35)
+
+### Fixed
+
+- The `.aksio-identity` cookie needs to be cleared in the toolbar when we change tenant or identity, since we need to re-evaluate and call the identity details endpoint on the application when that happens.
+
+
 # [v3.3.1] - 2022-12-23 [PR: #34](https://github.com/aksio-insurtech/IngressMiddleware/pull/34)
 
 ### Fixed
