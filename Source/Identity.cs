@@ -12,7 +12,11 @@ public static class Identity
 
     public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response, IHttpClientFactory httpClientFactory)
     {
-        if (string.IsNullOrEmpty(config.IdentityDetailsUrl)) return;
+        if (string.IsNullOrEmpty(config.IdentityDetailsUrl))
+        {
+            Globals.Logger.LogInformation("Identity details url is not configured, skipping identity details resolution");
+            return;
+        }
 
         if (!request.Cookies.ContainsKey(CookieName)
             && request.Headers.ContainsKey(Headers.Principal)
@@ -42,7 +46,7 @@ public static class Identity
                 }
 
                 var identityDetailsAsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(identityDetails));
-                response.Cookies.Append(CookieName, identityDetailsAsBase64);
+                response.Cookies.Append(CookieName, identityDetailsAsBase64, new CookieOptions { Expires = DateTimeOffset.Now.AddMinutes(5) });
             }
             catch (Exception ex)
             {
