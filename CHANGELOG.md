@@ -1,3 +1,10 @@
+# [v3.3.5] - 2023-3-16 [PR: #39](https://github.com/aksio-insurtech/IngressMiddleware/pull/39)
+
+### Fixed
+
+- Removing sensitive data from log output.
+
+
 # [v3.3.3] - 2023-3-16 [PR: #36](https://github.com/aksio-insurtech/IngressMiddleware/pull/36)
 
 ### Fixed
