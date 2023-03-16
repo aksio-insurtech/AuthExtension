@@ -9,7 +9,7 @@ namespace Aksio.IngressMiddleware;
 public class OpenIDConnectConfig
 {
     /// <summary>
-    /// Gets or sets the issuer URL. Typically the well known configuration would be found at this URL + /.well-known/openid-configuration
+    /// Gets or sets the issuer URL. Typically the well known configuration would be found at this URL + /.well-known/openid-configuration.
     /// </summary>
     public string Issuer { get; set; } = string.Empty;
 

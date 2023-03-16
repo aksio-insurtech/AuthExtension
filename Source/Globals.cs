@@ -3,6 +3,8 @@
 
 namespace Aksio.IngressMiddleware;
 
+#pragma warning disable MA0069 // Avoid static globals
+
 public static class Globals
 {
     public static ILogger Logger = null!;
