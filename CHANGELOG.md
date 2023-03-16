@@ -1,3 +1,10 @@
+# [v3.3.3] - 2023-3-16 [PR: #36](https://github.com/aksio-insurtech/IngressMiddleware/pull/36)
+
+### Fixed
+
+- Adding logging to see what is going on with the identity details provider.
+
+
 # [v3.3.2] - 2022-12-23 [PR: #35](https://github.com/aksio-insurtech/IngressMiddleware/pull/35)
 
 ### Fixed
