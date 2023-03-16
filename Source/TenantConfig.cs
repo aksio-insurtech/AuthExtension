@@ -6,6 +6,6 @@ namespace Aksio.IngressMiddleware;
 public record TenantConfig
 {
     public string Domain { get; set; } = "localhost";
-    public string OnBehalfOf { get; set; } = "";
-    public string[] TenantIdClaims { get; set; } = new string[0];
+    public string OnBehalfOf { get; set; } = string.Empty;
+    public string[] TenantIdClaims { get; set; } = Array.Empty<string>();
 }
