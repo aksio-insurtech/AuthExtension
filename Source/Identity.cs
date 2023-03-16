@@ -21,7 +21,7 @@ public static class Identity
         {
             try
             {
-                Globals.Logger.LogInformation("Resolving identity details for {PrincipalId} ({PrincipalName} {Principal})", request.Headers[Headers.PrincipalId].ToString(), request.Headers[Headers.PrincipalName].ToString(), request.Headers[Headers.Principal].ToString());
+                Globals.Logger.LogInformation("Resolving identity details for {PrincipalId}", request.Headers[Headers.PrincipalId].ToString());
 
                 var client = httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
