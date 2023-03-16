@@ -21,6 +21,8 @@ public static class Identity
         {
             try
             {
+                Globals.Logger.LogInformation("Resolving identity details for {PrincipalId} ({PrincipalName})", request.Headers[Headers.PrincipalId].ToString(), request.Headers[Headers.PrincipalName].ToString());
+
                 var client = httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
                 client.DefaultRequestHeaders.Add(Headers.PrincipalId, request.Headers[Headers.PrincipalId].ToString());
@@ -32,6 +34,13 @@ public static class Identity
                     response.StatusCode = 403;
                 }
                 var identityDetails = await responseMessage.Content.ReadAsStringAsync();
+
+                if (responseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    Globals.Logger.LogError("Error trying to resolve identity details: {StatusCode} {ReasonPhrase}", responseMessage.StatusCode, responseMessage.ReasonPhrase);
+                    return;
+                }
+
                 var identityDetailsAsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(identityDetails));
                 response.Cookies.Append(CookieName, identityDetailsAsBase64);
             }
