@@ -1,3 +1,10 @@
+# [v3.3.6] - 2023-3-28 [PR: #40](https://github.com/aksio-insurtech/IngressMiddleware/pull/40)
+
+### Fixed
+
+- Removing Serilog `WriteTo` for the base `appsettings.json`. This will allow to override this as Serilog combines sinks from all configuration sources.
+
+
 # [v3.3.5] - 2023-3-16 [PR: #39](https://github.com/aksio-insurtech/IngressMiddleware/pull/39)
 
 ### Fixed
