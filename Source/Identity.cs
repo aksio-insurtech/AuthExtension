@@ -50,6 +50,7 @@ public static class Identity
                 client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
                 client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
                 client.DefaultRequestHeaders.Add(Headers.PrincipalName, principalName);
+                client.DefaultRequestHeaders.Add(Headers.TenantId, request.Headers[Headers.TenantId].ToString());
                 var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
 
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
