@@ -1,3 +1,10 @@
+# [v3.3.7] - 2023-3-29 [PR: #41](https://github.com/aksio-insurtech/IngressMiddleware/pull/41)
+
+### Fixed
+
+- Adding log message to see the principal information
+
+
 # [v3.3.6] - 2023-3-28 [PR: #40](https://github.com/aksio-insurtech/IngressMiddleware/pull/40)
 
 ### Fixed
