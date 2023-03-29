@@ -1,3 +1,10 @@
+# [v3.3.10] - 2023-3-29 [PR: #44](https://github.com/aksio-insurtech/IngressMiddleware/pull/44)
+
+### Fixed
+
+- Outputting `Tenant-ID`in log for Identity provider call
+
+
 # [v3.3.9] - 2023-3-29 [PR: #43](https://github.com/aksio-insurtech/IngressMiddleware/pull/43)
 
 ### Fixed
