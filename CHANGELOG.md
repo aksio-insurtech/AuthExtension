@@ -1,3 +1,10 @@
+# [v3.3.11] - 2023-3-29 [PR: #45](https://github.com/aksio-insurtech/IngressMiddleware/pull/45)
+
+### Fixed
+
+- Carrying over the established `Tenant-ID` from the Cratis part of the middleware.
+
+
 # [v3.3.10] - 2023-3-29 [PR: #44](https://github.com/aksio-insurtech/IngressMiddleware/pull/44)
 
 ### Fixed
