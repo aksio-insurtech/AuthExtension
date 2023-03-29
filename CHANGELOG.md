@@ -1,3 +1,16 @@
+# [v3.3.8] - 2023-3-29 [PR: #42](https://github.com/aksio-insurtech/IngressMiddleware/pull/42)
+
+### Fixed
+
+- Removing the requirement of `x-ms-client-principal-id` and `x-ms-client-principal-name` for calling the `.aksio/me` endpoint.
+
+# [v3.3.7] - 2023-3-29 [PR: #41](https://github.com/aksio-insurtech/IngressMiddleware/pull/41)
+
+### Fixed
+
+- Adding log message to see the principal information
+
+
 # [v3.3.6] - 2023-3-28 [PR: #40](https://github.com/aksio-insurtech/IngressMiddleware/pull/40)
 
 ### Fixed
