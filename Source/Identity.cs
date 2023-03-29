@@ -19,18 +19,37 @@ public static class Identity
         }
 
         if (!request.Cookies.ContainsKey(CookieName)
-            && request.Headers.ContainsKey(Headers.Principal)
-            && request.Headers.ContainsKey(Headers.PrincipalId)
-            && request.Headers.ContainsKey(Headers.PrincipalName))
+            && request.Headers.ContainsKey(Headers.Principal))
         {
             try
             {
-                Globals.Logger.LogInformation("Resolving identity details for {PrincipalId}", request.Headers[Headers.PrincipalId].ToString());
-
                 var client = httpClientFactory.CreateClient();
+                var principalId = string.Empty;
+                var principalName = string.Empty;
+
+                if (request.Headers.ContainsKey(Headers.PrincipalId))
+                {
+                    principalId = request.Headers[Headers.PrincipalId];
+                }
+                if (request.Headers.ContainsKey(Headers.PrincipalName))
+                {
+                    principalName = request.Headers[Headers.PrincipalName];
+                }
+
+                if (string.IsNullOrEmpty(principalId))
+                {
+                    principalId = "[NotSet]";
+                }
+                if (string.IsNullOrEmpty(principalName))
+                {
+                    principalName = "[NotSet]";
+                }
+
+                Globals.Logger.LogInformation("Resolving identity details for {PrincipalId}", principalId);
+
                 client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
-                client.DefaultRequestHeaders.Add(Headers.PrincipalId, request.Headers[Headers.PrincipalId].ToString());
-                client.DefaultRequestHeaders.Add(Headers.PrincipalName, request.Headers[Headers.PrincipalName].ToString());
+                client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
+                client.DefaultRequestHeaders.Add(Headers.PrincipalName, principalName);
                 var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
 
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
@@ -52,13 +71,6 @@ public static class Identity
             {
                 Globals.Logger.LogError(ex, "Error trying to resolve identity details");
             }
-        }
-        else
-        {
-            Globals.Logger.LogInformation("No Identity resolved '{PrincipalId}', '{PrincipalName}', {Principal}",
-                request.Headers[Headers.PrincipalId].ToString(),
-                request.Headers[Headers.PrincipalName].ToString(),
-                request.Headers[Headers.Principal].ToString());
         }
         await Task.CompletedTask;
     }
