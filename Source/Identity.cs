@@ -45,12 +45,13 @@ public static class Identity
                     principalName = "[NotSet]";
                 }
 
-                Globals.Logger.LogInformation("Resolving identity details for {PrincipalId}", principalId);
+                var tenantId = request.Headers[Headers.TenantId].ToString();
+                Globals.Logger.LogInformation("Resolving identity details for {PrincipalId} and {TenantId}", principalId, tenantId);
 
                 client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
                 client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
                 client.DefaultRequestHeaders.Add(Headers.PrincipalName, principalName);
-                client.DefaultRequestHeaders.Add(Headers.TenantId, request.Headers[Headers.TenantId].ToString());
+                client.DefaultRequestHeaders.Add(Headers.TenantId, tenantId);
                 var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
 
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
