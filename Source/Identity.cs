@@ -53,6 +53,13 @@ public static class Identity
                 Globals.Logger.LogError(ex, "Error trying to resolve identity details");
             }
         }
+        else
+        {
+            Globals.Logger.LogInformation("No Identity resolved '{PrincipalId}', '{PrincipalName}', {Principal}",
+                request.Headers[Headers.PrincipalId].ToString(),
+                request.Headers[Headers.PrincipalName].ToString(),
+                request.Headers[Headers.Principal].ToString());
+        }
         await Task.CompletedTask;
     }
 }
