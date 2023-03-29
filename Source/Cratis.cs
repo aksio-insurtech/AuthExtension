@@ -3,12 +3,13 @@
 
 using System.Text;
 using System.Text.Json.Nodes;
+using Aksio.Cratis.Execution;
 
 namespace Aksio.IngressMiddleware;
 
 public static class Cratis
 {
-    public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response)
+    public static Task<TenantId> HandleRequest(Config config, HttpRequest request, HttpResponse response)
     {
         var tenantId = string.Empty;
         if (request.Headers.ContainsKey(Headers.Principal))
@@ -37,6 +38,6 @@ public static class Cratis
             Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
         }
         response.Headers[Headers.TenantId] = tenantId;
-        await Task.CompletedTask;
+        return Task.FromResult(string.IsNullOrEmpty(tenantId) ? TenantId.NotSet : new TenantId(Guid.Parse(tenantId)));
     }
 }

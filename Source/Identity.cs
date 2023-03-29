@@ -3,6 +3,7 @@
 
 using System.Net;
 using System.Text;
+using Aksio.Cratis.Execution;
 
 namespace Aksio.IngressMiddleware;
 
@@ -10,7 +11,7 @@ public static class Identity
 {
     const string CookieName = ".aksio-identity";
 
-    public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response, IHttpClientFactory httpClientFactory)
+    public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response, TenantId tenantId, IHttpClientFactory httpClientFactory)
     {
         if (string.IsNullOrEmpty(config.IdentityDetailsUrl))
         {
@@ -45,13 +46,12 @@ public static class Identity
                     principalName = "[NotSet]";
                 }
 
-                var tenantId = request.Headers[Headers.TenantId].ToString();
                 Globals.Logger.LogInformation("Resolving identity details for {PrincipalId} and {TenantId}", principalId, tenantId);
 
                 client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
                 client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
                 client.DefaultRequestHeaders.Add(Headers.PrincipalName, principalName);
-                client.DefaultRequestHeaders.Add(Headers.TenantId, tenantId);
+                client.DefaultRequestHeaders.Add(Headers.TenantId, tenantId.ToString());
                 var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
 
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
