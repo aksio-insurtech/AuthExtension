@@ -1,3 +1,10 @@
+# [v3.3.9] - 2023-3-29 [PR: #43](https://github.com/aksio-insurtech/IngressMiddleware/pull/43)
+
+### Fixed
+
+- Adding forwarding of `Tenant-ID` header to the identity provider.
+
+
 # [v3.3.8] - 2023-3-29 [PR: #42](https://github.com/aksio-insurtech/IngressMiddleware/pull/42)
 
 ### Fixed
