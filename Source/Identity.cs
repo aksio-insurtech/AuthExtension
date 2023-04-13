@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using Aksio.Cratis.Execution;
 
@@ -52,8 +53,11 @@ public static class Identity
                 client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
                 client.DefaultRequestHeaders.Add(Headers.PrincipalName, principalName);
                 client.DefaultRequestHeaders.Add(Headers.TenantId, tenantId.ToString());
-                var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));
+                client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("utf-8"));
 
+                var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
                 {
                     response.StatusCode = 403;
@@ -66,7 +70,9 @@ public static class Identity
                     return;
                 }
 
-                var identityDetailsAsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(identityDetails));
+                var encoding = Encoding.GetEncoding("iso-8859-1");
+                var encoded = encoding.GetBytes(identityDetails);
+                var identityDetailsAsBase64 = Convert.ToBase64String(encoded);
                 response.Cookies.Append(CookieName, identityDetailsAsBase64, new CookieOptions { Expires = DateTimeOffset.Now.AddMinutes(5) });
             }
             catch (Exception ex)
