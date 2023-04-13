@@ -1,3 +1,10 @@
+# [v3.3.12] - 2023-4-13 [PR: #46](https://github.com/aksio-insurtech/IngressMiddleware/pull/46)
+
+### Fixed
+
+- Fixing encoding for identity details before Base64 encoding it into the target cookie. Browsers can with `atob()` convert ISO-8859-1 encoded strings, UTF-8 strings becomes scrambled when string contains special characters such as Norwegian Æ,Ø,Å.
+
+
 # [v3.3.11] - 2023-3-29 [PR: #45](https://github.com/aksio-insurtech/IngressMiddleware/pull/45)
 
 ### Fixed
