@@ -56,9 +56,8 @@ public static class Identity
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));
                 client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("utf-8"));
-                
-                var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
 
+                var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
                 {
                     response.StatusCode = 403;
