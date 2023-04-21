@@ -24,20 +24,14 @@ public class OAuthBearerTokens
 
         if (request.Headers.Authorization.Count == 0)
         {
-            var result = "Authorization header missing, unauthorized";
-            response.StatusCode = 403;
-            Globals.Logger.LogError(result);
-            await response.WriteAsync(result);
+            await Unauthorized(response, "Missing header", "Authorization header missing");
             return;
         }
 
         var strings = request.Headers.Authorization.ToString().Split(' ');
         if (strings.Length < 2 && strings[0].StartsWith("Bearer"))
         {
-            var result = "Authorization header missing 'Bearer' in token value, unauthorized, Should be in the format \"Bearer {token}\"";
-            response.StatusCode = 403;
-            Globals.Logger.LogError(result);
-            await response.WriteAsync(result);
+            await Unauthorized(response, "Missing Bearer in header", "Authorization header missing 'Bearer' in token value, unauthorized, Should be in the format \"Bearer {token}\"");
             return;
         }
         var token = strings[1];
@@ -67,24 +61,18 @@ public class OAuthBearerTokens
             var valid = validatedToken != null;
             if (!valid)
             {
-                response.StatusCode = 403;
-                Globals.Logger.LogError("Invalid token");
-                await response.WriteAsync("Invalid token");
+                await Unauthorized(response, "invalid_token", "Given token is invalid");
                 return;
             }
         }
         catch (SecurityTokenExpiredException ex)
         {
-            response.StatusCode = 403;
-            Globals.Logger.LogError("Token has expired", ex);
-            await response.WriteAsync($"Token has expired, it expired at {ex.Expires}");
-            return; 
+            await Unauthorized(response, "token_expired", $"Token has expired, it expired at {ex.Expires} (UTC)");
+            return;
         }
         catch (Exception ex)
         {
-            response.StatusCode = 403;
-            Globals.Logger.LogError("Could not validate token", ex);
-            await response.WriteAsync($"Could not validate token ; {ex.Message}");
+            await Unauthorized(response, "invalid_token", $"Could not validate token ; {ex.Message}");
             return;
         }
     }
@@ -117,5 +105,13 @@ public class OAuthBearerTokens
         _jwksLastUpdated = DateTime.UtcNow;
 
         return true;
+    }
+
+    static async Task Unauthorized(HttpResponse response, string message, string description)
+    {
+        response.StatusCode = 401;
+        response.Headers.Add("WWW-Authenticate", $"Bearer, error=\"{message}\", error_description=\"{description}\"");
+        Globals.Logger.LogError(message);
+        await response.WriteAsync(message);
     }
 }
