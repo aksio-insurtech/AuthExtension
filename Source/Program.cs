@@ -26,6 +26,7 @@ app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
     var config = configuration.Get<Config>();
     var tenantId = await Cratis.HandleRequest(config, request, response);
     await Identity.HandleRequest(config, request, response, tenantId, httpClientFactory);
+    await OAuthBearerTokens.HandleRequest(config, request, response, tenantId, httpClientFactory);
 });
 
 app.MapGet("/id-porten/authorize/", async (HttpRequest request, HttpResponse response) =>

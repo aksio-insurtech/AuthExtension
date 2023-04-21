@@ -69,9 +69,14 @@ Its format is:
             "onBehalfOf": "Value to use for id-porten as behalf of"
         }
     },
-    "identityProviderUrl": "The URL to call to get application details for the identity"
+    "identityProviderUrl": "The URL to call to get application details for the identity",
+    "OAuthBearerTokens": {
+        "authority": "The URL for the well-known document that describes the authority"
+    }
 }
 ```
+
+The `OAuthBearerToken` configuration is optional. It won't run any authorization if the config is left out.
 
 > Note: The specific identity provider configurations are optional. You can have either or all.
 
