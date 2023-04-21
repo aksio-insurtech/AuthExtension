@@ -1,3 +1,10 @@
+# [v3.4.0] - 2023-4-21 [PR: #47](https://github.com/aksio-insurtech/IngressMiddleware/pull/47)
+
+### Added
+
+- Adding support for OAuth bearer tokens authorization.
+
+
 # [v3.3.12] - 2023-4-13 [PR: #46](https://github.com/aksio-insurtech/IngressMiddleware/pull/46)
 
 ### Fixed
