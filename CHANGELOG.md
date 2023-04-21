@@ -1,3 +1,15 @@
+# [v3.5.0] - 2023-4-21 [PR: #48](https://github.com/aksio-insurtech/IngressMiddleware/pull/48)
+
+### Added
+
+- Adding support for OAuth bearer tokens authorization.
+- Added `WWW-Authenticate` response headers with error messages and descriptions.
+
+### Fixed
+
+- All errored OAuth Bearer token scenarios now end up with a 401, which seems to be more correct according to RFC7235 (https://www.rfc-editor.org/rfc/rfc7235#section-3.1).
+
+
 # [v3.4.0] - 2023-4-21 [PR: #47](https://github.com/aksio-insurtech/IngressMiddleware/pull/47)
 
 ### Added
