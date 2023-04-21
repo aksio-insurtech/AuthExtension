@@ -3,4 +3,6 @@
 
 namespace Aksio.IngressMiddleware;
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+
 public record AuthorityResult(string issuer, string jwks_uri);

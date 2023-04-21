@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Aksio.IngressMiddleware;
 
-public class OAuthBearerTokens
+public static class OAuthBearerTokens
 {
     static AuthorityResult? _authority;
     static JsonWebKeySet? _jwks;
@@ -46,10 +46,12 @@ public class OAuthBearerTokens
 
         if (_jwks is null || _authority is null) return;
 
-        var jwk = _jwks.Keys.First();
+        var jwk = _jwks.Keys[0];
         var validationParameters = new TokenValidationParameters
         {
             IssuerSigningKey = jwk,
+
+            #pragma warning disable CA5404 // Disable audience validation
             ValidateAudience = false,
             ValidIssuer = _authority.issuer
         };
