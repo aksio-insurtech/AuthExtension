@@ -1,3 +1,10 @@
+# [v3.5.1] - 2023-4-25 [PR: #49](https://github.com/aksio-insurtech/IngressMiddleware/pull/49)
+
+### Fixed
+
+- Adding missing principal id and tenant id for when we aren't able to get identity details.
+
+
 # [v3.5.0] - 2023-4-21 [PR: #48](https://github.com/aksio-insurtech/IngressMiddleware/pull/48)
 
 ### Added
