@@ -66,7 +66,7 @@ public static class Identity
 
                 if (responseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    Globals.Logger.LogError("Error trying to resolve identity details: {StatusCode} {ReasonPhrase}", responseMessage.StatusCode, responseMessage.ReasonPhrase);
+                    Globals.Logger.LogError("Error trying to resolve identity details for {PrincipalId} on tenant {TenantId}: {StatusCode} {ReasonPhrase}", principalId, tenantId, responseMessage.StatusCode, responseMessage.ReasonPhrase);
                     return;
                 }
 
