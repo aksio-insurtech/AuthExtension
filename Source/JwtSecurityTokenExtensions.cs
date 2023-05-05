@@ -8,7 +8,7 @@ namespace Aksio.IngressMiddleware;
 public static class JwtSecurityTokenExtensions
 {
     public static ClientPrincipal ToClientPrincipal(this JwtSecurityToken token)
-        => new ClientPrincipal(
+        => new(
             token.Issuer,
             token.Subject,
             token.Subject,

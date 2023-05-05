@@ -88,8 +88,7 @@ public static class OAuthBearerTokens
         var principal = jwtToken.ToClientPrincipal();
         var principalAsJson = JsonSerializer.Serialize(principal, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         var principalAsJsonBytes = Encoding.UTF8.GetBytes(principalAsJson);
-        var principalAsJsonBase64 = Convert.ToBase64String(principalAsJsonBytes);
-        response.Headers[Headers.Principal] = principalAsJsonBase64;
+        response.Headers[Headers.Principal] = Convert.ToBase64String(principalAsJsonBytes);
     }
 
     static async Task<bool> RefreshJwks(Config config, IHttpClientFactory httpClientFactory)
