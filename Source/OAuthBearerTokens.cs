@@ -3,6 +3,8 @@
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Text;
+using System.Text.Json;
 using Aksio.Cratis.Execution;
 using Microsoft.IdentityModel.Tokens;
 
@@ -51,7 +53,7 @@ public static class OAuthBearerTokens
         {
             IssuerSigningKey = jwk,
 
-            #pragma warning disable CA5404 // Disable audience validation
+#pragma warning disable CA5404 // Disable audience validation
             ValidateAudience = false,
             ValidIssuer = _authority.issuer
         };
@@ -59,6 +61,7 @@ public static class OAuthBearerTokens
         var tokenHandler = new JwtSecurityTokenHandler();
         try
         {
+            var jwtToken = tokenHandler.ReadJwtToken(token);
             tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
             var valid = validatedToken != null;
             if (!valid)
@@ -66,6 +69,7 @@ public static class OAuthBearerTokens
                 await Unauthorized(response, "invalid_token", "Given token is invalid");
                 return;
             }
+            AddPrincipalHeader(response, jwtToken);
         }
         catch (SecurityTokenExpiredException ex)
         {
@@ -77,6 +81,14 @@ public static class OAuthBearerTokens
             await Unauthorized(response, "invalid_token", $"Could not validate token ; {ex.Message}");
             return;
         }
+    }
+
+    static void AddPrincipalHeader(HttpResponse response, JwtSecurityToken jwtToken)
+    {
+        var principal = jwtToken.ToClientPrincipal();
+        var principalAsJson = JsonSerializer.Serialize(principal, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        var principalAsJsonBytes = Encoding.UTF8.GetBytes(principalAsJson);
+        response.Headers[Headers.Principal] = Convert.ToBase64String(principalAsJsonBytes);
     }
 
     static async Task<bool> RefreshJwks(Config config, IHttpClientFactory httpClientFactory)
