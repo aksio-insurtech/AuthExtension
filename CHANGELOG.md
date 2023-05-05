@@ -1,3 +1,10 @@
+# [v3.6.0] - 2023-5-5 [PR: #50](https://github.com/aksio-insurtech/IngressMiddleware/pull/50)
+
+### Added
+
+- Support for converting a JWT bearer token to the Microsoft client principal format and adding it to the `x-ms-client-principal` header on response. This provides us with a consistent way to deal with claims in services / applications.
+
+
 # [v3.5.1] - 2023-4-25 [PR: #49](https://github.com/aksio-insurtech/IngressMiddleware/pull/49)
 
 ### Fixed
