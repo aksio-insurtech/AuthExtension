@@ -100,7 +100,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/aksio-insurtech/IngressMiddleware:${{ needs.release.outputs.version }}
+            ghcr.io/aksio-insurtech/ingressmiddleware:${{ needs.release.outputs.version }}
           build-args: |
             VERSION=${{ needs.release.outputs.version }}
             ENTRYPOINT=pr_entrypoint.sh
@@ -112,7 +112,7 @@ jobs:
         with:
           message: |
             Docker Image for this PR:
-            https://ghcr.io/aksio-insurtech/IngressMiddleware:${{ needs.release.outputs.version }}
+            https://ghcr.io/aksio-insurtech/ingressmiddleware:${{ needs.release.outputs.version }}
 
-            docker run ghcr.io/aksio-insurtech/IngressMiddleware:${{ needs.release.outputs.version }}
+            docker run ghcr.io/aksio-insurtech/ingressmiddleware:${{ needs.release.outputs.version }}
           allow-repeats: false
