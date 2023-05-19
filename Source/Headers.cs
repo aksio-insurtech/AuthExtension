@@ -8,6 +8,7 @@ public static class Headers
     public const string Principal = "x-ms-client-principal";
     public const string PrincipalId = "x-ms-client-principal-id";
     public const string PrincipalName = "x-ms-client-principal-name";
+    public const string OriginalUri = "x-original-uri";
     public const string TenantId = "Tenant-ID";
     public const string Authorization = "Authorization";
 }
