@@ -3,15 +3,15 @@
 
 using System.Text;
 using System.Text.Json.Nodes;
-using Aksio.Cratis.Execution;
 
 namespace Aksio.IngressMiddleware;
 
-public static class Cratis
+public class ClaimsSourceIdentifierResolver : TenantSourceIdentifierResolver, ITenantSourceIdentifierResolver<ClaimsSourceIdentifierResolverOptions>
 {
-    public static Task<TenantId> HandleRequest(Config config, HttpRequest request, HttpResponse response)
+    public Task<string> Resolve(Config config, ClaimsSourceIdentifierResolverOptions options, HttpRequest request)
     {
-        var tenantId = string.Empty;
+        var sourceIdentifier = string.Empty;
+
         if (request.Headers.ContainsKey(Headers.Principal))
         {
             var token = Convert.FromBase64String(request.Headers[Headers.Principal]);
@@ -23,21 +23,11 @@ public static class Cratis
                 var tenantObject = claimsAsArray.Cast<JsonObject>().FirstOrDefault(_ => _.TryGetPropertyValue("typ", out var type) && type!.ToString() == "http://schemas.microsoft.com/identity/claims/tenantid");
                 if (tenantObject is not null && tenantObject.TryGetPropertyValue("val", out var tenantValue) && tenantValue is not null)
                 {
-                    var tenantValueString = tenantValue.ToString();
-                    var tenant = config.Tenants.FirstOrDefault(_ => _.Value.TenantIdClaims.Any(t => t == tenantValueString));
-                    tenantId = tenant.Key;
-                    Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured TID claim ({tenantValueString})");
+                    return Task.FromResult(tenantValue.ToString());
                 }
             }
         }
 
-        if (string.IsNullOrEmpty(tenantId))
-        {
-            var tenant = config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host));
-            tenantId = tenant.Key;
-            Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
-        }
-        response.Headers[Headers.TenantId] = tenantId;
-        return Task.FromResult(string.IsNullOrEmpty(tenantId) ? TenantId.NotSet : new TenantId(Guid.Parse(tenantId)));
+        return Task.FromResult(sourceIdentifier);
     }
 }

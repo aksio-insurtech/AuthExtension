@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json;
 using Aksio.IngressMiddleware;
 using Serilog;
 
@@ -10,9 +11,14 @@ var loggerFactory = builder.Host.UseDefaultLogging();
 var app = builder.Build();
 app.UseStaticFiles();
 
-var configurationBuilder = new ConfigurationBuilder();
-configurationBuilder.AddJsonFile("./config/config.json", optional: true, reloadOnChange: true);
-var configuration = configurationBuilder.Build();
+const string configFile = "./config/config.json";
+
+var config = new Config();
+if (File.Exists(configFile))
+{
+    var configJson = File.ReadAllText(configFile);
+    config = JsonSerializer.Deserialize<Config>(configJson, Globals.JsonSerializerOptions)!;
+}
 
 Globals.Logger = loggerFactory.CreateLogger("Default");
 Globals.Logger.LogInformation("Setting up routes");
@@ -23,17 +29,13 @@ var httpClientFactory = app.Services.GetService<IHttpClientFactory>()!;
 
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
-    var config = configuration.Get<Config>();
-    var tenantId = await Cratis.HandleRequest(config, request, response);
+    var tenantId = await Tenancy.HandleRequest(config, request, response);
     await Identity.HandleRequest(config, request, response, tenantId, httpClientFactory);
     await OAuthBearerTokens.HandleRequest(config, request, response, tenantId, httpClientFactory);
 });
 
-app.MapGet("/id-porten/authorize/", async (HttpRequest request, HttpResponse response) =>
-{
-    var config = configuration.Get<Config>();
-    await IdPorten.HandleAuthorize(config, request, response);
-});
+app.MapGet("/id-porten/authorize/", (HttpRequest request, HttpResponse response) =>
+    IdPorten.HandleAuthorize(config, request, response));
 
 app.Run();
 

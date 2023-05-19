@@ -66,8 +66,13 @@ Its format is:
     "tenants": {
         "<tenant guid>": {
             "domain": "fully qualified host string",
-            "onBehalfOf": "Value to use for id-porten as behalf of"
+            "onBehalfOf": "Value to use for id-porten as behalf of",
+            "sourceIdentifiers": []
         }
+    },
+    "tenantResolution": {
+        "strategy": "route | claim",
+        "options": {}
     },
     "identityProviderUrl": "The URL to call to get application details for the identity",
     "OAuthBearerTokens": {
@@ -75,6 +80,56 @@ Its format is:
     }
 }
 ```
+
+### Tenant resolution
+
+Within every tenant you'll see an optional array of source identifiers (`sourceIdentifiers`).
+These are strings that can will be matched with a value provided by a source identifier provider.
+If a tenant has a source identifier in its array, that tenant will become the tenant selected.
+
+You can also use the host name as a matching criteria, which is specified as `domain` in the configuration file.
+If no source identifier provider is specified, or they are not able to resolve and the `domain` value is set
+it will match the tenant on this.
+
+Configuration of source providers is done through the `tenantResolution` key. This is entirely optional and
+will revert to `none` if not configured.
+
+#### Route source identifier provider
+
+Route values can be extracted using regular expression to provide a source identifier that will be mapped.
+In the regular expression you will have to provide an expression that contains a named group. If an expression
+is matched, it will use the named groups value as the source identifier for matching up the tenant.
+
+Below shows an example:
+
+```json
+{
+    "tenantResolution": {
+        "strategy": "route",
+        "options": {
+            "regularExpression": "\/(?<sourceIdentifier>[\\w]+)\/"
+        }
+    }
+}
+```
+
+#### Claim source identifier provider
+
+You can configure using claims on the principal in the `x-ms-client-principal` as the source identifier for
+resolving a tenant. The claim-type supported for this is the one defined by Microsoft for tenant (http://schemas.microsoft.com/identity/claims/tenantid).
+
+Below shows an example:
+
+```json
+{
+    "tenantResolution": {
+        "strategy": "claim",
+        "options": { }
+    }
+}
+```
+
+### OAuth Bearer Tokens
 
 The `OAuthBearerToken` configuration is optional. It won't run any authorization if the config is left out.
 
