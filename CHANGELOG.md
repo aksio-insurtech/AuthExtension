@@ -1,3 +1,14 @@
+# [v4.0.0] - 2023-5-19 [PR: #52](https://github.com/aksio-insurtech/IngressMiddleware/pull/52)
+
+### Added
+
+- Support for resolving tenant source identifiers from routes.
+
+### Changed
+
+- Configuration for resolving tenancy from claims.
+
+
 # [v3.6.1] - 2023-5-19 [PR: #51](https://github.com/aksio-insurtech/IngressMiddleware/pull/51)
 
 ## Fixed
