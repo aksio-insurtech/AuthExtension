@@ -1,3 +1,12 @@
+# [v3.6.1] - 2023-5-19 [PR: #51](https://github.com/aksio-insurtech/IngressMiddleware/pull/51)
+
+## Fixed
+
+- Updated Cratis packages to support Aksio.Cratis.Applications.Logging.RenderedCompactJsonFormatter which is the desired format in Aksio cloud-deployed systems.
+- Bumped token NuGet packages
+
+
+
 # [v3.6.0] - 2023-5-5 [PR: #50](https://github.com/aksio-insurtech/IngressMiddleware/pull/50)
 
 ### Added
