@@ -91,6 +91,9 @@ You can also use the host name as a matching criteria, which is specified as `do
 If no source identifier provider is specified, or they are not able to resolve and the `domain` value is set
 it will match the tenant on this.
 
+Configuration of source providers is done through the `tenantResolution` key. This is entirely optional and
+will revert to `none` if not configured.
+
 #### Route source identifier provider
 
 Route values can be extracted using regular expression to provide a source identifier that will be mapped.
