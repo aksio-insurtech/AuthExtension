@@ -26,16 +26,28 @@ public static class Tenancy
         {
             var tenant = config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier));
             tenantId = tenant.Key;
-            Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on source identifier ({sourceIdentifier}) resolved using {config.TenantResolution.Strategy}");
+            if (!string.IsNullOrEmpty(tenantId))
+            {
+                Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on source identifier ({sourceIdentifier}) resolved using {config.TenantResolution.Strategy}");
+            }
         }
 
         if (string.IsNullOrEmpty(tenantId))
         {
             var tenant = config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host));
             tenantId = tenant.Key;
-            Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
+            if (!string.IsNullOrEmpty(tenantId))
+            {
+                Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
+            }
         }
-        response.Headers[Headers.TenantId] = tenantId;
+
+        if (string.IsNullOrEmpty(tenantId))
+        {
+            Globals.Logger.LogInformation($"TenantId is not resolved, setting to empty.");
+        }
+
+        response.Headers[Headers.TenantId] = tenantId ?? string.Empty;
         return string.IsNullOrEmpty(tenantId) ? TenantId.NotSet : new TenantId(Guid.Parse(tenantId));
     }
 }

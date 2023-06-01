@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text;
 using System.Text.Json;
 using Aksio.IngressMiddleware;
 using Serilog;
@@ -30,12 +31,37 @@ var httpClientFactory = app.Services.GetService<IHttpClientFactory>()!;
 app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
 {
     var tenantId = await Tenancy.HandleRequest(config, request, response);
+
+    // TODO: Impersonation. Look for impersonation cookie, if present, use that as the principal
+
     await Identity.HandleRequest(config, request, response, tenantId, httpClientFactory);
     await OAuthBearerTokens.HandleRequest(config, request, response, tenantId, httpClientFactory);
 });
 
 app.MapGet("/id-porten/authorize/", (HttpRequest request, HttpResponse response) =>
     IdPorten.HandleAuthorize(config, request, response));
+
+app.MapPost("/.aksio/impersonate", (HttpRequest request, HttpResponse response) =>
+{
+    // Pull out claims from the FORM 
+    // Add claims to a structure
+    // Add an impersonation cookie
+    Console.WriteLine("Hello world");
+});
+
+app.MapGet("/.aksio/impersonate/auth", (HttpRequest request, HttpResponse response) =>
+{
+    var principalBase64 = request.Headers[Headers.Principal];
+    var principalJson = Convert.FromBase64String(principalBase64.ToString());
+    var principalString = Encoding.UTF8.GetString(principalJson);
+    var principal = JsonSerializer.Deserialize<ClientPrincipal>(principalJson, Globals.JsonSerializerOptions);
+
+    // Check if tenant is allowed
+    // Check if Identity Provider is allowed
+    // Check if a claim is allowed (Group membership)
+
+    Console.WriteLine("Hello Auth");
+});
 
 app.Run();
 
