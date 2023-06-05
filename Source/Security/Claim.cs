@@ -3,7 +3,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Security;
 
 public class Claim
 {

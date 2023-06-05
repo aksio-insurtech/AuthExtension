@@ -4,7 +4,7 @@
 using System.Text;
 using System.Text.Json.Nodes;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Security;
 
 public class ClaimsSourceIdentifierResolver : TenantSourceIdentifierResolver, ITenantSourceIdentifierResolver<ClaimsSourceIdentifierResolverOptions>
 {

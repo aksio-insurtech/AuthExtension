@@ -3,7 +3,7 @@
 
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Security;
 
 public static class JwtSecurityTokenExtensions
 {
