@@ -5,9 +5,18 @@ using System.Text.Json.Nodes;
 
 namespace Aksio.IngressMiddleware.Configuration;
 
+/// <summary>
+/// Represents the configuration related to tenant resolution.
+/// </summary>
 public class TenantResolutionConfig
 {
+    /// <summary>
+    /// Gets or sets the strategy to use for resolving the tenant identifier.
+    /// </summary>
     public TenantSourceIdentifierResolverType Strategy { get; set; } = TenantSourceIdentifierResolverType.None;
 
+    /// <summary>
+    /// Gets or sets the options for the strategy.
+    /// </summary>
     public JsonObject Options { get; set; } = new JsonObject();
 }

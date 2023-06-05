@@ -9,6 +9,9 @@ using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Identities;
 
+/// <summary>
+/// Represents an implementation of <see cref="IIdentityDetailsResolver"/>.
+/// </summary>
 public class IdentityDetailsResolver : IIdentityDetailsResolver
 {
     const string CookieName = ".aksio-identity";
@@ -16,6 +19,12 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
     readonly IHttpClientFactory _httpClientFactory;
     readonly ILogger<IdentityDetailsResolver> _logger;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IdentityDetailsResolver"/> class.
+    /// </summary>
+    /// <param name="config"><see cref="Config"/> to use.</param>
+    /// <param name="httpClientFactory"><see cref="IHttpClientFactory"/> for creating clients.</param>
+    /// <param name="logger">Logger for logging.</param>
     public IdentityDetailsResolver(
         Config config,
         IHttpClientFactory httpClientFactory,
@@ -26,6 +35,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public async Task<bool> Resolve(HttpRequest request, HttpResponse response, TenantId tenantId)
     {
         if (string.IsNullOrEmpty(_config.IdentityDetailsUrl))

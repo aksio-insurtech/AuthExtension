@@ -5,15 +5,45 @@ using System.Text.Json;
 
 namespace Aksio.IngressMiddleware.Configuration;
 
+/// <summary>
+/// Represents the root configuration object for the ingress middleware.
+/// </summary>
 public class Config
 {
+    /// <summary>
+    /// Gets or sets the <see cref="OpenIDConnectConfig"/> configuration related to IdPorten.
+    /// </summary>
     public OpenIDConnectConfig IdPorten { get; set; } = new OpenIDConnectConfig();
+
+    /// <summary>
+    /// Gets or sets the <see cref="TenantsConfig"/>.
+    /// </summary>
     public TenantsConfig Tenants { get; set; } = new TenantsConfig();
+
+    /// <summary>
+    /// Gets or sets the <see cref="TenantResolution"/> configuration.
+    /// </summary>
     public TenantResolutionConfig TenantResolution { get; set; } = new TenantResolutionConfig();
+
+    /// <summary>
+    /// Gets or sets the URL to use for getting identity details.
+    /// </summary>
     public string IdentityDetailsUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the <see cref="OAuthBearerTokensConfig"/> configuration.
+    /// </summary>
     public OAuthBearerTokensConfig OAuthBearerTokens { get; set; } = new OAuthBearerTokensConfig();
+
+    /// <summary>
+    /// Gets or sets the <see cref="ImpersonationConfig"/> configuration.
+    /// </summary>
     public ImpersonationConfig Impersonation { get; set; } = new ImpersonationConfig();
 
+    /// <summary>
+    /// Loads the configuration from the file system.
+    /// </summary>
+    /// <returns>A new <see cref="Config"/> instance.</returns>
     public static Config Load()
     {
         const string configFile = "./config/config.json";

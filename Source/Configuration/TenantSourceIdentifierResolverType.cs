@@ -3,9 +3,23 @@
 
 namespace Aksio.IngressMiddleware.Configuration;
 
+/// <summary>
+/// Represents the configuration for a tenant.
+/// </summary>
 public enum TenantSourceIdentifierResolverType
 {
+    /// <summary>
+    /// No strategy is used.
+    /// </summary>
     None = 0,
+
+    /// <summary>
+    /// The tenant identifier is resolved from the route.
+    /// </summary>
     Route = 1,
+
+    /// <summary>
+    /// The tenant identifier is resolved from a claim.
+    /// </summary>
     Claim = 2
 }
