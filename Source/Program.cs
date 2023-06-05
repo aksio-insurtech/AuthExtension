@@ -2,10 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware;
-using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
-using Aksio.IngressMiddleware.Tenancy;
 
 UnhandledExceptionsManager.Setup();
 
@@ -15,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddSingleton(config);
+builder.Services.AddTransient<IIdentityDetailsResolver, IdentityDetailsResolver>();
 
 builder.Services.AddHttpClient();
 var loggerFactory = builder.Host.UseDefaultLogging();
@@ -28,14 +27,14 @@ app.UseStaticFiles();
 
 var httpClientFactory = app.Services.GetService<IHttpClientFactory>()!;
 
-app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
-{
-    var tenantId = await Tenancy.HandleRequest(config, request, response);
+// app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
+// {
+//     var tenantId = await Tenancy.HandleRequest(config, request, response);
 
-    // TODO: Impersonation. Look for impersonation cookie, if present, use that as the principal
+//     // TODO: Impersonation. Look for impersonation cookie, if present, use that as the principal
 
-    await Identity.HandleRequest(config, request, response, tenantId, httpClientFactory);
-    await OAuthBearerTokens.HandleRequest(config, request, response, tenantId, httpClientFactory);
-});
+//     await Identity.HandleRequest(config, request, response, tenantId, httpClientFactory);
+//     await OAuthBearerTokens.HandleRequest(config, request, response, tenantId, httpClientFactory);
+// });
 
 app.Run();

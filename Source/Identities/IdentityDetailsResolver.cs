@@ -9,16 +9,24 @@ using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Identities;
 
-public static class Identity
+public class IdentityDetailsResolver : IIdentityDetailsResolver
 {
     const string CookieName = ".aksio-identity";
+    readonly Config _config;
+    readonly IHttpClientFactory _httpClientFactory;
 
-    public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response, TenantId tenantId, IHttpClientFactory httpClientFactory)
+    public IdentityDetailsResolver(Config config, IHttpClientFactory httpClientFactory)
     {
-        if (string.IsNullOrEmpty(config.IdentityDetailsUrl))
+        _config = config;
+        _httpClientFactory = httpClientFactory;
+    }
+
+    public async Task<bool> Resolve(HttpRequest request, HttpResponse response, TenantId tenantId)
+    {
+        if (string.IsNullOrEmpty(_config.IdentityDetailsUrl))
         {
             Globals.Logger.LogInformation("Identity details url is not configured, skipping identity details resolution");
-            return;
+            return true;
         }
 
         if (!request.Cookies.ContainsKey(CookieName)
@@ -26,7 +34,7 @@ public static class Identity
         {
             try
             {
-                var client = httpClientFactory.CreateClient();
+                var client = _httpClientFactory.CreateClient();
                 var principalId = string.Empty;
                 var principalName = string.Empty;
 
@@ -58,17 +66,18 @@ public static class Identity
                 client.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));
                 client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("utf-8"));
 
-                var responseMessage = await client.GetAsync(config.IdentityDetailsUrl);
+                var responseMessage = await client.GetAsync(_config.IdentityDetailsUrl);
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
                 {
                     response.StatusCode = 403;
+                    return false;
                 }
                 var identityDetails = await responseMessage.Content.ReadAsStringAsync();
 
                 if (responseMessage.StatusCode != HttpStatusCode.OK)
                 {
                     Globals.Logger.LogError("Error trying to resolve identity details for {PrincipalId} on tenant {TenantId}: {StatusCode} {ReasonPhrase}", principalId, tenantId, responseMessage.StatusCode, responseMessage.ReasonPhrase);
-                    return;
+                    return true;
                 }
 
                 var encoding = Encoding.GetEncoding("iso-8859-1");
@@ -81,6 +90,7 @@ public static class Identity
                 Globals.Logger.LogError(ex, "Error trying to resolve identity details");
             }
         }
-        await Task.CompletedTask;
+
+        return true;
     }
 }
