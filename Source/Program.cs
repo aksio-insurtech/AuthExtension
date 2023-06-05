@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddSingleton(config);
+builder.Services.AddTenantSourceIdentifierResolver();
 builder.Services.AddTransient<ITenantResolver, TenantResolver>();
 builder.Services.AddTransient<IIdentityDetailsResolver, IdentityDetailsResolver>();
 builder.Services.AddTransient<IOAuthBearerTokens, OAuthBearerTokens>();

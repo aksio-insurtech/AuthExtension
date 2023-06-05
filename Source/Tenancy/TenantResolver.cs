@@ -8,28 +8,21 @@ namespace Aksio.IngressMiddleware.Tenancy;
 
 public class TenantResolver : ITenantResolver
 {
-    readonly static Dictionary<TenantSourceIdentifierResolverType, ITenantSourceIdentifierResolver> _resolvers = new()
-    {
-        { TenantSourceIdentifierResolverType.Claim, new ClaimsSourceIdentifierResolver() },
-        { TenantSourceIdentifierResolverType.Route, new RouteSourceIdentifierResolver() }
-    };
     readonly Config _config;
+    readonly ITenantSourceIdentifierResolver _resolver;
     readonly ILogger<TenantResolver> _logger;
 
-    public TenantResolver(Config config, ILogger<TenantResolver> logger)
+    public TenantResolver(Config config, ITenantSourceIdentifierResolver resolver, ILogger<TenantResolver> logger)
     {
         _config = config;
+        _resolver = resolver;
         _logger = logger;
     }
 
     public async Task<TenantId> Resolve(HttpRequest request, HttpResponse response)
     {
         var tenantId = string.Empty;
-        var sourceIdentifier = string.Empty;
-        if (_resolvers.ContainsKey(_config.TenantResolution.Strategy))
-        {
-            sourceIdentifier = await _resolvers[_config.TenantResolution.Strategy].Resolve(_config, request);
-        }
+        var sourceIdentifier = await _resolver.Resolve(_config, request);
 
         if (!string.IsNullOrEmpty(sourceIdentifier))
         {
@@ -53,7 +46,7 @@ public class TenantResolver : ITenantResolver
 
         if (string.IsNullOrEmpty(tenantId))
         {
-            _logger.LogInformation($"TenantId is not resolved, setting to empty.");
+            _logger.LogInformation("TenantId is not resolved, setting to empty.");
         }
 
         response.Headers[Headers.TenantId] = tenantId ?? string.Empty;
