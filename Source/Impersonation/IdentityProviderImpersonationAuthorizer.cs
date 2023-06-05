@@ -1,9 +1,19 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Aksio.IngressMiddleware.Configuration;
+
 namespace Aksio.IngressMiddleware.Impersonation;
 
 public class IdentityProviderImpersonationAuthorizer : IImpersonationAuthorizer
 {
-    public Task<bool> IsAuthorized(HttpRequest request, ClientPrincipal principal) => throw new NotImplementedException();
+    readonly Config _config;
+
+    public IdentityProviderImpersonationAuthorizer(Config config)
+    {
+        _config = config;
+    }
+
+    public Task<bool> IsAuthorized(HttpRequest request, ClientPrincipal principal) =>
+        Task.FromResult(_config.Impersonation.IdentityProviders.Any(_ => _ == principal.IdentityProvider));
 }

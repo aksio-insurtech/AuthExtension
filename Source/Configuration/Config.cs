@@ -12,6 +12,7 @@ public class Config
     public TenantResolutionConfig TenantResolution { get; set; } = new TenantResolutionConfig();
     public string IdentityDetailsUrl { get; set; } = string.Empty;
     public OAuthBearerTokensConfig OAuthBearerTokens { get; set; } = new OAuthBearerTokensConfig();
+    public ImpersonationConfig Impersonation { get; set; } = new ImpersonationConfig();
 
     public static Config Load()
     {

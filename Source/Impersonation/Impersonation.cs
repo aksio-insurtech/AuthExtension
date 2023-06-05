@@ -12,7 +12,9 @@ public class Impersonation : Controller
     {
         typeof(TenantImpersonationAuthorizer),
         typeof(IdentityProviderImpersonationAuthorizer),
-        typeof(ClaimImpersonationAuthorizer)
+        typeof(ClaimImpersonationAuthorizer),
+        typeof(RolesImpersonationAuthorizer),
+        typeof(GroupsImpersonationAuthorizer)
     };
     readonly IServiceProvider _serviceProvider;
     readonly ILogger<Impersonation> _logger;
