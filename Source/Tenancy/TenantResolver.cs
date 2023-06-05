@@ -3,30 +3,35 @@
 
 using Aksio.Cratis.Execution;
 using Aksio.IngressMiddleware.Configuration;
-using Aksio.IngressMiddleware.Security;
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
-public static class Tenancy
+public class TenantResolver
 {
     readonly static Dictionary<TenantSourceIdentifierResolverType, ITenantSourceIdentifierResolver> _resolvers = new()
     {
         { TenantSourceIdentifierResolverType.Claim, new ClaimsSourceIdentifierResolver() },
         { TenantSourceIdentifierResolverType.Route, new RouteSourceIdentifierResolver() }
     };
+    readonly Config _config;
 
-    public static async Task<TenantId> HandleRequest(Config config, HttpRequest request, HttpResponse response)
+    public TenantResolver(Config config)
+    {
+        _config = config;
+    }
+
+    public async Task<TenantId> Resolve(HttpRequest request, HttpResponse response)
     {
         var tenantId = string.Empty;
         var sourceIdentifier = string.Empty;
-        if (_resolvers.ContainsKey(config.TenantResolution.Strategy))
+        if (_resolvers.ContainsKey(_config.TenantResolution.Strategy))
         {
-            sourceIdentifier = await _resolvers[config.TenantResolution.Strategy].Resolve(config, request);
+            sourceIdentifier = await _resolvers[_config.TenantResolution.Strategy].Resolve(config, request);
         }
 
         if (!string.IsNullOrEmpty(sourceIdentifier))
         {
-            var tenant = config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier));
+            var tenant = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier));
             tenantId = tenant.Key;
             if (!string.IsNullOrEmpty(tenantId))
             {
@@ -36,7 +41,7 @@ public static class Tenancy
 
         if (string.IsNullOrEmpty(tenantId))
         {
-            var tenant = config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host));
+            var tenant = _config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host));
             tenantId = tenant.Key;
             if (!string.IsNullOrEmpty(tenantId))
             {

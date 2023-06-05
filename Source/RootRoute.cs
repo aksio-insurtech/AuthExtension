@@ -3,6 +3,7 @@
 
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
+using Aksio.IngressMiddleware.Tenancy;
 
 namespace Aksio.IngressMiddleware;
 
@@ -11,17 +12,22 @@ public class RootRoute : Controller
 {
     readonly Config _config;
     readonly IIdentityDetailsResolver _identityDetailsResolver;
+    readonly ITenantResolver _tenantResolver;
 
-    public RootRoute(Config config, IIdentityDetailsResolver identityDetailsResolver)
+    public RootRoute(
+        Config config,
+        IIdentityDetailsResolver identityDetailsResolver,
+        ITenantResolver tenantResolver)
     {
         _config = config;
         _identityDetailsResolver = identityDetailsResolver;
+        _tenantResolver = tenantResolver;
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var tenantId = await Tenancy.Tenancy.HandleRequest(_config, Request, Response);
+        var tenantId = await _tenantResolver.Resolve(Request, Response);
 
         // TODO: Impersonation. Look for impersonation cookie, if present, use that as the principal
 
