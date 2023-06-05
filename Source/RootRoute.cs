@@ -31,7 +31,7 @@ public class RootRoute : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var tenantId = await _tenantResolver.Resolve(Request, Response);
+        var tenantId = await _tenantResolver.Resolve(Request);
         Response.Headers[Headers.TenantId] = tenantId.ToString();
 
         // TODO: Impersonation. Look for impersonation cookie, i+f present, use that as the principal
