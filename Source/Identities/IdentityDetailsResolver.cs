@@ -14,18 +14,23 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
     const string CookieName = ".aksio-identity";
     readonly Config _config;
     readonly IHttpClientFactory _httpClientFactory;
+    readonly ILogger<IdentityDetailsResolver> _logger;
 
-    public IdentityDetailsResolver(Config config, IHttpClientFactory httpClientFactory)
+    public IdentityDetailsResolver(
+        Config config,
+        IHttpClientFactory httpClientFactory,
+        ILogger<IdentityDetailsResolver> logger)
     {
         _config = config;
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
 
     public async Task<bool> Resolve(HttpRequest request, HttpResponse response, TenantId tenantId)
     {
         if (string.IsNullOrEmpty(_config.IdentityDetailsUrl))
         {
-            Globals.Logger.LogInformation("Identity details url is not configured, skipping identity details resolution");
+            _logger.LogInformation("Identity details url is not configured, skipping identity details resolution");
             return true;
         }
 
@@ -56,7 +61,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
                     principalName = "[NotSet]";
                 }
 
-                Globals.Logger.LogInformation("Resolving identity details for {PrincipalId} and {TenantId}", principalId, tenantId);
+                _logger.LogInformation("Resolving identity details for {PrincipalId} and {TenantId}", principalId, tenantId);
 
                 client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
                 client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
@@ -76,7 +81,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
 
                 if (responseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    Globals.Logger.LogError("Error trying to resolve identity details for {PrincipalId} on tenant {TenantId}: {StatusCode} {ReasonPhrase}", principalId, tenantId, responseMessage.StatusCode, responseMessage.ReasonPhrase);
+                    _logger.LogError("Error trying to resolve identity details for {PrincipalId} on tenant {TenantId}: {StatusCode} {ReasonPhrase}", principalId, tenantId, responseMessage.StatusCode, responseMessage.ReasonPhrase);
                     return true;
                 }
 
@@ -87,7 +92,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
             }
             catch (Exception ex)
             {
-                Globals.Logger.LogError(ex, "Error trying to resolve identity details");
+                _logger.LogError(ex, "Error trying to resolve identity details");
             }
         }
 

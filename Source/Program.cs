@@ -19,8 +19,6 @@ builder.Services.AddTransient<IIdentityDetailsResolver, IdentityDetailsResolver>
 
 builder.Services.AddHttpClient();
 var loggerFactory = builder.Host.UseDefaultLogging();
-Globals.Logger = loggerFactory.CreateLogger("Default");
-Globals.Logger.LogInformation("Setting up routes");
 
 var app = builder.Build();
 app.UseRouting();

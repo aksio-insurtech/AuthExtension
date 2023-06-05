@@ -33,7 +33,7 @@ public class OAuthBearerTokens : IOAuthBearerTokens
     {
         if (!_config.OAuthBearerTokens.IsEnabled)
         {
-            Globals.Logger.LogInformation("OAuth bearer tokens validation is not enabled, skipping validation");
+            _logger.LogInformation("OAuth bearer tokens validation is not enabled, skipping validation");
             return _ok;
         }
 
