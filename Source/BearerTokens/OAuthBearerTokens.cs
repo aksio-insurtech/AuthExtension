@@ -12,43 +12,52 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Aksio.IngressMiddleware.BearerTokens;
 
-public static class OAuthBearerTokens
+public class OAuthBearerTokens : IOAuthBearerTokens
 {
     static AuthorityResult? _authority;
     static JsonWebKeySet? _jwks;
     static DateTime _jwksLastUpdated = DateTime.MinValue;
+    readonly Config _config;
+    readonly IHttpClientFactory _httpClientFactory;
+    readonly ILogger<OAuthBearerTokens> _logger;
+    readonly IActionResult _ok = new OkResult();
 
-    public static async Task HandleRequest(Config config, HttpRequest request, HttpResponse response, TenantId tenantId, IHttpClientFactory httpClientFactory)
+    public OAuthBearerTokens(Config config, IHttpClientFactory httpClientFactory, ILogger<OAuthBearerTokens> logger)
     {
-        if (!config.OAuthBearerTokens.IsEnabled)
+        _config = config;
+        _httpClientFactory = httpClientFactory;
+        _logger = logger;
+    }
+
+    public async Task<IActionResult> Handle(HttpRequest request, HttpResponse response, TenantId tenantId)
+    {
+        if (!_config.OAuthBearerTokens.IsEnabled)
         {
             Globals.Logger.LogInformation("OAuth bearer tokens validation is not enabled, skipping validation");
-            return;
+            return _ok;
         }
 
         if (request.Headers.Authorization.Count == 0)
         {
-            await Unauthorized(response, "Missing header", "Authorization header missing");
-            return;
+            return Unauthorized(response, "Missing header", "Authorization header missing");
         }
 
         var strings = request.Headers.Authorization.ToString().Split(' ');
         if (strings.Length < 2 && strings[0].StartsWith("Bearer"))
         {
-            await Unauthorized(response, "Missing Bearer in header", "Authorization header missing 'Bearer' in token value, unauthorized, Should be in the format \"Bearer {token}\"");
-            return;
+            return Unauthorized(response, "Missing Bearer in header", "Authorization header missing 'Bearer' in token value, unauthorized, Should be in the format \"Bearer {token}\"");
         }
         var token = strings[1];
 
         if (_jwks is null || _jwksLastUpdated < DateTime.UtcNow.AddHours(-5))
         {
-            if (!await RefreshJwks(config, httpClientFactory))
+            if (!await RefreshJwks())
             {
-                return;
+                return _ok;
             }
         }
 
-        if (_jwks is null || _authority is null) return;
+        if (_jwks is null || _authority is null) return _ok;
 
         var jwk = _jwks.Keys[0];
         var validationParameters = new TokenValidationParameters
@@ -68,21 +77,20 @@ public static class OAuthBearerTokens
             var valid = validatedToken != null;
             if (!valid)
             {
-                await Unauthorized(response, "invalid_token", "Given token is invalid");
-                return;
+                return Unauthorized(response, "invalid_token", "Given token is invalid");
             }
             AddPrincipalHeader(response, jwtToken);
         }
         catch (SecurityTokenExpiredException ex)
         {
-            await Unauthorized(response, "token_expired", $"Token has expired, it expired at {ex.Expires} (UTC)");
-            return;
+            return Unauthorized(response, "token_expired", $"Token has expired, it expired at {ex.Expires} (UTC)");
         }
         catch (Exception ex)
         {
-            await Unauthorized(response, "invalid_token", $"Could not validate token ; {ex.Message}");
-            return;
+            return Unauthorized(response, "invalid_token", $"Could not validate token ; {ex.Message}");
         }
+
+        return _ok;
     }
 
     static void AddPrincipalHeader(HttpResponse response, JwtSecurityToken jwtToken)
@@ -93,27 +101,27 @@ public static class OAuthBearerTokens
         response.Headers[Headers.Principal] = Convert.ToBase64String(principalAsJsonBytes);
     }
 
-    static async Task<bool> RefreshJwks(Config config, IHttpClientFactory httpClientFactory)
+    async Task<bool> RefreshJwks()
     {
-        var client = httpClientFactory.CreateClient();
-        var response = await client.GetAsync(config.OAuthBearerTokens.Authority);
+        var client = _httpClientFactory.CreateClient();
+        var response = await client.GetAsync(_config.OAuthBearerTokens.Authority);
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            Globals.Logger.LogError("Could not get the well-known authority document");
+            _logger.LogError("Could not get the well-known authority document");
             return false;
         }
 
         _authority = await response.Content.ReadFromJsonAsync<AuthorityResult>();
         if (_authority is null)
         {
-            Globals.Logger.LogError("Could not parse the well-known authority document");
+            _logger.LogError("Could not parse the well-known authority document");
             return false;
         }
 
         response = await client.GetAsync(_authority.jwks_uri);
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            Globals.Logger.LogError("Could not get JWKS document");
+            _logger.LogError("Could not get JWKS document");
         }
 
         var jwks = await response.Content.ReadAsStringAsync();
@@ -123,11 +131,10 @@ public static class OAuthBearerTokens
         return true;
     }
 
-    static async Task Unauthorized(HttpResponse response, string message, string description)
+    IActionResult Unauthorized(HttpResponse response, string message, string description)
     {
-        response.StatusCode = 401;
         response.Headers.Add("WWW-Authenticate", $"Bearer, error=\"{message}\", error_description=\"{description}\"");
-        Globals.Logger.LogError(message);
-        await response.WriteAsync(message);
+        _logger.LogError(message);
+        return new UnauthorizedResult();
     }
 }

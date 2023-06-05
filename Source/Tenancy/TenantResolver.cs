@@ -6,7 +6,7 @@ using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
-public class TenantResolver
+public class TenantResolver : ITenantResolver
 {
     readonly static Dictionary<TenantSourceIdentifierResolverType, ITenantSourceIdentifierResolver> _resolvers = new()
     {
