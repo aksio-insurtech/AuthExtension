@@ -22,5 +22,24 @@
             "regularExpression": "^\/(?<sourceIdentifier>[\\w]+)\/"
         }
     },
-    "identityDetailsUrl": "http://localhost:5100/.aksio/me"
+    "identityDetailsUrl": "http://localhost:5100/.aksio/me",
+    "impersonation": {
+        "identityProviders": [
+            "aad"
+        ],
+        "authorization": {
+            "roles": [
+                "aksio:impersonate"
+            ],
+            "groups": [
+                "aksio:impersonate"
+            ],
+            "claims": [
+                {
+                    "type": "http://schemas.microsoft.com/identity/claims/identityprovider",
+                    "value": "aad"
+                }
+            ]
+        }
+    }
 }
