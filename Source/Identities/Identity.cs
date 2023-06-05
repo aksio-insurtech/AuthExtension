@@ -7,7 +7,7 @@ using System.Text;
 using Aksio.Cratis.Execution;
 using Aksio.IngressMiddleware.Configuration;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Identities;
 
 public static class Identity
 {
