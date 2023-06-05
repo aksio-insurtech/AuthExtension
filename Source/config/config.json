@@ -28,6 +28,9 @@
             "aad"
         ],
         "authorization": {
+            "tenants": [
+                "3f5baba5-65d7-4058-886c-aa6fab261a8c"
+            ],
             "roles": [
                 "aksio:impersonate"
             ],
