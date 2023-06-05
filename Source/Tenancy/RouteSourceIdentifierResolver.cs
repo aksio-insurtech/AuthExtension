@@ -4,7 +4,7 @@
 using System.Text.RegularExpressions;
 using Aksio.IngressMiddleware.Configuration;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Tenancy;
 
 public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITenantSourceIdentifierResolver<RouteSourceIdentifierResolverOptions>
 {

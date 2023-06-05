@@ -3,6 +3,7 @@
 
 using Aksio.IngressMiddleware;
 using Aksio.IngressMiddleware.Configuration;
+using Aksio.IngressMiddleware.Tenancy;
 
 UnhandledExceptionsManager.Setup();
 

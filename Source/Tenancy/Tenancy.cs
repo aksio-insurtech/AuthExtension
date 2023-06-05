@@ -5,7 +5,7 @@ using Aksio.Cratis.Execution;
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Security;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Tenancy;
 
 public static class Tenancy
 {

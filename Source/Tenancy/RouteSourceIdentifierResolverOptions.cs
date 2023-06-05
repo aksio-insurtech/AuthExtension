@@ -1,11 +1,9 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Tenancy;
 
-public enum TenantSourceIdentifierResolverType
+public class RouteSourceIdentifierResolverOptions
 {
-    None = 0,
-    Route = 1,
-    Claim = 2
+    public string RegularExpression { get; set; } = string.Empty;
 }

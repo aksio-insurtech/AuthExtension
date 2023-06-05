@@ -4,7 +4,7 @@
 using System.Text.Json;
 using Aksio.IngressMiddleware.Configuration;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Tenancy;
 
 public class TenantSourceIdentifierResolver : ITenantSourceIdentifierResolver
 {
