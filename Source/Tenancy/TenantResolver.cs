@@ -19,7 +19,7 @@ public class TenantResolver : ITenantResolver
         _logger = logger;
     }
 
-    public async Task<TenantId> Resolve(HttpRequest request, HttpResponse response)
+    public async Task<TenantId> Resolve(HttpRequest request)
     {
         var tenantId = string.Empty;
         var sourceIdentifier = await _resolver.Resolve(_config, request);
@@ -49,7 +49,6 @@ public class TenantResolver : ITenantResolver
             _logger.LogInformation("TenantId is not resolved, setting to empty.");
         }
 
-        response.Headers[Headers.TenantId] = tenantId ?? string.Empty;
         return string.IsNullOrEmpty(tenantId) ? TenantId.NotSet : new TenantId(Guid.Parse(tenantId));
     }
 }

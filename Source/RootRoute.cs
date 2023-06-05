@@ -32,8 +32,9 @@ public class RootRoute : Controller
     public async Task<IActionResult> Get()
     {
         var tenantId = await _tenantResolver.Resolve(Request, Response);
+        Response.Headers[Headers.TenantId] = tenantId.ToString();
 
-        // TODO: Impersonation. Look for impersonation cookie, if present, use that as the principal
+        // TODO: Impersonation. Look for impersonation cookie, i+f present, use that as the principal
 
         if (!await _identityDetailsResolver.Resolve(Request, Response, tenantId))
         {

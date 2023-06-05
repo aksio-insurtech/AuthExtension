@@ -7,5 +7,5 @@ namespace Aksio.IngressMiddleware.Tenancy;
 
 public interface ITenantResolver
 {
-    Task<TenantId> Resolve(HttpRequest request, HttpResponse response);
+    Task<TenantId> Resolve(HttpRequest request);
 }
