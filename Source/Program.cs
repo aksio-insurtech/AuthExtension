@@ -34,7 +34,4 @@ app.MapGet("/", async (HttpRequest request, HttpResponse response) =>
     await OAuthBearerTokens.HandleRequest(config, request, response, tenantId, httpClientFactory);
 });
 
-app.MapGet("/id-porten/authorize/", (HttpRequest request, HttpResponse response) =>
-    IdPorten.HandleAuthorize(config, request, response));
-
 app.Run();
