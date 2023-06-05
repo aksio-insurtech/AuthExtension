@@ -3,7 +3,7 @@
 
 using Microsoft.Extensions.Primitives;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Helpers;
 
 public static class QueryCollectionExtensions
 {

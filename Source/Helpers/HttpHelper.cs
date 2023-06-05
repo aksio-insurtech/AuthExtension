@@ -3,7 +3,7 @@
 
 using System.Text.Json;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Helpers;
 
 public static class HttpHelper
 {
