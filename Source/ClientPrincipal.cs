@@ -11,7 +11,7 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
 {
     record RawClientPrincipal(string auth_typ, string name_typ, string role_typ, IEnumerable<Claim> claims);
 
-    public static ClientPrincipal FromBase64(string base64)
+    public static ClientPrincipal FromBase64(string userId, string base64)
     {
         var json = Convert.FromBase64String(base64);
         var jsonText = Encoding.UTF8.GetString(json);
@@ -19,6 +19,6 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
 
         var name = rawPrincipal.claims.FirstOrDefault(_ => _.Type == rawPrincipal.name_typ)?.Value ?? string.Empty;
         var roles = rawPrincipal.claims.Where(_ => _.Type == rawPrincipal.role_typ).Select(_ => _.Value).ToArray();
-        return new ClientPrincipal(rawPrincipal.auth_typ, string.Empty, name, roles, rawPrincipal.claims);
+        return new ClientPrincipal(rawPrincipal.auth_typ, userId, name, roles, rawPrincipal.claims);
     }
 }
