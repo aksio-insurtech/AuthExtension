@@ -3,7 +3,7 @@
 
 using System.Text.Json;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.Configuration;
 
 public class Config
 {

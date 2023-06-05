@@ -6,6 +6,13 @@ namespace Aksio.IngressMiddleware.Impersonation;
 [Route("/.aksio/impersonate")]
 public class Impersonation : Controller
 {
+    readonly ILogger<Impersonation> _logger;
+
+    public Impersonation(ILogger<Impersonation> logger)
+    {
+        _logger = logger;
+    }
+
     [HttpPost]
     public IActionResult Impersonate()
     {

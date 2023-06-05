@@ -3,6 +3,7 @@
 
 using System.Text;
 using System.Text.Json;
+using Aksio.IngressMiddleware.Security;
 
 namespace Aksio.IngressMiddleware;
 
