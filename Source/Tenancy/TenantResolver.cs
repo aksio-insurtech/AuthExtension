@@ -14,10 +14,12 @@ public class TenantResolver
         { TenantSourceIdentifierResolverType.Route, new RouteSourceIdentifierResolver() }
     };
     readonly Config _config;
+    readonly ILogger<TenantResolver> _logger;
 
-    public TenantResolver(Config config)
+    public TenantResolver(Config config, ILogger<TenantResolver> logger)
     {
         _config = config;
+        _logger = logger;
     }
 
     public async Task<TenantId> Resolve(HttpRequest request, HttpResponse response)
@@ -26,7 +28,7 @@ public class TenantResolver
         var sourceIdentifier = string.Empty;
         if (_resolvers.ContainsKey(_config.TenantResolution.Strategy))
         {
-            sourceIdentifier = await _resolvers[_config.TenantResolution.Strategy].Resolve(config, request);
+            sourceIdentifier = await _resolvers[_config.TenantResolution.Strategy].Resolve(_config, request);
         }
 
         if (!string.IsNullOrEmpty(sourceIdentifier))
@@ -35,7 +37,7 @@ public class TenantResolver
             tenantId = tenant.Key;
             if (!string.IsNullOrEmpty(tenantId))
             {
-                Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on source identifier ({sourceIdentifier}) resolved using {config.TenantResolution.Strategy}");
+                _logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on source identifier ({sourceIdentifier}) resolved using {_config.TenantResolution.Strategy}");
             }
         }
 
@@ -45,13 +47,13 @@ public class TenantResolver
             tenantId = tenant.Key;
             if (!string.IsNullOrEmpty(tenantId))
             {
-                Globals.Logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
+                _logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on configured host ({request.Host.Host})");
             }
         }
 
         if (string.IsNullOrEmpty(tenantId))
         {
-            Globals.Logger.LogInformation($"TenantId is not resolved, setting to empty.");
+            _logger.LogInformation($"TenantId is not resolved, setting to empty.");
         }
 
         response.Headers[Headers.TenantId] = tenantId ?? string.Empty;
