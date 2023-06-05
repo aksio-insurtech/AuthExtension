@@ -10,7 +10,7 @@ using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Security;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Aksio.IngressMiddleware;
+namespace Aksio.IngressMiddleware.BearerTokens;
 
 public static class OAuthBearerTokens
 {
