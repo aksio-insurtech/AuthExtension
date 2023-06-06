@@ -20,4 +20,10 @@ public class when_converting_from_base64 : Specification
     void Because() => result = ClientPrincipal.FromBase64(UserId, Convert.ToBase64String(Encoding.UTF8.GetBytes(input)));
 
     [Fact] void should_have_the_correct_identity_provider() => result.IdentityProvider.ShouldEqual(IdentityProvider);
+    [Fact] void should_have_the_correct_user_id() => result.UserId.ShouldEqual(UserId);
+    [Fact] void should_have_the_correct_user_name() => result.UserDetails.ShouldEqual(UserName);
+    [Fact] void should_have_the_correct_roles() => result.UserRoles.ShouldContain(UserRole, AdminRole);
+    [Fact] void should_hold_the_name_claim() => result.Claims.ShouldContain(claim => claim.Type == "name" && claim.Value == UserName);
+    [Fact] void should_hold_the_user_role_claim() => result.Claims.ShouldContain(claim => claim.Type == "roles" && claim.Value == UserRole);
+    [Fact] void should_hold_the_admin_role_claim() => result.Claims.ShouldContain(claim => claim.Type == "roles" && claim.Value == AdminRole);
 }
