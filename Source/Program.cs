@@ -5,6 +5,7 @@ using Aksio.IngressMiddleware;
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
+using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.Tenancy;
 
 UnhandledExceptionsManager.Setup();
@@ -19,6 +20,11 @@ builder.Services.AddTenantSourceIdentifierResolver();
 builder.Services.AddTransient<ITenantResolver, TenantResolver>();
 builder.Services.AddTransient<IIdentityDetailsResolver, IdentityDetailsResolver>();
 builder.Services.AddTransient<IOAuthBearerTokens, OAuthBearerTokens>();
+builder.Services.AddTransient<TenantImpersonationAuthorizer>();
+builder.Services.AddTransient<IdentityProviderImpersonationAuthorizer>();
+builder.Services.AddTransient<ClaimImpersonationAuthorizer>();
+builder.Services.AddTransient<RolesImpersonationAuthorizer>();
+builder.Services.AddTransient<GroupsImpersonationAuthorizer>();
 
 builder.Services.AddHttpClient();
 var loggerFactory = builder.Host.UseDefaultLogging();

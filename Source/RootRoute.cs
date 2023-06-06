@@ -46,11 +46,15 @@ public class RootRoute : Controller
         var tenantId = await _tenantResolver.Resolve(Request);
         Response.Headers[Headers.TenantId] = tenantId.ToString();
 
-        // TODO: Impersonation. Look for impersonation cookie, i+f present, use that as the principal
+        // If we have an impersonation cookie, we'll set the principal header to the value of the cookie
+        if( Request.Cookies.ContainsKey(Cookies.Impersonation))
+        {
+            Request.Headers[Headers.Principal] = Request.Cookies[Cookies.Impersonation];
+        }
 
         if (!await _identityDetailsResolver.Resolve(Request, Response, tenantId))
         {
-            return Forbid();
+            return StatusCode(StatusCodes.Status403Forbidden);
         }
 
         return await _bearerTokens.Handle(Request, Response, tenantId);

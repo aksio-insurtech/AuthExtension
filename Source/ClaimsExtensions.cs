@@ -19,4 +19,20 @@ public static class ClaimsExtensions
     {
         return claims.Where(_ => _.Type == "groups").Select(_ => _.Value);
     }
+
+    /// <summary>
+    /// Convert from collection of <see cref="RawClaim"/> to collection of <see cref="Claim"/>.
+    /// </summary>
+    /// <param name="claims">Raw claims to convert from.</param>
+    /// <returns>Collection of <see cref="Claim"/>.</returns>
+    public static IEnumerable<Claim> ToClaims(this IEnumerable<RawClaim> claims) =>
+         claims.Select(_ => new Claim(_.Type, _.Value)).ToArray();
+
+    /// <summary>
+    /// Convert from collection of <see cref="Claim"/> to collection of <see cref="RawClaim"/>.
+    /// </summary>
+    /// <param name="claims">Raw claims to convert from.</param>
+    /// <returns>Collection of <see cref="Claim"/>.</returns>
+    public static IEnumerable<RawClaim> ToRawClaims(this IEnumerable<Claim> claims) =>
+         claims.Select(_ => new RawClaim(_.Type, _.Value)).ToArray();
 }

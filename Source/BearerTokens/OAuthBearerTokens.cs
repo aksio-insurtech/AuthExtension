@@ -148,6 +148,6 @@ public class OAuthBearerTokens : IOAuthBearerTokens
     {
         response.Headers.Add("WWW-Authenticate", $"Bearer, error=\"{message}\", error_description=\"{description}\"");
         _logger.LogError(message);
-        return new UnauthorizedResult();
+        return new StatusCodeResult(StatusCodes.Status401Unauthorized);
     }
 }

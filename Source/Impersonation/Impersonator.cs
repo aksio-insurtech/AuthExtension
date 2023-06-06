@@ -50,13 +50,19 @@ public class Impersonator : Controller
     [HttpPost]
     public IActionResult Impersonate()
     {
+        var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
         var claims = Request.Form.ToClaims();
+        var filtered = principal.Claims.Where(_ => !claims.Any(c => c.Type == _.Type));
+        var newPrincipal = principal with
+        {
+            Claims = filtered.Concat(claims).ToArray()
+        };
 
-        // Copy existing client principal
-        // Replace claims with new claims
-        // Add an impersonation cookie
+        var newPrincipalAsBase64 = newPrincipal.ToBase64();
+        Response.Headers[Headers.Principal] = newPrincipalAsBase64;
+        Response.Cookies.Append(Cookies.Impersonation, newPrincipalAsBase64, new CookieOptions { Expires = DateTimeOffset.MinValue });
 
-        return Ok();
+        return Redirect("/");
     }
 
     /// <summary>
@@ -68,12 +74,12 @@ public class Impersonator : Controller
     {
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
 
-        foreach( var authorizerType in _authorizers)
+        foreach (var authorizerType in _authorizers)
         {
             var authorizer = (_serviceProvider.GetRequiredService(authorizerType) as IImpersonationAuthorizer)!;
             if (!await authorizer.IsAuthorized(Request, principal))
             {
-                return Forbid();
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
         }
 

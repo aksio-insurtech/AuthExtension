@@ -14,7 +14,6 @@ namespace Aksio.IngressMiddleware.Identities;
 /// </summary>
 public class IdentityDetailsResolver : IIdentityDetailsResolver
 {
-    const string CookieName = ".aksio-identity";
     readonly Config _config;
     readonly IHttpClientFactory _httpClientFactory;
     readonly ILogger<IdentityDetailsResolver> _logger;
@@ -44,7 +43,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
             return true;
         }
 
-        if (!request.Cookies.ContainsKey(CookieName)
+        if (!request.Cookies.ContainsKey(Cookies.Identity)
             && request.Headers.ContainsKey(Headers.Principal))
         {
             try
@@ -98,7 +97,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
                 var encoding = Encoding.GetEncoding("iso-8859-1");
                 var encoded = encoding.GetBytes(identityDetails);
                 var identityDetailsAsBase64 = Convert.ToBase64String(encoded);
-                response.Cookies.Append(CookieName, identityDetailsAsBase64, new CookieOptions { Expires = DateTimeOffset.Now.AddMinutes(5) });
+                response.Cookies.Append(Cookies.Identity, identityDetailsAsBase64, new CookieOptions { Expires = DateTimeOffset.MinValue });
             }
             catch (Exception ex)
             {

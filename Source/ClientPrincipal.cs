@@ -22,8 +22,6 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
     /// </summary>
     public static readonly ClientPrincipal Empty = new(string.Empty, string.Empty, string.Empty, Array.Empty<string>(), Array.Empty<Claim>());
 
-    record RawClientPrincipal(string auth_typ, string name_typ, string role_typ, IEnumerable<Claim> claims);
-
     /// <summary>
     /// Convert from a base64 encoded string to a <see cref="ClientPrincipal"/>.
     /// </summary>
@@ -38,6 +36,18 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
 
         var name = string.IsNullOrEmpty(rawPrincipal.name_typ) ? string.Empty : rawPrincipal.claims.FirstOrDefault(_ => _.Type == rawPrincipal.name_typ)?.Value ?? string.Empty;
         var roles = string.IsNullOrEmpty(rawPrincipal.role_typ) ? Enumerable.Empty<string>() : rawPrincipal.claims.Where(_ => _.Type == rawPrincipal.role_typ).Select(_ => _.Value).ToArray();
-        return new ClientPrincipal(rawPrincipal.auth_typ, userId ?? string.Empty, name, roles, rawPrincipal.claims);
+        var claims = rawPrincipal.claims.ToClaims();
+        return new ClientPrincipal(rawPrincipal.auth_typ, userId ?? string.Empty, name, roles, claims);
+    }
+
+    /// <summary>
+    /// Convert to base64 encoded string.
+    /// </summary>
+    /// <returns>A base64 encoded string.</returns>
+    public string ToBase64()
+    {
+        var rawPrincipal = new RawClientPrincipal(IdentityProvider, string.Empty, string.Empty, Claims.ToRawClaims());
+        var json = JsonSerializer.SerializeToUtf8Bytes(rawPrincipal, Globals.JsonSerializerOptions);
+        return Convert.ToBase64String(json);
     }
 }
