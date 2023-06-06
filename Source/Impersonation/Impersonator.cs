@@ -9,7 +9,7 @@ namespace Aksio.IngressMiddleware.Impersonation;
 /// Represents the impersonation endpoints.
 /// </summary>
 [Route("/.aksio/impersonate")]
-public class Impersonation : Controller
+public class Impersonator : Controller
 {
     static readonly IEnumerable<Type> _authorizers = new[]
     {
@@ -20,16 +20,16 @@ public class Impersonation : Controller
         typeof(GroupsImpersonationAuthorizer)
     };
     readonly IServiceProvider _serviceProvider;
-    readonly ILogger<Impersonation> _logger;
+    readonly ILogger<Impersonator> _logger;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Impersonation"/> class.
+    /// Initializes a new instance of the <see cref="Impersonator"/> class.
     /// </summary>
     /// <param name="serviceProvider"><see cref="IServiceProvider"/> to get instances from.</param>
     /// <param name="logger">Logger for logging.</param>
-    public Impersonation(
+    public Impersonator(
         IServiceProvider serviceProvider,
-        ILogger<Impersonation> logger)
+        ILogger<Impersonator> logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
@@ -64,7 +64,7 @@ public class Impersonation : Controller
     /// </summary>
     /// <returns><see cref="IActionResult"/>.</returns>
     [HttpGet("auth")]
-    public async Task<IActionResult> Auth()
+    public async Task<IActionResult> Authorize()
     {
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
 

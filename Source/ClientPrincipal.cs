@@ -36,8 +36,8 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
         var jsonText = Encoding.UTF8.GetString(json);
         var rawPrincipal = JsonSerializer.Deserialize<RawClientPrincipal>(jsonText, Globals.JsonSerializerOptions)!;
 
-        var name = rawPrincipal.claims.FirstOrDefault(_ => _.Type == rawPrincipal.name_typ)?.Value ?? string.Empty;
-        var roles = rawPrincipal.claims.Where(_ => _.Type == rawPrincipal.role_typ).Select(_ => _.Value).ToArray();
-        return new ClientPrincipal(rawPrincipal.auth_typ, userId, name, roles, rawPrincipal.claims);
+        var name = string.IsNullOrEmpty(rawPrincipal.name_typ) ? string.Empty : rawPrincipal.claims.FirstOrDefault(_ => _.Type == rawPrincipal.name_typ)?.Value ?? string.Empty;
+        var roles = string.IsNullOrEmpty(rawPrincipal.role_typ) ? Enumerable.Empty<string>() : rawPrincipal.claims.Where(_ => _.Type == rawPrincipal.role_typ).Select(_ => _.Value).ToArray();
+        return new ClientPrincipal(rawPrincipal.auth_typ, userId ?? string.Empty, name, roles, rawPrincipal.claims);
     }
 }
