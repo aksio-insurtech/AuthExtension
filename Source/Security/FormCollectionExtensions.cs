@@ -18,7 +18,7 @@ public static class FormCollectionExtensions
     /// <remarks>
     /// This method will only convert claims that starts with <c>claim:</c>.
     /// </remarks>
-    public static IEnumerable<Claim> ToClaims(this IFormCollection form) =>
+    public static IEnumerable<Claim> ToClaims(this IQueryCollection form) =>
         form.Keys
             .Where(_ => _.StartsWith(ClaimPrefix))
             .Select(_ => new Claim(_.Replace(ClaimPrefix, string.Empty), form[_]))

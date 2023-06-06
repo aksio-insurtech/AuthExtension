@@ -13,6 +13,19 @@
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build sample",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "--no-restore",
+                "${workspaceFolder}/Sample/backend/backend.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }

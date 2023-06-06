@@ -50,6 +50,7 @@ public class RootRoute : Controller
         if( Request.Cookies.ContainsKey(Cookies.Impersonation))
         {
             Request.Headers[Headers.Principal] = Request.Cookies[Cookies.Impersonation];
+            Response.Headers[Headers.Principal] = Request.Cookies[Cookies.Impersonation];
         }
 
         if (!await _identityDetailsResolver.Resolve(Request, Response, tenantId))

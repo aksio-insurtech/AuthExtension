@@ -97,7 +97,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
                 var encoding = Encoding.GetEncoding("iso-8859-1");
                 var encoded = encoding.GetBytes(identityDetails);
                 var identityDetailsAsBase64 = Convert.ToBase64String(encoded);
-                response.Cookies.Append(Cookies.Identity, identityDetailsAsBase64, new CookieOptions { Expires = DateTimeOffset.MinValue });
+                response.Cookies.Append(Cookies.Identity, identityDetailsAsBase64, new CookieOptions { Expires = null! });
             }
             catch (Exception ex)
             {

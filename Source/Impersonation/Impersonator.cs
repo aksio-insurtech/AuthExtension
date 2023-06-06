@@ -47,11 +47,11 @@ public class Impersonator : Controller
     /// <br/>
     /// claim:sub=1234567890
     /// </remarks>
-    [HttpPost]
+    [HttpGet("perform")]
     public IActionResult Impersonate()
     {
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
-        var claims = Request.Form.ToClaims();
+        var claims = Request.Query.ToClaims();
         var filtered = principal.Claims.Where(_ => !claims.Any(c => c.Type == _.Type));
         var newPrincipal = principal with
         {
@@ -60,7 +60,8 @@ public class Impersonator : Controller
 
         var newPrincipalAsBase64 = newPrincipal.ToBase64();
         Response.Headers[Headers.Principal] = newPrincipalAsBase64;
-        Response.Cookies.Append(Cookies.Impersonation, newPrincipalAsBase64, new CookieOptions { Expires = DateTimeOffset.MinValue });
+        Response.Cookies.Append(Cookies.Impersonation, newPrincipalAsBase64, new CookieOptions { Expires = null! });
+        Response.Cookies.Delete(Cookies.Identity);
 
         return Redirect("/");
     }
