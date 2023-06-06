@@ -29,10 +29,16 @@ public class ClaimImpersonationAuthorizer : IImpersonationAuthorizer
             return Task.FromResult(true);
         }
 
-        return Task.FromResult(principal.Claims
-            .All(_ => _config
-                .Impersonation.Authorization.Claims.Any(claim =>
-                    claim.Type.Equals(_.Type, StringComparison.InvariantCultureIgnoreCase) &&
-                    claim.Value.Equals(_.Value, StringComparison.InvariantCultureIgnoreCase))));
+        if( !principal.Claims.Any() )
+        {
+            return Task.FromResult(false);
+        }
+
+        var authorized = _config.Impersonation.Authorization.Claims
+            .All(_ => principal.Claims.Any(claim =>
+                claim.Type.Equals(_.Type, StringComparison.InvariantCultureIgnoreCase) &&
+                claim.Value.Equals(_.Value, StringComparison.InvariantCultureIgnoreCase)));
+
+        return Task.FromResult(authorized);
     }
 }
