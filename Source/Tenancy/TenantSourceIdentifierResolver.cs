@@ -2,13 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Text.Json;
+using Aksio.Cratis.Execution;
 using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
 public class TenantSourceIdentifierResolver : ITenantSourceIdentifierResolver
 {
-    public async Task<string> Resolve(Config config, HttpRequest request)
+    public async Task<TenantId> Resolve(Config config, HttpRequest request)
     {
         var genericResolverInterface = GetType().GetInterface(typeof(ITenantSourceIdentifierResolver<>).Name);
         if (genericResolverInterface is not null)
@@ -21,6 +22,6 @@ public class TenantSourceIdentifierResolver : ITenantSourceIdentifierResolver
                 return await (method.Invoke(this, new object[] { config, options, request }) as Task<string>)!;
             }
         }
-        return string.Empty;
+        return TenantId.NotSet;
     }
 }

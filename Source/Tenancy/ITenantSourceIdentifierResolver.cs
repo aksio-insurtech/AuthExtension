@@ -1,6 +1,7 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Aksio.Cratis.Execution;
 using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
@@ -16,7 +17,7 @@ public interface ITenantSourceIdentifierResolver
     /// <param name="config"><see cref="Config"/> instance.</param>
     /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
     /// <returns></returns>
-    Task<string> Resolve(Config config, HttpRequest request);
+    Task<TenantId> Resolve(Config config, HttpRequest request);
 }
 
 /// <summary>
@@ -25,5 +26,5 @@ public interface ITenantSourceIdentifierResolver
 /// <typeparam name="TOptions">Type of options.</typeparam>
 public interface ITenantSourceIdentifierResolver<TOptions> : ITenantSourceIdentifierResolver
 {
-    Task<string> Resolve(Config config, TOptions options, HttpRequest request);
+    Task<TenantId> Resolve(Config config, TOptions options, HttpRequest request);
 }
