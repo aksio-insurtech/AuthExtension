@@ -22,5 +22,22 @@ public class GroupsImpersonationAuthorizer : IImpersonationAuthorizer
     }
 
     /// <inheritdoc/>
-    public Task<bool> IsAuthorized(HttpRequest request, ClientPrincipal principal) => throw new NotImplementedException();
+    public Task<bool> IsAuthorized(HttpRequest request, ClientPrincipal principal)
+    {
+        if (!_config.Impersonation.Authorization.Groups.Any())
+        {
+            return Task.FromResult(true);
+        }
+
+        var groups = principal.Claims.GetGroups();
+        if (!groups.Any())
+        {
+            return Task.FromResult(false);
+        }
+
+        var authorized = _config.Impersonation.Authorization.Groups
+            .All(_ => groups.Any(role => role.Equals(_, StringComparison.InvariantCultureIgnoreCase)));
+
+        return Task.FromResult(authorized);
+    }
 }
