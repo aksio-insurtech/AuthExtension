@@ -3,10 +3,21 @@
 
 namespace Aksio.IngressMiddleware.Security;
 
+/// <summary>
+/// Extension methods for <see cref="IFormCollection"/>.
+/// </summary>
 public static class FormCollectionExtensions
 {
     const string ClaimPrefix = "claim:";
 
+    /// <summary>
+    /// Converts the <see cref="IFormCollection"/> to a set of claims.
+    /// </summary>
+    /// <param name="form"><see cref="IFormCollection"/> to convert.</param>
+    /// <returns>Collection of <see cref="Claim"/>.</returns>
+    /// <remarks>
+    /// This method will only convert claims that starts with <c>claim:</c>.
+    /// </remarks>
     public static IEnumerable<Claim> ToClaims(this IFormCollection form) =>
         form.Keys
             .Where(_ => _.StartsWith(ClaimPrefix))

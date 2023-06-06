@@ -5,8 +5,16 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace Aksio.IngressMiddleware.Security;
 
+/// <summary>
+/// Extensions for <see cref="JwtSecurityToken"/>.
+/// </summary>
 public static class JwtSecurityTokenExtensions
 {
+    /// <summary>
+    /// Converts a <see cref="JwtSecurityToken"/> to a <see cref="ClientPrincipal"/>.
+    /// </summary>
+    /// <param name="token"><see cref="JwtSecurityToken"/> to convert.</param>
+    /// <returns>Converted <see cref="ClientPrincipal"/>.</returns>
     public static ClientPrincipal ToClientPrincipal(this JwtSecurityToken token)
         => new(
             token.Issuer,

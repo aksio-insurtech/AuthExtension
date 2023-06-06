@@ -6,16 +6,27 @@ using Aksio.IngressMiddleware.Helpers;
 
 namespace Aksio.IngressMiddleware.IdPorten;
 
+/// <summary>
+/// Represents an endpoint for enabling IdPorten specific authorization.
+/// </summary>
 [Route("/id-porten")]
 public class IdPorten : Controller
 {
     readonly Config _config;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IdPorten"/> class.
+    /// </summary>
+    /// <param name="config"><see cref="Config"/> instance.</param>
     public IdPorten(Config config)
     {
         _config = config;
     }
 
+    /// <summary>
+    /// Performs the authorization based on IdPorten and their 'onbehalfof'.
+    /// </summary>
+    /// <returns><see cref="IActionResult"/>.</returns>
     [HttpGet("authorize")]
     public IActionResult Authorize()
     {
