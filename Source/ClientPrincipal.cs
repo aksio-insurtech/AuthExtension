@@ -17,6 +17,11 @@ namespace Aksio.IngressMiddleware;
 /// <param name="Claims">Collection of all the claims for the user.</param>
 public record ClientPrincipal(string IdentityProvider, string UserId, string UserDetails, IEnumerable<string> UserRoles, IEnumerable<Claim> Claims)
 {
+    /// <summary>
+    /// Represents an empty <see cref="ClientPrincipal"/>.
+    /// </summary>
+    public static readonly ClientPrincipal Empty = new(string.Empty, string.Empty, string.Empty, Array.Empty<string>(), Array.Empty<Claim>());
+
     record RawClientPrincipal(string auth_typ, string name_typ, string role_typ, IEnumerable<Claim> claims);
 
     /// <summary>
