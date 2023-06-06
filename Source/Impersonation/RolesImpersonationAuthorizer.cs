@@ -30,9 +30,14 @@ public class RolesImpersonationAuthorizer : IImpersonationAuthorizer
             return Task.FromResult(true);
         }
 
-        return Task.FromResult(
-            principal.UserRoles
-                        .Any(_ =>
-                            _config.Impersonation.Authorization.Roles.Any(role => role.Equals(_, StringComparison.InvariantCultureIgnoreCase))));
+        if (!principal.UserRoles.Any())
+        {
+            return Task.FromResult(false);
+        }
+
+        var authorized = _config.Impersonation.Authorization.Roles
+            .All(_ => principal.UserRoles.Any(role => role.Equals(_, StringComparison.InvariantCultureIgnoreCase)));
+
+        return Task.FromResult(authorized);
     }
 }
