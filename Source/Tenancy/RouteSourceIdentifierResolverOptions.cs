@@ -3,7 +3,13 @@
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
+/// <summary>
+/// Represents configuration options for <see cref="RouteSourceIdentifierResolver"/>.
+/// </summary>
 public class RouteSourceIdentifierResolverOptions
 {
+    /// <summary>
+    /// Gets or sets the regular expression to use for extracting the source identifier.
+    /// </summary>
     public string RegularExpression { get; set; } = string.Empty;
 }

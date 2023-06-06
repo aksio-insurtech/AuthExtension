@@ -2,32 +2,44 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware.BearerTokens;
-using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Tenancy;
 
 namespace Aksio.IngressMiddleware;
 
+/// <summary>
+/// Represents the root route for the ingress middleware.
+/// </summary>
+/// <remarks>
+/// This is the default route used for authorizing and identity requests.
+/// </remarks>
 [Route("/")]
 public class RootRoute : Controller
 {
-    readonly Config _config;
     readonly IIdentityDetailsResolver _identityDetailsResolver;
     readonly ITenantResolver _tenantResolver;
     readonly IOAuthBearerTokens _bearerTokens;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RootRoute"/> class.
+    /// </summary>
+    /// <param name="identityDetailsResolver"><see cref="IIdentityDetailsResolver"/> to use.</param>
+    /// <param name="tenantResolver"><see cref="ITenantResolver"/> to use.</param>
+    /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/> to use.</param>
     public RootRoute(
-        Config config,
         IIdentityDetailsResolver identityDetailsResolver,
         ITenantResolver tenantResolver,
         IOAuthBearerTokens bearerTokens)
     {
-        _config = config;
         _identityDetailsResolver = identityDetailsResolver;
         _tenantResolver = tenantResolver;
         _bearerTokens = bearerTokens;
     }
 
+    /// <summary>
+    /// Handles GET requests to the root route.
+    /// </summary>
+    /// <returns><see cref="IActionResult"/>.</returns>
     [HttpGet]
     public async Task<IActionResult> Get()
     {

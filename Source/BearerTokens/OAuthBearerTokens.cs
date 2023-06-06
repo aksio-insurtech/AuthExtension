@@ -12,6 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Aksio.IngressMiddleware.BearerTokens;
 
+/// <summary>
+/// Represents an implementation of <see cref="IOAuthBearerTokens"/>.
+/// </summary>
 public class OAuthBearerTokens : IOAuthBearerTokens
 {
     static AuthorityResult? _authority;
@@ -22,13 +25,23 @@ public class OAuthBearerTokens : IOAuthBearerTokens
     readonly ILogger<OAuthBearerTokens> _logger;
     readonly IActionResult _ok = new OkResult();
 
-    public OAuthBearerTokens(Config config, IHttpClientFactory httpClientFactory, ILogger<OAuthBearerTokens> logger)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OAuthBearerTokens"/> class.
+    /// </summary>
+    /// <param name="config"><see cref="Config"/> instance.</param>
+    /// <param name="httpClientFactory"><see cref="IHttpClientFactory"/> to use to create clients.</param>
+    /// <param name="logger">Logger for logging.</param>
+    public OAuthBearerTokens(
+        Config config,
+        IHttpClientFactory httpClientFactory,
+        ILogger<OAuthBearerTokens> logger)
     {
         _config = config;
         _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public async Task<IActionResult> Handle(HttpRequest request, HttpResponse response, TenantId tenantId)
     {
         if (!_config.OAuthBearerTokens.IsEnabled)

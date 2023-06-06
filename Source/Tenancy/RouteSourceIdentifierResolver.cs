@@ -7,12 +7,16 @@ using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
+/// <summary>
+/// Represents a source identifier resolver for routes.
+/// </summary>
 public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITenantSourceIdentifierResolver<RouteSourceIdentifierResolverOptions>
 {
     const string SourceIdentifier = "sourceIdentifier";
 
     readonly IDictionary<string, Regex> _regularExpressions = new Dictionary<string, Regex>();
 
+    /// <inheritdoc/>
     public Task<TenantId> Resolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request)
     {
         var originalUri = request.Headers[Headers.OriginalUri].FirstOrDefault() ?? string.Empty;

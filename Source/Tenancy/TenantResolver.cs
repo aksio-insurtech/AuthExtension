@@ -6,19 +6,32 @@ using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
+/// <summary>
+/// Represents an implementation of <see cref="ITenantResolver"/>.
+/// </summary>
 public class TenantResolver : ITenantResolver
 {
     readonly Config _config;
     readonly ITenantSourceIdentifierResolver _resolver;
     readonly ILogger<TenantResolver> _logger;
 
-    public TenantResolver(Config config, ITenantSourceIdentifierResolver resolver, ILogger<TenantResolver> logger)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TenantResolver"/> class.
+    /// </summary>
+    /// <param name="config"><see cref="Config"/> instance.</param>
+    /// <param name="resolver">The <see cref="ITenantSourceIdentifierResolver"/> to use.</param>
+    /// <param name="logger">Logger for logging.</param>
+    public TenantResolver(
+        Config config,
+        ITenantSourceIdentifierResolver resolver,
+        ILogger<TenantResolver> logger)
     {
         _config = config;
         _resolver = resolver;
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public async Task<TenantId> Resolve(HttpRequest request)
     {
         var tenantId = string.Empty;

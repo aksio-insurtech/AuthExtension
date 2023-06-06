@@ -16,7 +16,7 @@ public interface ITenantSourceIdentifierResolver
     /// </summary>
     /// <param name="config"><see cref="Config"/> instance.</param>
     /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
-    /// <returns></returns>
+    /// <returns>Resolved <see cref="TenantId"/>.</returns>
     Task<TenantId> Resolve(Config config, HttpRequest request);
 }
 
@@ -26,5 +26,12 @@ public interface ITenantSourceIdentifierResolver
 /// <typeparam name="TOptions">Type of options.</typeparam>
 public interface ITenantSourceIdentifierResolver<TOptions> : ITenantSourceIdentifierResolver
 {
+    /// <summary>
+    /// Resolve the tenant from the given <see cref="HttpRequest"/>.
+    /// </summary>
+    /// <param name="config"><see cref="Config"/> instance.</param>
+    /// <param name="options">The options associated with the resolver.</param>
+    /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
+    /// <returns>Resolved <see cref="TenantId"/>.</returns>
     Task<TenantId> Resolve(Config config, TOptions options, HttpRequest request);
 }

@@ -5,8 +5,14 @@ using Serilog;
 
 namespace Aksio.IngressMiddleware;
 
+/// <summary>
+/// Represents a global exception handler for unhandled exceptions.
+/// </summary>
 public static class UnhandledExceptionsManager
 {
+    /// <summary>
+    /// Setup the global exception handler.
+    /// </summary>
     public static void Setup()
     {
         AppDomain.CurrentDomain.UnhandledException += UnhandledExceptions;
