@@ -7,8 +7,12 @@ using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
+/// <summary>
+/// Represents a source identifier resolver for claims.
+/// </summary>
 public class ClaimsSourceIdentifierResolver : TenantSourceIdentifierResolver, ITenantSourceIdentifierResolver<ClaimsSourceIdentifierResolverOptions>
 {
+    /// <inheritdoc/>
     public Task<string> Resolve(Config config, ClaimsSourceIdentifierResolverOptions options, HttpRequest request)
     {
         var sourceIdentifier = string.Empty;

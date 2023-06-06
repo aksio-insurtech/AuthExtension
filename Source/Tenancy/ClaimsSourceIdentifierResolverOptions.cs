@@ -3,6 +3,9 @@
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
+/// <summary>
+/// Represents configuration options for <see cref="ClaimsSourceIdentifierResolver"/>.
+/// </summary>
 public class ClaimsSourceIdentifierResolverOptions
 {
 }

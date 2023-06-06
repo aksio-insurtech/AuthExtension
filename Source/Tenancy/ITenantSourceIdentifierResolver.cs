@@ -5,12 +5,24 @@ using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
-
+/// <summary>
+/// Defines a tenant source identifier resolver.
+/// </summary>
 public interface ITenantSourceIdentifierResolver
 {
+    /// <summary>
+    /// Resolve the tenant from the given <see cref="HttpRequest"/>.
+    /// </summary>
+    /// <param name="config"><see cref="Config"/> instance.</param>
+    /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
+    /// <returns></returns>
     Task<string> Resolve(Config config, HttpRequest request);
 }
 
+/// <summary>
+/// Defines a tenant source identifier resolver for a specific options configuration.
+/// </summary>
+/// <typeparam name="TOptions">Type of options.</typeparam>
 public interface ITenantSourceIdentifierResolver<TOptions> : ITenantSourceIdentifierResolver
 {
     Task<string> Resolve(Config config, TOptions options, HttpRequest request);
