@@ -10,4 +10,4 @@ namespace Aksio.IngressMiddleware;
 /// <param name="name_typ">Name claim.</param>
 /// <param name="role_typ">Role claim.</param>
 /// <param name="claims">All the claims.</param>
-record RawClientPrincipal(string auth_typ, string name_typ, string role_typ, IEnumerable<RawClaim> claims);
+public record RawClientPrincipal(string auth_typ, string name_typ, string role_typ, IEnumerable<RawClaim> claims);
