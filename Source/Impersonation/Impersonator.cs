@@ -56,6 +56,7 @@ public class Impersonator : Controller
     public IActionResult Impersonate()
     {
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
+        _logger.PerformingImpersonation(principal.UserId, principal.UserDetails);
         var claims = Request.Query.ToClaims();
         var filtered = principal.Claims.Where(_ => !claims.Any(c => c.Type == _.Type));
         var newPrincipal = principal with
@@ -85,10 +86,12 @@ public class Impersonator : Controller
             var authorizer = (_serviceProvider.GetRequiredService(authorizerType) as IImpersonationAuthorizer)!;
             if (!await authorizer.IsAuthorized(Request, principal))
             {
+                _logger.ImpersonationNotAuthorized(principal.UserId, principal.UserDetails);
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
         }
 
+        _logger.ImpersonationAuthorized(principal.UserId, principal.UserDetails);
         return Ok();
     }
 }
