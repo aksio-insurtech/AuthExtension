@@ -3,6 +3,7 @@
 
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Identities;
+using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.Tenancy;
 
 namespace Aksio.IngressMiddleware;
@@ -14,19 +15,19 @@ namespace Aksio.IngressMiddleware;
 /// This is the default route used for authorizing and identity requests.
 /// </remarks>
 [Route("/")]
-public class RootRoute : Controller
+public class RequestAugmenter : Controller
 {
     readonly IIdentityDetailsResolver _identityDetailsResolver;
     readonly ITenantResolver _tenantResolver;
     readonly IOAuthBearerTokens _bearerTokens;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RootRoute"/> class.
+    /// Initializes a new instance of the <see cref="RequestAugmenter"/> class.
     /// </summary>
     /// <param name="identityDetailsResolver"><see cref="IIdentityDetailsResolver"/> to use.</param>
     /// <param name="tenantResolver"><see cref="ITenantResolver"/> to use.</param>
     /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/> to use.</param>
-    public RootRoute(
+    public RequestAugmenter(
         IIdentityDetailsResolver identityDetailsResolver,
         ITenantResolver tenantResolver,
         IOAuthBearerTokens bearerTokens)
@@ -47,10 +48,20 @@ public class RootRoute : Controller
         Response.Headers[Headers.TenantId] = tenantId.ToString();
 
         // If we have an impersonation cookie, we'll set the principal header to the value of the cookie
-        if( Request.Cookies.ContainsKey(Cookies.Impersonation))
+        if (Request.Cookies.ContainsKey(Cookies.Impersonation))
         {
             Request.Headers[Headers.Principal] = Request.Cookies[Cookies.Impersonation];
             Response.Headers[Headers.Principal] = Request.Cookies[Cookies.Impersonation];
+        }
+
+        var referer = Request.Headers.Referer;
+        if (!string.IsNullOrEmpty(referer))
+        {
+            var uri = new Uri(referer);
+            if (uri.PathAndQuery.StartsWith(Impersonator.Route))
+            {
+                return Ok();
+            }
         }
 
         if (!await _identityDetailsResolver.Resolve(Request, Response, tenantId))
