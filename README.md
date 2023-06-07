@@ -172,7 +172,40 @@ The flow for this as follows:
 
 ![](./Images/impersonation-flow.jpg)
 
-#### Claims
+#### Authorization of users allowed to impersonate
+
+There are a few ways to limit what users are allowed to impersonate other users.
+
+##### Identity Provider
+
+You configure in the `config.json` under `impersonation` which identity provider(s) are allowed to perform impersonation.
+This information is typically found as a claim called `auth_type` in the client principal coming from the Microsoft Identity platform.
+If none are configured, impersonation is not allowed.
+
+##### Tenants
+
+The user resolves to a tenant from the tenancy mapping. You can filter what tenants are allowed.
+If none are configured, this filter is ignored.
+
+##### Roles
+
+The user can have roles associated with it. You can filter what role(s) the user needs to have.
+This resolves based on the the claim called `roles`.
+If none are configured, this filter is ignored.
+
+##### Groups
+
+The user can have groups associated with it. You can filter what group(s) the user needs to have.
+This resolves based on the the claim called `groups`.
+If none are configured, this filter is ignored.
+
+##### Claims
+
+Part of the principal from the Microsoft Identity platform are a collection of claims.
+You can filter based on claim(s), specific types and values.
+If none are configured, this filter is ignored.
+
+#### Claims replacing
 
 Impersonation happens by replacing claims that is later used as part of the request towards the identity details.
 The claims are replaced in the principal of the currently logged in user. This means that if you're using an identity provider that
