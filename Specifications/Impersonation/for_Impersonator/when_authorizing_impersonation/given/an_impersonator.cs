@@ -20,9 +20,13 @@ public class an_impersonator : Specification
         authorizer = new();
         service_provider.Setup(_ => _.GetService(IsAny<Type>())).Returns(authorizer.Object);
 
-        impersonator = new(service_provider.Object, Mock.Of<ILogger<Impersonator>>());
-        impersonator.ControllerContext = new ControllerContext();
-        impersonator.ControllerContext.HttpContext = new DefaultHttpContext();
+        impersonator = new(service_provider.Object, Mock.Of<ILogger<Impersonator>>())
+        {
+            ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            }
+        };
         impersonator.ControllerContext.HttpContext.Request.Headers.Add(Headers.Principal, "e30=");
     }
 }
