@@ -77,6 +77,28 @@ Its format is:
     "identityProviderUrl": "The URL to call to get application details for the identity",
     "OAuthBearerTokens": {
         "authority": "The URL for the well-known document that describes the authority"
+    },
+    "impersonation": {
+        "identityProviders": [
+            "aad"
+        ],
+        "authorization": {
+            "tenants": [
+                "<tenant guid>"
+            ],
+            "roles": [
+                "<role string>"
+            ],
+            "groups": [
+                "<group string>"
+            ],
+            "claims": [
+                {
+                    "type": "<claim type>",
+                    "value": "<claim value>"
+                }
+            ]
+        }
     }
 }
 ```
@@ -139,3 +161,83 @@ The `OAuthBearerToken` configuration is optional. It won't run any authorization
 
 The result coming from the application specific identity details endpoint called ends up as a cookie with the string representation of what was returned.
 The cookie name is `.aksio-identity`.
+
+### Impersonation
+
+The ingress middleware supports an impersonation flow, if configured for it.
+This allows you to typically have your regular flow go through the identity provider(s) you want for your users and dedicate one
+or more identity providers for logging in as a user in the regular flow.
+
+The flow for this as follows:
+
+![](./Images/impersonation-flow.jpg)
+
+#### Authorization of users allowed to impersonate
+
+There are a few ways to limit what users are allowed to impersonate other users.
+
+##### Identity Provider
+
+You configure in the `config.json` under `impersonation` which identity provider(s) are allowed to perform impersonation.
+This information is typically found as a claim called `auth_type` in the client principal coming from the Microsoft Identity platform.
+If none are configured, impersonation is not allowed.
+
+##### Tenants
+
+The user resolves to a tenant from the tenancy mapping. You can filter what tenants are allowed.
+If none are configured, this filter is ignored.
+
+##### Roles
+
+The user can have roles associated with it. You can filter what role(s) the user needs to have.
+This resolves based on the the claim called `roles`.
+If none are configured, this filter is ignored.
+
+##### Groups
+
+The user can have groups associated with it. You can filter what group(s) the user needs to have.
+This resolves based on the the claim called `groups`.
+If none are configured, this filter is ignored.
+
+##### Claims
+
+Part of the principal from the Microsoft Identity platform are a collection of claims.
+You can filter based on claim(s), specific types and values.
+If none are configured, this filter is ignored.
+
+#### Claims replacing
+
+Impersonation happens by replacing claims that is later used as part of the request towards the identity details.
+The claims are replaced in the principal of the currently logged in user. This means that if you're using an identity provider that
+is different and does not offer the same claims as the one for your regular user flow, you will have to provide these claims in the
+route for performing the actual impersonation.
+
+The claims should be part of the HTML FORM being sent to the server. The FORM accepts a GET request, meaning you'll have to include
+the FORM values in the query string.
+
+#### UI
+
+For impersonation you'll need a UI that can present to the user a way to impersonate a specific user.
+The impersonation UI is expected to be at `/.aksio/impersonate`.
+
+In your HTML you would typically then have a form that looks like the following:
+
+```html
+<form action="/.aksio/impersonate/perform" method="GET">
+    <label for=""ssn">Enter name to impersonate:</label><br>
+    <input type="text" name="claim:name" id="name" placeholder="Name" /><br>
+    <label for=""ssn">Enter Social Security Number to impersonate:</label><br>
+    <input type="text" name="claim:pid" id="ssn" placeholder="Social Security Number" />
+    <button>Impersonate</button>
+</form>
+```
+
+The FORM action is set to `/.aksio/impersonate/perform` and uses `GET` as method.
+All the claims you want to override have to be prefixed with `claim:` in the name of the
+input field.
+
+#### Cookies
+
+When a user has completed the impersonation flow, a cookie is added called `.aksio-identity-impersonation`.
+This cookie will be used in subsequent requests and will replace the `x-ms-client-principal` header with the value
+of the cookie.

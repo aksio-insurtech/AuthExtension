@@ -1,0 +1,20 @@
+<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageVersion Include="Aksio.Cratis.Applications" Version="8.18.7" />
+		<PackageVersion Include="Aksio.Cratis.Fundamentals" Version="8.18.7" />
+		<PackageVersion Include="Aksio.Defaults" Version="1.6.10" />
+		<PackageVersion Include="Aksio.Defaults.Specs" Version="1.6.10" />
+		<PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="6.30.1" />
+		<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.30.1" />
+
+        <!-- Specifications -->
+		<PackageVersion Include="Aksio.Specifications" Version="2.0.1" />
+		<PackageVersion Include="xunit" Version="2.4.2" />
+		<PackageVersion Include="xunit.runner.visualstudio" Version="2.4.2" />
+		<PackageVersion Include="moq" Version="4.18.4" />
+		<PackageVersion Include="Microsoft.NET.Test.SDK" Version="16.10.0" />
+	</ItemGroup>
+</Project>

@@ -8,10 +8,14 @@ namespace Aksio.IngressMiddleware;
 
 #pragma warning disable MA0069 // Avoid static globals
 
+/// <summary>
+/// Represents global settings for the ingress middleware.
+/// </summary>
 public static class Globals
 {
-    public static ILogger Logger = null!;
-
+    /// <summary>
+    /// Gets the default <see cref="JsonSerializerOptions"/> to use.
+    /// </summary>
     public static JsonSerializerOptions JsonSerializerOptions = new()
     {
         PropertyNameCaseInsensitive = true,

@@ -9,21 +9,38 @@
             "onBehalfOf": "vpk"
         },
         "eb681eb3-f7ca-4c0b-b309-92625bff5a59": {
-            "domain": "arentdal.opensjon.no",
+            "domain": "arendal.opensjon.no",
             "onBehalfOf": "arendal",
             "sourceIdentifiers": [
-                "3610"
+                "1042fa82-e1c7-40a8-9c61-a7831ef3f10a"
             ]
         }
     },
     "tenantResolution": {
-        "strategy": "route",
+        "strategy": "claim",
         "options": {
-            "regularExpression": "\/(?<sourceIdentifier>[\\w]+)\/"
+            "regularExpression": "^\/(?<sourceIdentifier>[\\w]+)\/"
         }
     },
-    "oAuthBearerTokens": {
-        "authority": "https://test.maskinporten.no/.well-known/oauth-authorization-server"
-    },    
-    "identityDetailsUrl": "http://localhost:5100/.aksio/me"
+    "identityDetailsUrl": "http://localhost:5100/.aksio/me",
+    "impersonation": {
+        "identityProviders": [
+            "aad"
+        ],
+        "authorization": {
+            "tenants": [
+                "eb681eb3-f7ca-4c0b-b309-92625bff5a59"
+            ],
+            "roles": [
+            ],
+            "groups": [
+            ],
+            "claims": [
+                {
+                    "type": "name",
+                    "value": "Einar Ingebrigtsen"
+                }
+            ]
+        }
+    }
 }

@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngressMiddleware", "Source\IngressMiddleware.csproj", "{89BA66FB-C7F9-492B-8530-2AF7B0396760}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngressMiddleware.Specs", "Specifications\IngressMiddleware.csproj", "{506BC489-0F71-4B4B-B7D6-6CADB8FEAE61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{89BA66FB-C7F9-492B-8530-2AF7B0396760}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89BA66FB-C7F9-492B-8530-2AF7B0396760}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89BA66FB-C7F9-492B-8530-2AF7B0396760}.Release|Any CPU.Build.0 = Release|Any CPU
+		{506BC489-0F71-4B4B-B7D6-6CADB8FEAE61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{506BC489-0F71-4B4B-B7D6-6CADB8FEAE61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{506BC489-0F71-4B4B-B7D6-6CADB8FEAE61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{506BC489-0F71-4B4B-B7D6-6CADB8FEAE61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

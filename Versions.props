@@ -1,7 +1,0 @@
-<Project>
-    <PropertyGroup>
-        <AksioCratis>8.18.7</AksioCratis>
-        <AksioDefaults>1.6.6</AksioDefaults>
-        <AksioSpecifications>2.0.1</AksioSpecifications>
-    </PropertyGroup>
-</Project>
