@@ -8,14 +8,9 @@ namespace Aksio.IngressMiddleware.Impersonation;
 /// <summary>
 /// Represents the impersonation endpoints.
 /// </summary>
-[Route(Route)]
+[Route(WellKnownPaths.Impersonation)]
 public class Impersonator : Controller
 {
-    /// <summary>
-    /// The route for the impersonation endpoints.
-    /// </summary>
-    public const string Route = "/.aksio/impersonate";
-
     static readonly IEnumerable<Type> _authorizers = new[]
     {
         typeof(TenantImpersonationAuthorizer),

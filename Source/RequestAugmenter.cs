@@ -18,6 +18,7 @@ namespace Aksio.IngressMiddleware;
 public class RequestAugmenter : Controller
 {
     readonly IIdentityDetailsResolver _identityDetailsResolver;
+    readonly IImpersonationFlow _impersonationFlow;
     readonly ITenantResolver _tenantResolver;
     readonly IOAuthBearerTokens _bearerTokens;
 
@@ -25,14 +26,17 @@ public class RequestAugmenter : Controller
     /// Initializes a new instance of the <see cref="RequestAugmenter"/> class.
     /// </summary>
     /// <param name="identityDetailsResolver"><see cref="IIdentityDetailsResolver"/> to use.</param>
+    /// <param name="impersonationFlow"><see cref="IImpersonationFlow"/> to use for the impersonation process.</param>
     /// <param name="tenantResolver"><see cref="ITenantResolver"/> to use.</param>
     /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/> to use.</param>
     public RequestAugmenter(
         IIdentityDetailsResolver identityDetailsResolver,
+        IImpersonationFlow impersonationFlow,
         ITenantResolver tenantResolver,
         IOAuthBearerTokens bearerTokens)
     {
         _identityDetailsResolver = identityDetailsResolver;
+        _impersonationFlow = impersonationFlow;
         _tenantResolver = tenantResolver;
         _bearerTokens = bearerTokens;
     }
@@ -47,21 +51,15 @@ public class RequestAugmenter : Controller
         var tenantId = await _tenantResolver.Resolve(Request);
         Response.Headers[Headers.TenantId] = tenantId.ToString();
 
-        // If we have an impersonation cookie, we'll set the principal header to the value of the cookie
-        if (Request.Cookies.ContainsKey(Cookies.Impersonation))
+        if (!_impersonationFlow.HandleImpersonatedPrincipal(Request, Response) && _impersonationFlow.ShouldImpersonate(Request))
         {
-            Request.Headers[Headers.Principal] = Request.Cookies[Cookies.Impersonation];
-            Response.Headers[Headers.Principal] = Request.Cookies[Cookies.Impersonation];
+            Response.Headers[Headers.ImpersonationRedirect] = WellKnownPaths.Impersonation;
+            return StatusCode(StatusCodes.Status401Unauthorized);
         }
 
-        var referer = Request.Headers.Referer;
-        if (!string.IsNullOrEmpty(referer))
+        if (_impersonationFlow.IsImpersonateRoute(Request))
         {
-            var uri = new Uri(referer);
-            if (uri.PathAndQuery.StartsWith(Impersonator.Route))
-            {
-                return Ok();
-            }
+            return Ok();
         }
 
         if (!await _identityDetailsResolver.Resolve(Request, Response, tenantId))

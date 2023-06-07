@@ -37,4 +37,9 @@ public static class Headers
     /// Authorization header.
     /// </summary>
     public const string Authorization = "Authorization";
+
+    /// <summary>
+    /// Impersonation redirect header.
+    /// </summary>
+    public const string ImpersonationRedirect = "x-aksio-impersonation-redirect";
 }

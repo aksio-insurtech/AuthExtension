@@ -25,6 +25,7 @@ builder.Services.AddTransient<IdentityProviderImpersonationAuthorizer>();
 builder.Services.AddTransient<ClaimImpersonationAuthorizer>();
 builder.Services.AddTransient<RolesImpersonationAuthorizer>();
 builder.Services.AddTransient<GroupsImpersonationAuthorizer>();
+builder.Services.AddSingleton<IImpersonationFlow, ImpersonationFlow>();
 
 builder.Services.AddHttpClient();
 var loggerFactory = builder.Host.UseDefaultLogging();
