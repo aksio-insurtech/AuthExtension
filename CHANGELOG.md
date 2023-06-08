@@ -1,3 +1,10 @@
+# [v4.1.2] - 2023-6-8 [PR: #55](https://github.com/aksio-insurtech/IngressMiddleware/pull/55)
+
+### Fixed
+
+- During impersonation when forwarded to a UI that will present the impersonation options, that UI might be part of the application bundle containing the `/.aksio/impersonate` UI as a route. If this UI refers to assets its using on a different route, that should be allowed and these requests not considered as requests that needs to be impersonated. We're interested in the application data / context being impersonated, not the individual assets that make the application. This is now fixed in this release.
+
+
 # [v4.1.1] - 2023-6-8 [PR: #54](https://github.com/aksio-insurtech/IngressMiddleware/pull/54)
 
 ### Fixed
