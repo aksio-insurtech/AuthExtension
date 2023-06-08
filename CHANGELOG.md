@@ -1,3 +1,10 @@
+# [v4.1.1] - 2023-6-8 [PR: #54](https://github.com/aksio-insurtech/IngressMiddleware/pull/54)
+
+### Fixed
+
+- Fixed so that you can ignore specifying the tenant resolver without it crashing. It will resolve to a default one which will always set `TenantId` to `NotSet`.
+
+
 # [v4.0.0] - 2023-5-19 [PR: #52](https://github.com/aksio-insurtech/IngressMiddleware/pull/52)
 
 ### Added
