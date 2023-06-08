@@ -41,6 +41,11 @@ public class ImpersonationFlow : IImpersonationFlow
     /// <inheritdoc/>
     public bool ShouldImpersonate(HttpRequest request)
     {
+        if (request.HasFileExtension())
+        {
+            return false;
+        }
+
         if (!IsImpersonateRoute(request))
         {
             var principal = ClientPrincipal.FromBase64(request.Headers[Headers.PrincipalId], request.Headers[Headers.Principal]);

@@ -51,7 +51,8 @@ public class RequestAugmenter : Controller
         var tenantId = await _tenantResolver.Resolve(Request);
         Response.Headers[Headers.TenantId] = tenantId.ToString();
 
-        if (!_impersonationFlow.HandleImpersonatedPrincipal(Request, Response) && _impersonationFlow.ShouldImpersonate(Request))
+        if (!_impersonationFlow.HandleImpersonatedPrincipal(Request, Response) &&
+            _impersonationFlow.ShouldImpersonate(Request))
         {
             Response.Headers[Headers.ImpersonationRedirect] = WellKnownPaths.Impersonation;
             return StatusCode(StatusCodes.Status401Unauthorized);
