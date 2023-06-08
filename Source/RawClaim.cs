@@ -12,6 +12,18 @@ namespace Aksio.IngressMiddleware;
 public class RawClaim
 {
     /// <summary>
+    /// Gets or sets the type of claim.
+    /// </summary>
+    [JsonPropertyName("typ")]
+    public string Type { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the value of the claim.
+    /// </summary>
+    [JsonPropertyName("val")]
+    public string Value { get; set; } = string.Empty;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Claim"/> class.
     /// </summary>
     public RawClaim()
@@ -28,16 +40,4 @@ public class RawClaim
         Type = type;
         Value = value;
     }
-
-    /// <summary>
-    /// Gets or sets the type of claim.
-    /// </summary>
-    [JsonPropertyName("typ")]
-    public string Type { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the value of the claim.
-    /// </summary>
-    [JsonPropertyName("val")]
-    public string Value { get; set; } = string.Empty;
 }

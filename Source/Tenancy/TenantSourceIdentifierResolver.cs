@@ -21,7 +21,7 @@ public class TenantSourceIdentifierResolver : ITenantSourceIdentifierResolver
             var method = genericResolverInterface.GetMethod(nameof(ITenantSourceIdentifierResolver<object>.Resolve));
             if (method is not null)
             {
-                var targetOptionsTypes = genericResolverInterface.GetGenericArguments().First();
+                var targetOptionsTypes = genericResolverInterface.GetGenericArguments()[0];
                 var options = config.TenantResolution.Options.Deserialize(targetOptionsTypes, Globals.JsonSerializerOptions)!;
                 return await (method.Invoke(this, new object[] { config, options, request }) as Task<TenantId>)!;
             }

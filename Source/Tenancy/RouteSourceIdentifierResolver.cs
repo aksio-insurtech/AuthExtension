@@ -7,6 +7,8 @@ using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
+#pragma warning disable MA0009 // We trust RegEx coming from configuration not to be a potential DOS attack
+
 /// <summary>
 /// Represents a source identifier resolver for routes.
 /// </summary>
@@ -23,7 +25,7 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
 
         if (!_regularExpressions.ContainsKey(options.RegularExpression))
         {
-            _regularExpressions[options.RegularExpression] = new Regex(options.RegularExpression, RegexOptions.Compiled);
+            _regularExpressions[options.RegularExpression] = new Regex(options.RegularExpression, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
         }
 
         var regex = _regularExpressions[options.RegularExpression];

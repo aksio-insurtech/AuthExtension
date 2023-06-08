@@ -1,8 +1,6 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Text.Json.Serialization;
-
 namespace Aksio.IngressMiddleware.Security;
 
 /// <summary>
@@ -10,6 +8,16 @@ namespace Aksio.IngressMiddleware.Security;
 /// </summary>
 public class Claim
 {
+    /// <summary>
+    /// Gets or sets the type of claim.
+    /// </summary>
+    public string Type { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the value of the claim.
+    /// </summary>
+    public string Value { get; set; } = string.Empty;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Claim"/> class.
     /// </summary>
@@ -27,14 +35,4 @@ public class Claim
         Type = type;
         Value = value;
     }
-
-    /// <summary>
-    /// Gets or sets the type of claim.
-    /// </summary>
-    public string Type { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the value of the claim.
-    /// </summary>
-    public string Value { get; set; } = string.Empty;
 }

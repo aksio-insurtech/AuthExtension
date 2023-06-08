@@ -6,11 +6,10 @@ using Aksio.IngressMiddleware.Tenancy;
 
 namespace Aksio.IngressMiddleware.Impersonation.for_TenantImpersonationAuthorizer.when_asking_if_authorized.given;
 
-public class no_tenant_filters : Aksio.IngressMiddleware.Impersonation.given.a_http_context
+public class no_tenant_filters : Impersonation.given.a_http_context
 {
     protected TenantImpersonationAuthorizer authorizer;
     protected Mock<ITenantResolver> tenant_resolver;
-    
 
     void Establish()
     {

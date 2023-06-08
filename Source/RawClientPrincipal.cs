@@ -3,6 +3,8 @@
 
 namespace Aksio.IngressMiddleware;
 
+#pragma warning disable CA1707
+
 /// <summary>
 /// Represents a raw client principal based on the Microsoft Identity Platform.
 /// </summary>

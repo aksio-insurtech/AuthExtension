@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware.Security;
-using Microsoft.AspNetCore.Http;
 
 namespace Aksio.IngressMiddleware.Impersonation.for_GroupsImpersonationAuthorizer.when_asking_if_authorized;
 
@@ -14,7 +13,6 @@ public class and_groups_are_configured_and_user_has_one_of_them : given.config_w
 
     void Establish()
     {
-        new DefaultHttpContext();
         authorizer = new(config);
 
         principal = ClientPrincipal.Empty with

@@ -3,6 +3,8 @@
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
+#pragma warning disable MA0036 // This class can not be static. Its used for configuration.
+
 /// <summary>
 /// Represents configuration options for <see cref="ClaimsSourceIdentifierResolver"/>.
 /// </summary>

@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Aksio.IngressMiddleware.BearerTokens;
 
+#pragma warning disable CA2000 // We are not responsible for disposing the IHttpClientFactory
+
 /// <summary>
 /// Represents an implementation of <see cref="IOAuthBearerTokens"/>.
 /// </summary>

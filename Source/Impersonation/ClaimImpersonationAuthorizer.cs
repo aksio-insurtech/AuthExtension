@@ -29,7 +29,7 @@ public class ClaimImpersonationAuthorizer : IImpersonationAuthorizer
             return Task.FromResult(true);
         }
 
-        if( !principal.Claims.Any() )
+        if (!principal.Claims.Any())
         {
             return Task.FromResult(false);
         }

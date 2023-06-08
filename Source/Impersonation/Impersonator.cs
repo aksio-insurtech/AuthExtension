@@ -45,7 +45,7 @@ public class Impersonator : Controller
     /// <br/>
     /// Example:
     /// <br/>
-    /// claim:sub=1234567890
+    /// claim:sub=1234567890.
     /// </remarks>
     [HttpGet("perform")]
     public IActionResult Impersonate()
