@@ -12,6 +12,7 @@ public static class TenantSourceIdentifierResolvers
 {
     static readonly Dictionary<TenantSourceIdentifierResolverType, ITenantSourceIdentifierResolver> _resolvers = new()
     {
+        { TenantSourceIdentifierResolverType.None, new NoneSourceIdentifierResolver() },
         { TenantSourceIdentifierResolverType.Claim, new ClaimsSourceIdentifierResolver() },
         { TenantSourceIdentifierResolverType.Route, new RouteSourceIdentifierResolver() }
     };
