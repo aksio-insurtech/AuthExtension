@@ -1,3 +1,10 @@
+# [v4.1.4] - 2023-6-13 [PR: #58](https://github.com/aksio-insurtech/IngressMiddleware/pull/58)
+
+### Fixed
+
+- Added some logging for impersonation authorization to figure out why it doesn't work in the cloud.
+
+
 # [v4.1.3] - 2023-6-13 [PR: #57](https://github.com/aksio-insurtech/IngressMiddleware/pull/57)
 
 ### Fixed
