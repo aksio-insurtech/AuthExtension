@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Aksio.Cratis.Execution;
 using Aksio.IngressMiddleware.Configuration;
+using Aksio.IngressMiddleware.Helpers;
 
 namespace Aksio.IngressMiddleware.Identities;
 
@@ -46,7 +47,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
         }
 
         if (!request.Cookies.ContainsKey(Cookies.Identity)
-            && request.Headers.ContainsKey(Headers.Principal))
+            && request.HasPrincipal())
         {
             try
             {
