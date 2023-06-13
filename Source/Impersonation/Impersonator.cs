@@ -74,6 +74,38 @@ public class Impersonator : Controller
     [HttpGet("auth")]
     public async Task<IActionResult> Authorize()
     {
+        var principalId = string.Empty;
+        var principalName = string.Empty;
+        var rawPrincipal = string.Empty;
+
+        if (Request.Headers.ContainsKey(Headers.PrincipalId))
+        {
+            principalId = Request.Headers[Headers.PrincipalId];
+        }
+        if (Request.Headers.ContainsKey(Headers.PrincipalName))
+        {
+            principalName = Request.Headers[Headers.PrincipalName];
+        }
+        if (Request.Headers.ContainsKey(Headers.Principal))
+        {
+            rawPrincipal = Request.Headers[Headers.Principal];
+        }
+
+        if (string.IsNullOrEmpty(principalId))
+        {
+            principalId = "[NotSet]";
+        }
+        if (string.IsNullOrEmpty(principalName))
+        {
+            principalName = "[NotSet]";
+        }
+        if (string.IsNullOrEmpty(rawPrincipal))
+        {
+            rawPrincipal = "[NotSet]";
+        }
+
+        _logger.LogInformation("Authorizing impersonation for '{PrincipalId}' and '{PrincipalName}' - '{Principal}' ", principalId, principalName, rawPrincipal);
+
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
 
         foreach (var authorizerType in _authorizers)
