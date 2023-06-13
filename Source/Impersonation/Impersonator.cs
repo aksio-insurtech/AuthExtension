@@ -106,7 +106,6 @@ public class Impersonator : Controller
 
         _logger.LogInformation("Authorizing impersonation for '{PrincipalId}' and '{PrincipalName}' - '{Principal}' ", principalId, principalName, rawPrincipal);
 
-
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
 
         foreach (var authorizerType in _authorizers)
