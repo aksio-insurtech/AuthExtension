@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aksio.IngressMiddleware.Impersonation.for_Impersonator.when_authorizing_impersonation;
 
-public class and_user_is_authorized : given.an_impersonator
+public class and_user_is_authorized : given.a_principal
 {
     IActionResult result;
 

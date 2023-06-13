@@ -26,6 +26,5 @@ public class an_impersonator : Specification
                 HttpContext = new DefaultHttpContext()
             }
         };
-        impersonator.ControllerContext.HttpContext.Request.Headers.Add(Headers.Principal, "e30=");
     }
 }

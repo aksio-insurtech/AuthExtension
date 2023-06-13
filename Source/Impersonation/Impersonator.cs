@@ -1,6 +1,7 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Aksio.IngressMiddleware.Helpers;
 using Aksio.IngressMiddleware.Security;
 
 namespace Aksio.IngressMiddleware.Impersonation;
@@ -74,37 +75,10 @@ public class Impersonator : Controller
     [HttpGet("auth")]
     public async Task<IActionResult> Authorize()
     {
-        var principalId = string.Empty;
-        var principalName = string.Empty;
-        var rawPrincipal = string.Empty;
-
-        if (Request.Headers.ContainsKey(Headers.PrincipalId))
+        if (!Request.HasPrincipal())
         {
-            principalId = Request.Headers[Headers.PrincipalId];
+            return StatusCode(StatusCodes.Status403Forbidden);
         }
-        if (Request.Headers.ContainsKey(Headers.PrincipalName))
-        {
-            principalName = Request.Headers[Headers.PrincipalName];
-        }
-        if (Request.Headers.ContainsKey(Headers.Principal))
-        {
-            rawPrincipal = Request.Headers[Headers.Principal];
-        }
-
-        if (string.IsNullOrEmpty(principalId))
-        {
-            principalId = "[NotSet]";
-        }
-        if (string.IsNullOrEmpty(principalName))
-        {
-            principalName = "[NotSet]";
-        }
-        if (string.IsNullOrEmpty(rawPrincipal))
-        {
-            rawPrincipal = "[NotSet]";
-        }
-
-        _logger.LogInformation("Authorizing impersonation for '{PrincipalId}' and '{PrincipalName}' - '{Principal}' ", principalId, principalName, rawPrincipal);
 
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
 
