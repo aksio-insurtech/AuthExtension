@@ -46,7 +46,7 @@ public class ImpersonationFlow : IImpersonationFlow
             return false;
         }
 
-        if (!IsImpersonateRoute(request))
+        if (!IsImpersonateRoute(request) && request.HasPrincipal())
         {
             var principal = ClientPrincipal.FromBase64(request.Headers[Headers.PrincipalId], request.Headers[Headers.Principal]);
             if (_config.Impersonation.IdentityProviders.Any(_ => _.Equals(principal.IdentityProvider, StringComparison.InvariantCultureIgnoreCase)))

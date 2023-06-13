@@ -54,4 +54,11 @@ public static class HttpRequestExtensions
     /// <returns>True if it is, false if not.</returns>
     public static bool IsImpersonateRoute(this HttpRequest request) =>
         request.GetOriginalUri().PathAndQuery.StartsWith(WellKnownPaths.Impersonation, StringComparison.InvariantCultureIgnoreCase);
+
+    /// <summary>
+    /// Gets whether or not the principal is present in the request.
+    /// </summary>
+    /// <param name="request"><see cref="HttpRequest"/> instance.</param>
+    /// <returns>True if it is, false if not.</returns>
+    public static bool HasPrincipal(this HttpRequest request) => request.Headers.ContainsKey(Headers.Principal);
 }
