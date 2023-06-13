@@ -1,3 +1,10 @@
+# [v4.1.3] - 2023-6-13 [PR: #57](https://github.com/aksio-insurtech/IngressMiddleware/pull/57)
+
+### Fixed
+
+- Fixed so that it does not fall over when asking if one should impersonate if there is no user principal. This then returns false now, which is expected behavior.
+
+
 # [v4.1.2] - 2023-6-8 [PR: #55](https://github.com/aksio-insurtech/IngressMiddleware/pull/55)
 
 ### Fixed
