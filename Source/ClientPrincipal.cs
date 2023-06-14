@@ -18,6 +18,16 @@ namespace Aksio.IngressMiddleware;
 public record ClientPrincipal(string IdentityProvider, string UserId, string UserDetails, IEnumerable<string> UserRoles, IEnumerable<Claim> Claims)
 {
     /// <summary>
+    /// The name type.
+    /// </summary>
+    public string NameType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The role type.
+    /// </summary>
+    public string RoleType { get; set; } = string.Empty;
+
+    /// <summary>
     /// Represents an empty <see cref="ClientPrincipal"/>.
     /// </summary>
     public static readonly ClientPrincipal Empty = new(string.Empty, string.Empty, string.Empty, Array.Empty<string>(), Array.Empty<Claim>());
@@ -37,7 +47,11 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
         var name = string.IsNullOrEmpty(rawPrincipal.name_typ) ? string.Empty : rawPrincipal.claims.FirstOrDefault(_ => _.Type == rawPrincipal.name_typ)?.Value ?? string.Empty;
         var roles = string.IsNullOrEmpty(rawPrincipal.role_typ) ? Enumerable.Empty<string>() : rawPrincipal.claims.Where(_ => _.Type == rawPrincipal.role_typ).Select(_ => _.Value).ToArray();
         var claims = rawPrincipal.claims?.ToClaims() ?? Enumerable.Empty<Claim>();
-        return new ClientPrincipal(rawPrincipal.auth_typ, userId ?? string.Empty, name, roles, claims);
+        return new ClientPrincipal(rawPrincipal.auth_typ, userId ?? string.Empty, name, roles, claims)
+        {
+            NameType = rawPrincipal.name_typ,
+            RoleType = rawPrincipal.role_typ
+        };
     }
 
     /// <summary>
@@ -57,9 +71,13 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
     /// <returns>Converted <see cref="RawClientPrincipal"/>.</returns>
     public RawClientPrincipal ToRawClientPrincipal()
     {
-        var nameType = Claims.FirstOrDefault(_ => _.Value == UserDetails)?.Type ?? string.Empty;
-        var roleType = string.Empty;
-        if (UserRoles.Any())
+        var nameType = NameType;
+        if (string.IsNullOrEmpty(nameType))
+        {
+            nameType = Claims.FirstOrDefault(_ => _.Value == UserDetails)?.Type ?? string.Empty;
+        }
+        var roleType = RoleType;
+        if (string.IsNullOrEmpty(roleType) && UserRoles.Any())
         {
             roleType = Claims.FirstOrDefault(_ => _.Value == UserRoles.First())?.Type ?? string.Empty;
         }
