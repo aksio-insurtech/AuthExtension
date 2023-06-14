@@ -58,7 +58,11 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
     public RawClientPrincipal ToRawClientPrincipal()
     {
         var nameType = Claims.FirstOrDefault(_ => _.Value == UserDetails)?.Type ?? string.Empty;
-        var roleType = Claims.FirstOrDefault(_ => _.Value == UserRoles.First())?.Type ?? string.Empty;
+        var roleType = string.Empty;
+        if (UserRoles.Any())
+        {
+            roleType = Claims.FirstOrDefault(_ => _.Value == UserRoles.First())?.Type ?? string.Empty;
+        }
         return new RawClientPrincipal(IdentityProvider, nameType, roleType, Claims.ToRawClaims());
     }
 }
