@@ -1,3 +1,10 @@
+# [v4.1.6] - 2023-6-14 [PR: #60](https://github.com/aksio-insurtech/IngressMiddleware/pull/60)
+
+### Fixed
+
+- Fixing `ITenantSourceIdentifierResolver` and implementations to return string, this is their purpose - to resolve to a source identifier that will then be used to map back to the real tenant identifier.
+
+
 # [v4.1.5] - 2023-6-14 [PR: #59](https://github.com/aksio-insurtech/IngressMiddleware/pull/59)
 
 ### Fixed
