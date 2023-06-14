@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Text.Json;
-using Aksio.Cratis.Execution;
 using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
@@ -13,7 +12,7 @@ namespace Aksio.IngressMiddleware.Tenancy;
 public class TenantSourceIdentifierResolver : ITenantSourceIdentifierResolver
 {
     /// <inheritdoc/>
-    public async Task<TenantId> Resolve(Config config, HttpRequest request)
+    public async Task<string> Resolve(Config config, HttpRequest request)
     {
         var genericResolverInterface = GetType().GetInterface(typeof(ITenantSourceIdentifierResolver<>).Name);
         if (genericResolverInterface is not null)
@@ -23,9 +22,9 @@ public class TenantSourceIdentifierResolver : ITenantSourceIdentifierResolver
             {
                 var targetOptionsTypes = genericResolverInterface.GetGenericArguments()[0];
                 var options = config.TenantResolution.Options.Deserialize(targetOptionsTypes, Globals.JsonSerializerOptions)!;
-                return await (method.Invoke(this, new object[] { config, options, request }) as Task<TenantId>)!;
+                return await (method.Invoke(this, new object[] { config, options, request }) as Task<string>)!;
             }
         }
-        return TenantId.NotSet;
+        return string.Empty;
     }
 }

@@ -37,7 +37,7 @@ public class TenantResolver : ITenantResolver
         var tenantId = string.Empty;
         var sourceIdentifier = await _resolver.Resolve(_config, request);
 
-        if (sourceIdentifier != TenantId.NotSet)
+        if (!string.IsNullOrEmpty(tenantId))
         {
             var tenant = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier));
             tenantId = tenant.Key;

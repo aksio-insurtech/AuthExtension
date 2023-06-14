@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Text.RegularExpressions;
-using Aksio.Cratis.Execution;
 using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
@@ -19,7 +18,7 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
     readonly IDictionary<string, Regex> _regularExpressions = new Dictionary<string, Regex>();
 
     /// <inheritdoc/>
-    public Task<TenantId> Resolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request)
+    public Task<string> Resolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request)
     {
         var originalUri = request.Headers[Headers.OriginalUri].FirstOrDefault() ?? string.Empty;
 
@@ -35,10 +34,10 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
             var value = match.Groups[SourceIdentifier].Value;
             if (!string.IsNullOrEmpty(value))
             {
-                return Task.FromResult(new TenantId(Guid.Parse(value)));
+                return Task.FromResult(value);
             }
         }
 
-        return Task.FromResult(TenantId.NotSet);
+        return Task.FromResult(string.Empty);
     }
 }
