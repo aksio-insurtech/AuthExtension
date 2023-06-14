@@ -77,6 +77,7 @@ public class Impersonator : Controller
     {
         if (!Request.HasPrincipal())
         {
+            _logger.NoPrincipal();
             return StatusCode(StatusCodes.Status403Forbidden);
         }
 

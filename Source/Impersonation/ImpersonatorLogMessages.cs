@@ -13,4 +13,7 @@ internal static partial class ImpersonatorLogMessages
 
     [LoggerMessage(2, LogLevel.Information, "Performing impersonation for principal {PrincipalId} ({PrincipalName})")]
     internal static partial void PerformingImpersonation(this ILogger<Impersonator> logger, string principalId, string principalName);
+
+    [LoggerMessage(3, LogLevel.Information, "No principal present in request. Not performing impersonation.")]
+    internal static partial void NoPrincipal(this ILogger<Impersonator> logger);
 }
