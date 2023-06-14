@@ -110,7 +110,7 @@ public class OAuthBearerTokens : IOAuthBearerTokens
 
     static void AddPrincipalHeader(HttpResponse response, JwtSecurityToken jwtToken)
     {
-        var principal = jwtToken.ToClientPrincipal();
+        var principal = jwtToken.ToClientPrincipal().ToRawClientPrincipal();
         var principalAsJson = JsonSerializer.Serialize(principal, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         var principalAsJsonBytes = Encoding.UTF8.GetBytes(principalAsJson);
         response.Headers[Headers.Principal] = Convert.ToBase64String(principalAsJsonBytes);

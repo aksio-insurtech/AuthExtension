@@ -50,4 +50,15 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
         var json = JsonSerializer.SerializeToUtf8Bytes(rawPrincipal, Globals.JsonSerializerOptions);
         return Convert.ToBase64String(json);
     }
+
+    /// <summary>
+    /// Convert to a <see cref="RawClientPrincipal"/>.
+    /// </summary>
+    /// <returns>Converted <see cref="RawClientPrincipal"/>.</returns>
+    public RawClientPrincipal ToRawClientPrincipal()
+    {
+        var nameType = Claims.FirstOrDefault(_ => _.Value == UserDetails)?.Type ?? string.Empty;
+        var roleType = Claims.FirstOrDefault(_ => _.Value == UserRoles.First())?.Type ?? string.Empty;
+        return new RawClientPrincipal(IdentityProvider, nameType, roleType, Claims.ToRawClaims());
+    }
 }
