@@ -1,3 +1,10 @@
+# [v4.1.5] - 2023-6-14 [PR: #59](https://github.com/aksio-insurtech/IngressMiddleware/pull/59)
+
+### Fixed
+
+- If the `x-ms-client-principal` is missing when calling the `.aksio/impersonate/auth`, we now return 403 - forbbiden.
+
+
 # [v4.1.4] - 2023-6-13 [PR: #58](https://github.com/aksio-insurtech/IngressMiddleware/pull/58)
 
 ### Fixed
