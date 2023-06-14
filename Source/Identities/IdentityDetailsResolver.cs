@@ -42,7 +42,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
     {
         if (string.IsNullOrEmpty(_config.IdentityDetailsUrl))
         {
-            _logger.LogInformation("Identity details url is not configured, skipping identity details resolution");
+            _logger.IdentityDetailsUrlNotConfigured();
             return true;
         }
 
@@ -73,7 +73,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
                     principalName = "[NotSet]";
                 }
 
-                _logger.LogInformation("Resolving identity details for {PrincipalId} and {TenantId}", principalId, tenantId);
+                _logger.ResolvingIdentityDetails(principalId, tenantId);
 
                 client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
                 client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
@@ -86,14 +86,15 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
                 var responseMessage = await client.GetAsync(_config.IdentityDetailsUrl);
                 if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
                 {
-                    response.StatusCode = 403;
+                    response.StatusCode = StatusCodes.Status403Forbidden;
+                    _logger.Forbidden(principalId, tenantId, responseMessage.ReasonPhrase ?? "[No reason given]");
                     return false;
                 }
                 var identityDetails = await responseMessage.Content.ReadAsStringAsync();
 
                 if (responseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    _logger.LogError("Error trying to resolve identity details for {PrincipalId} on tenant {TenantId}: {StatusCode} {ReasonPhrase}", principalId, tenantId, responseMessage.StatusCode, responseMessage.ReasonPhrase);
+                    _logger.ErrorResolvingIdentityDetails(principalId, tenantId, responseMessage.StatusCode, responseMessage.ReasonPhrase ?? "[No reason given]");
                     return true;
                 }
 

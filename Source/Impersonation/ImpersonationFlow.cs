@@ -1,6 +1,7 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Aksio.Cratis.Collections;
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Helpers;
 
@@ -12,14 +13,19 @@ namespace Aksio.IngressMiddleware.Impersonation;
 public class ImpersonationFlow : IImpersonationFlow
 {
     readonly Config _config;
+    readonly ILogger<ImpersonationFlow> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ImpersonationFlow"/> class.
     /// </summary>
     /// <param name="config"><see cref="Config"/> instance.</param>
-    public ImpersonationFlow(Config config)
+    /// <param name="logger">Logger for logging.</param>
+    public ImpersonationFlow(
+        Config config,
+        ILogger<ImpersonationFlow> logger)
     {
         _config = config;
+        _logger = logger;
     }
 
     /// <inheritdoc/>
@@ -46,14 +52,23 @@ public class ImpersonationFlow : IImpersonationFlow
             return false;
         }
 
+        _logger.LogInformation("Checking if request should be impersonated. IsImpersonateRoute: {IsImpersonateRoute}, HasPrincipal: {HasPrincipal}", IsImpersonateRoute(request), request.HasPrincipal());
         if (!IsImpersonateRoute(request) && request.HasPrincipal())
         {
             var principal = ClientPrincipal.FromBase64(request.Headers[Headers.PrincipalId], request.Headers[Headers.Principal]);
+
+            _logger.LogInformation("Principal has identity provider: {IdentityProvider}", principal.IdentityProvider);
+
+            _config.Impersonation.IdentityProviders.ForEach(_ => _logger.LogInformation("Configured identity provider: {IdentityProvider}", _));
+
             if (_config.Impersonation.IdentityProviders.Any(_ => _.Equals(principal.IdentityProvider, StringComparison.InvariantCultureIgnoreCase)))
             {
+                _logger.LogInformation("Request should be impersonated");
                 return true;
             }
         }
+
+        _logger.LogInformation("Request should not be impersonated");
 
         return false;
     }
