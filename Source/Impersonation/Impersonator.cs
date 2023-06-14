@@ -78,14 +78,6 @@ public class Impersonator : Controller
         if (!Request.HasPrincipal())
         {
             _logger.NoPrincipal();
-
-            Console.WriteLine("*********** HEADERS ***********");
-            foreach (var key in Request.Headers.Keys)
-            {
-                Console.WriteLine($"{key}: {Request.Headers[key]}");
-            }
-            Console.WriteLine("*********** HEADERS ***********");
-
             return StatusCode(StatusCodes.Status403Forbidden);
         }
 
