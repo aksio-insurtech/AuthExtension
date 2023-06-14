@@ -37,13 +37,13 @@ public class TenantResolver : ITenantResolver
         var tenantId = string.Empty;
         var sourceIdentifier = await _resolver.Resolve(_config, request);
 
-        if (!string.IsNullOrEmpty(tenantId))
+        if (!string.IsNullOrEmpty(sourceIdentifier))
         {
             var tenant = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier));
-            tenantId = tenant.Key;
             if (!string.IsNullOrEmpty(tenantId))
             {
                 _logger.LogInformation($"Setting tenant id to '{tenant.Key}' based on source identifier ({sourceIdentifier}) resolved using {_config.TenantResolution.Strategy}");
+                tenantId = tenant.Key;
             }
         }
 

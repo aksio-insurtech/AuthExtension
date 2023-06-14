@@ -18,7 +18,7 @@ public class when_resolving_a_route_that_matches : Specification
     {
         options = new RouteSourceIdentifierResolverOptions
         {
-            RegularExpression = @"^/(?<sourceIdentifier>[\d]{4})/"
+            RegularExpression = "^/(?<sourceIdentifier>[\\d]{4})/"
         };
 
         context = new DefaultHttpContext();
