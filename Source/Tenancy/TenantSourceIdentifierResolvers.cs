@@ -25,7 +25,7 @@ public static class TenantSourceIdentifierResolvers
     public static IServiceCollection AddTenantSourceIdentifierResolver(this IServiceCollection services)
     {
         var config = services.BuildServiceProvider().GetRequiredService<Config>();
-        services.AddSingleton(sp => sp.GetRequiredService(_resolvers[config.TenantResolution.Strategy]));
+        services.AddSingleton(sp => (sp.GetRequiredService(_resolvers[config.TenantResolution.Strategy]) as ITenantSourceIdentifierResolver)!);
         return services;
     }
 }
