@@ -48,18 +48,20 @@ public class OAuthBearerTokens : IOAuthBearerTokens
     {
         if (!_config.OAuthBearerTokens.IsEnabled)
         {
-            _logger.LogInformation("OAuth bearer tokens validation is not enabled, skipping validation");
+            _logger.OAuthBearerTokensValidationNotEnabled();
             return _ok;
         }
 
         if (request.Headers.Authorization.Count == 0)
         {
+            _logger.MissingHeader();
             return Unauthorized(response, "Missing header", "Authorization header missing");
         }
 
         var strings = request.Headers.Authorization.ToString().Split(' ');
         if (strings.Length < 2 && strings[0].StartsWith("Bearer"))
         {
+            _logger.MissingBearerInHeader();
             return Unauthorized(response, "Missing Bearer in header", "Authorization header missing 'Bearer' in token value, unauthorized, Should be in the format \"Bearer {token}\"");
         }
         var token = strings[1];
@@ -89,28 +91,30 @@ public class OAuthBearerTokens : IOAuthBearerTokens
         {
             var jwtToken = tokenHandler.ReadJwtToken(token);
             tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
-            var valid = validatedToken != null;
-            if (!valid)
+            if (validatedToken is null)
             {
+                _logger.InvalidToken(jwtToken.EncodedPayload);
                 return Unauthorized(response, "invalid_token", "Given token is invalid");
             }
             AddPrincipalHeader(response, jwtToken);
         }
         catch (SecurityTokenExpiredException ex)
         {
+            _logger.TokenExpired(ex.Expires);
             return Unauthorized(response, "token_expired", $"Token has expired, it expired at {ex.Expires} (UTC)");
         }
         catch (Exception ex)
         {
+            _logger.CouldNotValidateToken(ex);
             return Unauthorized(response, "invalid_token", $"Could not validate token ; {ex.Message}");
         }
 
         return _ok;
     }
 
-    static void AddPrincipalHeader(HttpResponse response, JwtSecurityToken jwtToken)
+    void AddPrincipalHeader(HttpResponse response, JwtSecurityToken jwtToken)
     {
-        var principal = jwtToken.ToClientPrincipal();
+        var principal = jwtToken.ToClientPrincipal().ToRawClientPrincipal();
         var principalAsJson = JsonSerializer.Serialize(principal, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         var principalAsJsonBytes = Encoding.UTF8.GetBytes(principalAsJson);
         response.Headers[Headers.Principal] = Convert.ToBase64String(principalAsJsonBytes);
@@ -122,21 +126,21 @@ public class OAuthBearerTokens : IOAuthBearerTokens
         var response = await client.GetAsync(_config.OAuthBearerTokens.Authority);
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            _logger.LogError("Could not get the well-known authority document");
+            _logger.CouldNotGetWellKnownAuthorityDocument();
             return false;
         }
 
         _authority = await response.Content.ReadFromJsonAsync<AuthorityResult>();
         if (_authority is null)
         {
-            _logger.LogError("Could not parse the well-known authority document");
+            _logger.CouldNotParseTheWellKnownAuthorityDocument();
             return false;
         }
 
         response = await client.GetAsync(_authority.jwks_uri);
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            _logger.LogError("Could not get JWKS document");
+            _logger.CouldNotGetJWKSDocument();
         }
 
         var jwks = await response.Content.ReadAsStringAsync();
@@ -149,7 +153,7 @@ public class OAuthBearerTokens : IOAuthBearerTokens
     IActionResult Unauthorized(HttpResponse response, string message, string description)
     {
         response.Headers.Add("WWW-Authenticate", $"Bearer, error=\"{message}\", error_description=\"{description}\"");
-        _logger.LogError(message);
+        _logger.Unauthorized(message, description);
         return new StatusCodeResult(StatusCodes.Status401Unauthorized);
     }
 }

@@ -10,11 +10,11 @@ namespace Aksio.IngressMiddleware.Tenancy;
 /// </summary>
 public static class TenantSourceIdentifierResolvers
 {
-    static readonly Dictionary<TenantSourceIdentifierResolverType, ITenantSourceIdentifierResolver> _resolvers = new()
+    static readonly Dictionary<TenantSourceIdentifierResolverType, Type> _resolvers = new()
     {
-        { TenantSourceIdentifierResolverType.None, new NoneSourceIdentifierResolver() },
-        { TenantSourceIdentifierResolverType.Claim, new ClaimsSourceIdentifierResolver() },
-        { TenantSourceIdentifierResolverType.Route, new RouteSourceIdentifierResolver() }
+        { TenantSourceIdentifierResolverType.None, typeof(NoneSourceIdentifierResolver) },
+        { TenantSourceIdentifierResolverType.Claim, typeof(ClaimsSourceIdentifierResolver) },
+        { TenantSourceIdentifierResolverType.Route, typeof(RouteSourceIdentifierResolver) }
     };
 
     /// <summary>
@@ -25,7 +25,7 @@ public static class TenantSourceIdentifierResolvers
     public static IServiceCollection AddTenantSourceIdentifierResolver(this IServiceCollection services)
     {
         var config = services.BuildServiceProvider().GetRequiredService<Config>();
-        services.AddSingleton(_resolvers[config.TenantResolution.Strategy]);
+        services.AddSingleton(sp => (sp.GetRequiredService(_resolvers[config.TenantResolution.Strategy]) as ITenantSourceIdentifierResolver)!);
         return services;
     }
 }
