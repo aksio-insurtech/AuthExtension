@@ -108,10 +108,11 @@ public class OAuthBearerTokens : IOAuthBearerTokens
         return _ok;
     }
 
-    static void AddPrincipalHeader(HttpResponse response, JwtSecurityToken jwtToken)
+    void AddPrincipalHeader(HttpResponse response, JwtSecurityToken jwtToken)
     {
         var principal = jwtToken.ToClientPrincipal().ToRawClientPrincipal();
         var principalAsJson = JsonSerializer.Serialize(principal, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        _logger.LogInformation("Principal: {principal}", principalAsJson);
         var principalAsJsonBytes = Encoding.UTF8.GetBytes(principalAsJson);
         response.Headers[Headers.Principal] = Convert.ToBase64String(principalAsJsonBytes);
     }
