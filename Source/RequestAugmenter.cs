@@ -48,6 +48,13 @@ public class RequestAugmenter : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
+        Console.WriteLine("*********** HEADERS ***********");
+        foreach (var key in Request.Headers.Keys)
+        {
+            Console.WriteLine($"{key}: {Request.Headers[key]}");
+        }
+        Console.WriteLine("*********** HEADERS ***********");
+
         var tenantId = await _tenantResolver.Resolve(Request);
         Response.Headers[Headers.TenantId] = tenantId.ToString();
 
