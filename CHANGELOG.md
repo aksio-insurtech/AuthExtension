@@ -1,3 +1,10 @@
+# [v4.1.8] - 2023-6-15 [PR: #62](https://github.com/aksio-insurtech/IngressMiddleware/pull/62)
+
+### Fixed
+
+- Fixed so that we return the identity cookie when doing an impersonation by leveraging the identity details directly. If for some reason the identity details endpoint (**.aksio/me**) returns anything but HTTP 200, we'll delete the identity cookie and return a forbidden.
+
+
 # [v4.1.7] - 2023-6-14 [PR: #61](https://github.com/aksio-insurtech/IngressMiddleware/pull/61)
 
 ## Summary
