@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware.Helpers;
+using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Security;
+using Aksio.IngressMiddleware.Tenancy;
 
 namespace Aksio.IngressMiddleware.Impersonation;
 
@@ -21,18 +23,26 @@ public class Impersonator : Controller
         typeof(GroupsImpersonationAuthorizer)
     };
     readonly IServiceProvider _serviceProvider;
+    readonly IIdentityDetailsResolver _identityDetailsResolver;
+    readonly ITenantResolver _tenantResolver;
     readonly ILogger<Impersonator> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Impersonator"/> class.
     /// </summary>
     /// <param name="serviceProvider"><see cref="IServiceProvider"/> to get instances from.</param>
+    /// <param name="identityDetailsResolver"><see cref="IIdentityDetailsResolver"/> to use.</param>
+    /// <param name="tenantResolver"><see cref="ITenantResolver"/> to use.</param>
     /// <param name="logger">Logger for logging.</param>
     public Impersonator(
         IServiceProvider serviceProvider,
+        IIdentityDetailsResolver identityDetailsResolver,
+        ITenantResolver tenantResolver,
         ILogger<Impersonator> logger)
     {
         _serviceProvider = serviceProvider;
+        _identityDetailsResolver = identityDetailsResolver;
+        _tenantResolver = tenantResolver;
         _logger = logger;
     }
 
@@ -49,7 +59,7 @@ public class Impersonator : Controller
     /// claim:sub=1234567890.
     /// </remarks>
     [HttpGet("perform")]
-    public IActionResult Impersonate()
+    public async Task<IActionResult> Impersonate()
     {
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
         _logger.PerformingImpersonation(principal.UserId, principal.UserDetails);
@@ -63,7 +73,13 @@ public class Impersonator : Controller
         var newPrincipalAsBase64 = newPrincipal.ToBase64();
         Response.Headers[Headers.Principal] = newPrincipalAsBase64;
         Response.Cookies.Append(Cookies.Impersonation, newPrincipalAsBase64, new CookieOptions { Expires = null! });
-        Response.Cookies.Delete(Cookies.Identity);
+
+        var tenantId = await _tenantResolver.Resolve(Request);
+        if (!await _identityDetailsResolver.Resolve(Request, Response, tenantId))
+        {
+            Response.Cookies.Delete(Cookies.Identity);
+            return StatusCode(StatusCodes.Status403Forbidden);
+        }
 
         return Redirect("/");
     }
