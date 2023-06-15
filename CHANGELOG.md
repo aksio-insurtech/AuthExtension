@@ -1,3 +1,10 @@
+# [v4.1.9] - 2023-6-15 [PR: #63](https://github.com/aksio-insurtech/IngressMiddleware/pull/63)
+
+### Fixed
+
+- Allowing for overriding the resolution of identities when doing impersonation. 
+
+
 # [v4.1.8] - 2023-6-15 [PR: #62](https://github.com/aksio-insurtech/IngressMiddleware/pull/62)
 
 ### Fixed
