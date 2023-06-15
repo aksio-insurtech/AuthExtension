@@ -41,8 +41,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
     public async Task<bool> Resolve(
         HttpRequest request,
         HttpResponse response,
-        TenantId tenantId,
-        bool isImpersonated = false)
+        TenantId tenantId)
     {
         if (string.IsNullOrEmpty(_config.IdentityDetailsUrl))
         {
@@ -50,67 +49,81 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
             return true;
         }
 
-        if ((!request.Cookies.ContainsKey(Cookies.Identity) || isImpersonated)
+        if (!request.Cookies.ContainsKey(Cookies.Identity)
             && request.HasPrincipal())
         {
-            try
+            return await Resolve(request, response, request.Headers[Headers.Principal].ToString(), tenantId);
+        }
+
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> Resolve(
+        HttpRequest request,
+        HttpResponse response,
+        string principal,
+        TenantId tenantId)
+    {
+        var client = _httpClientFactory.CreateClient();
+
+        var principalId = string.Empty;
+        var principalName = string.Empty;
+
+        if (request.Headers.ContainsKey(Headers.PrincipalId))
+        {
+            principalId = request.Headers[Headers.PrincipalId];
+        }
+        if (request.Headers.ContainsKey(Headers.PrincipalName))
+        {
+            principalName = request.Headers[Headers.PrincipalName];
+        }
+
+        if (string.IsNullOrEmpty(principalId))
+        {
+            principalId = "[NotSet]";
+        }
+        if (string.IsNullOrEmpty(principalName))
+        {
+            principalName = "[NotSet]";
+        }
+
+        _logger.ResolvingIdentityDetails(principalId, tenantId);
+
+        client.DefaultRequestHeaders.Add(Headers.Principal, principal);
+        client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
+        client.DefaultRequestHeaders.Add(Headers.PrincipalName, principalName);
+        client.DefaultRequestHeaders.Add(Headers.TenantId, tenantId.ToString());
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));
+        client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("utf-8"));
+
+        try
+        {
+            var responseMessage = await client.GetAsync(_config.IdentityDetailsUrl);
+            if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
             {
-                var client = _httpClientFactory.CreateClient();
-                var principalId = string.Empty;
-                var principalName = string.Empty;
-
-                if (request.Headers.ContainsKey(Headers.PrincipalId))
-                {
-                    principalId = request.Headers[Headers.PrincipalId];
-                }
-                if (request.Headers.ContainsKey(Headers.PrincipalName))
-                {
-                    principalName = request.Headers[Headers.PrincipalName];
-                }
-
-                if (string.IsNullOrEmpty(principalId))
-                {
-                    principalId = "[NotSet]";
-                }
-                if (string.IsNullOrEmpty(principalName))
-                {
-                    principalName = "[NotSet]";
-                }
-
-                _logger.ResolvingIdentityDetails(principalId, tenantId);
-
-                client.DefaultRequestHeaders.Add(Headers.Principal, request.Headers[Headers.Principal].ToString());
-                client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
-                client.DefaultRequestHeaders.Add(Headers.PrincipalName, principalName);
-                client.DefaultRequestHeaders.Add(Headers.TenantId, tenantId.ToString());
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));
-                client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("utf-8"));
-
-                var responseMessage = await client.GetAsync(_config.IdentityDetailsUrl);
-                if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    response.StatusCode = StatusCodes.Status403Forbidden;
-                    _logger.Forbidden(principalId, tenantId, responseMessage.ReasonPhrase ?? "[No reason given]");
-                    return false;
-                }
-                var identityDetails = await responseMessage.Content.ReadAsStringAsync();
-
-                if (responseMessage.StatusCode != HttpStatusCode.OK)
-                {
-                    _logger.ErrorResolvingIdentityDetails(principalId, tenantId, responseMessage.StatusCode, responseMessage.ReasonPhrase ?? "[No reason given]");
-                    return true;
-                }
-
-                var encoding = Encoding.GetEncoding("iso-8859-1");
-                var encoded = encoding.GetBytes(identityDetails);
-                var identityDetailsAsBase64 = Convert.ToBase64String(encoded);
-                response.Cookies.Append(Cookies.Identity, identityDetailsAsBase64, new CookieOptions { Expires = null! });
+                response.StatusCode = StatusCodes.Status403Forbidden;
+                _logger.Forbidden(principalId, tenantId, responseMessage.ReasonPhrase ?? "[No reason given]");
+                return false;
             }
-            catch (Exception ex)
+            var identityDetails = await responseMessage.Content.ReadAsStringAsync();
+
+            if (responseMessage.StatusCode != HttpStatusCode.OK)
             {
-                _logger.LogError(ex, "Error trying to resolve identity details");
+                _logger.ErrorResolvingIdentityDetails(principalId, tenantId, responseMessage.StatusCode, responseMessage.ReasonPhrase ?? "[No reason given]");
+                return true;
             }
+
+            var encoding = Encoding.GetEncoding("iso-8859-1");
+            var encoded = encoding.GetBytes(identityDetails);
+            var identityDetailsAsBase64 = Convert.ToBase64String(encoded);
+            response.Cookies.Append(Cookies.Identity, identityDetailsAsBase64, new CookieOptions { Expires = null! });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error trying to resolve identity details");
+            return false;
         }
 
         return true;
