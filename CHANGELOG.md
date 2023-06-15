@@ -1,3 +1,10 @@
+# [v4.1.10] - 2023-6-15 [PR: #64](https://github.com/aksio-insurtech/IngressMiddleware/pull/64)
+
+### Fixed
+
+- Fixing the check for the identity resolver while we're doing impersonation to go through.
+
+
 # [v4.1.9] - 2023-6-15 [PR: #63](https://github.com/aksio-insurtech/IngressMiddleware/pull/63)
 
 ### Fixed
