@@ -13,7 +13,7 @@ public class when_handling_impersonated_route : given.a_request_augmenter
 
     void Establish()
     {
-        identity_details_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id, false)).ReturnsAsync(true);
+        identity_details_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id)).ReturnsAsync(true);
         bearer_tokens.Setup(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id)).ReturnsAsync(new OkResult());
         cookie_value = Guid.NewGuid().ToString();
 
@@ -24,6 +24,6 @@ public class when_handling_impersonated_route : given.a_request_augmenter
 
     [Fact] void should_ask_impersonation_flow_to_handle_impersonated_principal() => impersonation_flow.Verify(_ => _.HandleImpersonatedPrincipal(IsAny<HttpRequest>(), IsAny<HttpResponse>()), Once);
     [Fact] void should_return_ok() => result.ShouldBeOfExactType<OkResult>();
-    [Fact] void should_resolve_identity_details() => identity_details_resolver.Verify(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id, false), Once);
+    [Fact] void should_resolve_identity_details() => identity_details_resolver.Verify(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id), Once);
     [Fact] void should_handle_bearer_tokens() => bearer_tokens.Verify(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id), Once);
 }

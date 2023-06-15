@@ -16,6 +16,6 @@ public class when_handling_non_impersonated_route_and_identity_provider_requires
 
     [Fact] void should_set_redirect_header() => response.Headers[Headers.ImpersonationRedirect].ShouldEqual(WellKnownPaths.Impersonation);
     [Fact] void should_return_forbidden() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status401Unauthorized);
-    [Fact] void should_not_resolve_identity_details() => identity_details_resolver.Verify(_ => _.Resolve(request, response, tenant_id, false), Never);
+    [Fact] void should_not_resolve_identity_details() => identity_details_resolver.Verify(_ => _.Resolve(request, response, tenant_id), Never);
     [Fact] void should_not_handle_bearer_tokens() => bearer_tokens.Verify(_ => _.Handle(request, response, tenant_id), Never);
 }

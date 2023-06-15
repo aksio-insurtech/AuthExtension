@@ -39,6 +39,7 @@ public class TenantResolver : ITenantResolver
 
         if (!string.IsNullOrEmpty(sourceIdentifier))
         {
+            _logger.LogInformation("Attempting to resolve tenant using source identifier.");
             var tenant = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier));
             tenantId = tenant.Key;
             if (!string.IsNullOrEmpty(tenantId))
@@ -49,6 +50,7 @@ public class TenantResolver : ITenantResolver
 
         if (string.IsNullOrEmpty(tenantId))
         {
+            _logger.LogInformation("Attempting to resolve tenant using host '{Host}'.", request.Host.Host);
             var tenant = _config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host));
             tenantId = tenant.Key;
             if (!string.IsNullOrEmpty(tenantId))
