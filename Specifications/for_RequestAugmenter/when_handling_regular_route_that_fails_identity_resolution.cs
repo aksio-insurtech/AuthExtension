@@ -12,7 +12,7 @@ public class when_handling_regular_route_that_fails_identity_resolution : given.
 
     void Establish()
     {
-        identity_details_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id)).ReturnsAsync(false);
+        identity_details_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id, false)).ReturnsAsync(false);
     }
 
     async Task Because() => result = await augmenter.Get();
