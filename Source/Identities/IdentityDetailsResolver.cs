@@ -50,7 +50,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
             return true;
         }
 
-        if (!(request.Cookies.ContainsKey(Cookies.Identity) || isImpersonated)
+        if ((!request.Cookies.ContainsKey(Cookies.Identity) || isImpersonated)
             && request.HasPrincipal())
         {
             try
