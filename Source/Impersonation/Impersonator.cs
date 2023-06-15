@@ -75,7 +75,7 @@ public class Impersonator : Controller
         Response.Cookies.Append(Cookies.Impersonation, newPrincipalAsBase64, new CookieOptions { Expires = null! });
 
         var tenantId = await _tenantResolver.Resolve(Request);
-        if (!await _identityDetailsResolver.Resolve(Request, Response, tenantId))
+        if (!await _identityDetailsResolver.Resolve(Request, Response, tenantId, true))
         {
             Response.Cookies.Delete(Cookies.Identity);
             return StatusCode(StatusCodes.Status403Forbidden);

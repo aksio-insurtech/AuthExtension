@@ -38,7 +38,11 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
     }
 
     /// <inheritdoc/>
-    public async Task<bool> Resolve(HttpRequest request, HttpResponse response, TenantId tenantId)
+    public async Task<bool> Resolve(
+        HttpRequest request,
+        HttpResponse response,
+        TenantId tenantId,
+        bool isImpersonated = false)
     {
         if (string.IsNullOrEmpty(_config.IdentityDetailsUrl))
         {
@@ -46,7 +50,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
             return true;
         }
 
-        if (!request.Cookies.ContainsKey(Cookies.Identity)
+        if (!(request.Cookies.ContainsKey(Cookies.Identity) || isImpersonated)
             && request.HasPrincipal())
         {
             try
