@@ -13,17 +13,17 @@ public class Config
     /// <summary>
     /// Gets or sets the <see cref="OpenIDConnectConfig"/> configuration related to IdPorten.
     /// </summary>
-    public OpenIDConnectConfig IdPorten { get; set; } = new OpenIDConnectConfig();
+    public OpenIDConnectConfig IdPorten { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the <see cref="TenantsConfig"/>.
     /// </summary>
-    public TenantsConfig Tenants { get; set; } = new TenantsConfig();
+    public TenantsConfig Tenants { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the <see cref="TenantResolution"/> configuration.
     /// </summary>
-    public TenantResolutionConfig TenantResolution { get; set; } = new TenantResolutionConfig();
+    public TenantResolutionConfig TenantResolution { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the URL to use for getting identity details.
@@ -33,12 +33,17 @@ public class Config
     /// <summary>
     /// Gets or sets the <see cref="OAuthBearerTokensConfig"/> configuration.
     /// </summary>
-    public OAuthBearerTokensConfig OAuthBearerTokens { get; set; } = new OAuthBearerTokensConfig();
+    public OAuthBearerTokensConfig OAuthBearerTokens { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the <see cref="ImpersonationConfig"/> configuration.
     /// </summary>
-    public ImpersonationConfig Impersonation { get; set; } = new ImpersonationConfig();
+    public ImpersonationConfig Impersonation { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the <see cref="MutualTLSConfig"/> configuration.
+    /// </summary>
+    public MutualTLSConfig MutualTLS { get; set; } = new();
 
     /// <summary>
     /// Loads the configuration from the file system.

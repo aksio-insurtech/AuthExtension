@@ -6,6 +6,7 @@ using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.Tenancy;
+using IngressMiddleware.MutualTLS;
 using Microsoft.AspNetCore.Http;
 
 namespace Aksio.IngressMiddleware.for_RequestAugmenter.given;
@@ -17,6 +18,7 @@ public class a_request_augmenter : Specification
     protected Mock<IImpersonationFlow> impersonation_flow;
     protected Mock<ITenantResolver> tenant_resolver;
     protected Mock<IOAuthBearerTokens> bearer_tokens;
+    protected Mock<IMutualTLS> mutual_tls;
     protected RequestAugmenter augmenter;
     protected HttpRequest request;
     protected HttpResponse response;
@@ -28,7 +30,14 @@ public class a_request_augmenter : Specification
         tenant_resolver = new();
         tenant_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>())).ReturnsAsync(tenant_id);
         bearer_tokens = new();
-        augmenter = new(identity_details_resolver.Object, impersonation_flow.Object, tenant_resolver.Object, bearer_tokens.Object)
+        mutual_tls = new();
+
+        augmenter = new(
+            identity_details_resolver.Object,
+            impersonation_flow.Object,
+            tenant_resolver.Object,
+            bearer_tokens.Object,
+            mutual_tls.Object)
         {
             ControllerContext = new()
             {
