@@ -42,4 +42,9 @@ public static class Headers
     /// Impersonation redirect header.
     /// </summary>
     public const string ImpersonationRedirect = "x-aksio-impersonation-redirect";
+
+    /// <summary>
+    /// Forwarded client certificate from container app ingress for Mutual TLS (mTLS).
+    /// </summary>
+    public const string ClientCertificateHeader = "x-forwarded-client-cert";
 }

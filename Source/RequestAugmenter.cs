@@ -5,6 +5,7 @@ using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.Tenancy;
+using IngressMiddleware.MutualTLS;
 
 namespace Aksio.IngressMiddleware;
 
@@ -21,6 +22,7 @@ public class RequestAugmenter : Controller
     readonly IImpersonationFlow _impersonationFlow;
     readonly ITenantResolver _tenantResolver;
     readonly IOAuthBearerTokens _bearerTokens;
+    readonly IMutualTLS _mutualTls;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RequestAugmenter"/> class.
@@ -29,16 +31,19 @@ public class RequestAugmenter : Controller
     /// <param name="impersonationFlow"><see cref="IImpersonationFlow"/> to use for the impersonation process.</param>
     /// <param name="tenantResolver"><see cref="ITenantResolver"/> to use.</param>
     /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/> to use.</param>
+    /// <param name="mutualTls"><see cref="IMutualTLS"/> to use.</param>
     public RequestAugmenter(
         IIdentityDetailsResolver identityDetailsResolver,
         IImpersonationFlow impersonationFlow,
         ITenantResolver tenantResolver,
-        IOAuthBearerTokens bearerTokens)
+        IOAuthBearerTokens bearerTokens,
+        IMutualTLS mutualTls)
     {
         _identityDetailsResolver = identityDetailsResolver;
         _impersonationFlow = impersonationFlow;
         _tenantResolver = tenantResolver;
         _bearerTokens = bearerTokens;
+        _mutualTls = mutualTls;
     }
 
     /// <summary>
@@ -50,6 +55,11 @@ public class RequestAugmenter : Controller
     {
         var tenantId = await _tenantResolver.Resolve(Request);
         Response.Headers[Headers.TenantId] = tenantId.ToString();
+
+        if (_mutualTls.IsEnabled())
+        {
+            return _mutualTls.Handle(Request);
+        }
 
         if (!_impersonationFlow.HandleImpersonatedPrincipal(Request, Response) &&
             _impersonationFlow.ShouldImpersonate(Request))
