@@ -7,6 +7,7 @@ using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.Tenancy;
+using IngressMiddleware.MutualTLS;
 
 UnhandledExceptionsManager.Setup();
 
@@ -20,6 +21,7 @@ builder.Services.AddTenantSourceIdentifierResolver();
 builder.Services.AddTransient<ITenantResolver, TenantResolver>();
 builder.Services.AddTransient<IIdentityDetailsResolver, IdentityDetailsResolver>();
 builder.Services.AddTransient<IOAuthBearerTokens, OAuthBearerTokens>();
+builder.Services.AddTransient<IMutualTLS, MutualTLS>();
 builder.Services.AddTransient<TenantImpersonationAuthorizer>();
 builder.Services.AddTransient<IdentityProviderImpersonationAuthorizer>();
 builder.Services.AddTransient<ClaimImpersonationAuthorizer>();
@@ -31,7 +33,6 @@ builder.Services.AddSingleton<ClaimsSourceIdentifierResolver>();
 builder.Services.AddSingleton<RouteSourceIdentifierResolver>();
 
 builder.Services.AddHttpClient();
-var loggerFactory = builder.Host.UseDefaultLogging();
 
 var app = builder.Build();
 app.UseRouting();

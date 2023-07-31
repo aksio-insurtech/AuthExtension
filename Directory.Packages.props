@@ -3,10 +3,10 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Aksio.Cratis.Applications" Version="8.18.7" />
-    <PackageVersion Include="Aksio.Cratis.Fundamentals" Version="8.18.7" />
+    <PackageVersion Include="Aksio.Applications.Serilog" Version="1.1.14" />
     <PackageVersion Include="Aksio.Defaults" Version="1.6.10" />
     <PackageVersion Include="Aksio.Defaults.Specs" Version="1.6.10" />
+    <PackageVersion Include="Aksio.Fundamentals" Version="1.3.10" />
     <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="6.30.1" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.30.1" />
     <PackageVersion Include="MELT" Version="0.8.0" />
