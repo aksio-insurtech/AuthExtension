@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aksio.IngressMiddleware.for_MutualTLS;
 
-public class when_handling_a_valid_mtls_client : given.a_mutualtls_instance
+public class when_handling_a_valid_mtls_client : given.a_mutual_tls_instance
 {
     IActionResult _result;
 
