@@ -1,3 +1,13 @@
+# [v4.2.1] - 2023-7-31 [PR: #68](https://github.com/aksio-insurtech/IngressMiddleware/pull/68)
+
+### Changed
+
+- Updated Aksio Application and Fundamentals NuGet packages
+
+### Fixed
+
+- Added MutualTLS to service locator during startup.
+
 # [v4.2.0] - 2023-7-31 [PR: #66](https://github.com/aksio-insurtech/IngressMiddleware/pull/66)
 
 ### Added
