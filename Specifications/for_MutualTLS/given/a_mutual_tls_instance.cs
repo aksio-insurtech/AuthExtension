@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Aksio.IngressMiddleware.for_MutualTLS.given;
 
-public class a_mutualtls_instance : Specification
+public class a_mutual_tls_instance : Specification
 {
     /// <summary>
     /// Base64 version of buypass test CA cert for virksomhetssertifikat.
