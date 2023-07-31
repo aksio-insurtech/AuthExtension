@@ -1,3 +1,14 @@
+# [v4.2.0] - 2023-7-31 [PR: #66](https://github.com/aksio-insurtech/IngressMiddleware/pull/66)
+
+### Added
+
+- Added support for mTLS, so that we can validate client certificate requests.
+
+### Changed
+
+- Renamed test-project to IngressMiddleware.Specs, because tooling (Rider) does not handle two projects with the same name very gracefully (e.g. in both nuget manager and search, results are combined in the UI, making it impossible to distinguish).
+
+
 # [v4.1.10] - 2023-6-15 [PR: #64](https://github.com/aksio-insurtech/IngressMiddleware/pull/64)
 
 ### Fixed
