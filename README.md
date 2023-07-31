@@ -75,7 +75,7 @@ Its format is:
         "options": {}
     },
     "identityProviderUrl": "The URL to call to get application details for the identity",
-    "oAuthBearerTokens": {
+    "OAuthBearerTokens": {
         "authority": "The URL for the well-known document that describes the authority"
     },
     "mutualTLS": {
