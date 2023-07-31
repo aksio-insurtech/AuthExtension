@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Aksio.IngressMiddleware.for_MutualTLS;
 
-public class when_authority_certificate_is_missing : given.a_mutualtls_instance
+public class when_authority_certificate_is_missing : given.a_mutual_tls_instance
 {
     IActionResult _result;
 
@@ -19,6 +19,6 @@ public class when_authority_certificate_is_missing : given.a_mutualtls_instance
     void should_return_forbidden() => ((StatusCodeResult)_result).StatusCode.ShouldEqual(StatusCodes.Status401Unauthorized);
 
     [Fact]
-    void should_log_accessdenied() =>
+    void should_log_access_denied() =>
         LoggerFactory.Sink.LogEntries.ShouldContain(_ => _.EventId == 2 && _.LogLevel == LogLevel.Error);
 }
