@@ -1,3 +1,10 @@
+# [v4.3.0] - 2023-8-2 [PR: #69](https://github.com/aksio-insurtech/IngressMiddleware/pull/69)
+
+### Changed
+
+- Changed some logging in mTLS handling.
+
+
 # [v4.2.1] - 2023-7-31 [PR: #68](https://github.com/aksio-insurtech/IngressMiddleware/pull/68)
 
 ### Changed
