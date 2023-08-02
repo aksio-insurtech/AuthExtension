@@ -40,34 +40,39 @@ public class MutualTLS : IMutualTLS
             return new StatusCodeResult(StatusCodes.Status401Unauthorized);
         }
 
+        // Get caller address, for logging purposes.
+        var clientIp = request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "(n/a)";
+
         try
         {
-            using var clientCert = GetClientCert(request);
+            using var clientCert = GetClientCert(request, clientIp);
             if (clientCert == null)
             {
+                _logger.NoCertificateReceivedFromClient(clientIp);
                 return new StatusCodeResult(StatusCodes.Status401Unauthorized);
             }
 
             if (!_config.MutualTLS.AcceptedSerialNumbers.Any(
                     accepted => string.Equals(clientCert.SerialNumber, accepted, StringComparison.OrdinalIgnoreCase)))
             {
-                _logger.InvalidCertificateSerialNumber(clientCert.SerialNumber, clientCert.Issuer);
+                _logger.InvalidCertificateSerialNumber(clientCert.SerialNumber, clientCert.Issuer, clientIp);
                 return new StatusCodeResult(StatusCodes.Status401Unauthorized);
             }
 
             if (!ValidateClientCert(clientCert, out var chainElements))
             {
-                _logger.InvalidCertificate(clientCert.SerialNumber, clientCert.Issuer, chainElements);
+                _logger.InvalidCertificate(clientCert.SerialNumber, clientCert.Issuer, chainElements, clientIp);
                 return new StatusCodeResult(StatusCodes.Status401Unauthorized);
             }
+
+            _logger.ClientLoggedIn(clientCert.SerialNumber, clientCert.Issuer, clientIp);
+            return new OkResult();
         }
         catch (Exception ex)
         {
-            _logger.CouldNotValidateCertificate(ex);
+            _logger.CouldNotValidateCertificate(ex, clientIp);
             return new StatusCodeResult(StatusCodes.Status401Unauthorized);
         }
-
-        return new OkResult();
     }
 
     /// <summary>
@@ -101,19 +106,20 @@ public class MutualTLS : IMutualTLS
     /// Get the client cert sent from the ingress, and return it in X509Certificate2 format.
     /// </summary>
     /// <param name="request">The http request object.</param>
+    /// <param name="clientIp">Content of X-Forwarded-For header.</param>
     /// <returns>The certificate, or null if it cannot be found.</returns>
-    X509Certificate2? GetClientCert(HttpRequest request)
+    X509Certificate2? GetClientCert(HttpRequest request, string clientIp)
     {
         if (!request.Headers.TryGetValue(Headers.ClientCertificateHeader, out var headers))
         {
-            _logger.MissingHeader();
+            _logger.MissingHeader(clientIp);
             return null;
         }
 
         var clientCertificateHeader = headers.SingleOrDefault();
         if (string.IsNullOrWhiteSpace(clientCertificateHeader))
         {
-            _logger.MissingCertificateInHeader();
+            _logger.MissingCertificateInHeader(clientIp);
             return null;
         }
 
