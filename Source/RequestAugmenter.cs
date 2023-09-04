@@ -53,7 +53,7 @@ public class RequestAugmenter : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        if (await _tenantResolver.CanResolve(Request) == false)
+        if (!await _tenantResolver.CanResolve(Request))
         {
             return StatusCode(StatusCodes.Status401Unauthorized);
         }

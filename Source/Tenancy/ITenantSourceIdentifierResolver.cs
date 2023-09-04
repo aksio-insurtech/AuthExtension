@@ -34,7 +34,7 @@ public interface ITenantSourceIdentifierResolver
 public interface ITenantSourceIdentifierResolver<TOptions> : ITenantSourceIdentifierResolver
 {
     /// <summary>
-    /// Check if the resolver can resolve the tenant from the given <see cref="HttpRequest"/>. 
+    /// Check if the resolver can resolve the tenant from the given <see cref="HttpRequest"/>.
     /// </summary>
     /// <param name="config"><see cref="Config"/> instance.</param>
     /// <param name="options">The options associated with the resolver.</param>

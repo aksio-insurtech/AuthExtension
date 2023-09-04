@@ -5,7 +5,7 @@ namespace Aksio.IngressMiddleware.Tenancy.for_SpecifiedTenantSourceIdentifierRes
 
 public class and_it_can : Specification
 {
-    SpecifiedSourceIdentifierResolver   resolver;
+    SpecifiedSourceIdentifierResolver resolver;
     bool result;
 
     void Establish() => resolver = new();
