@@ -114,7 +114,8 @@ If no source identifier provider is specified, or they are not able to resolve a
 it will match the tenant on this.
 
 Configuration of source providers is done through the `tenantResolution` key. This is entirely optional and
-will revert to `none` if not configured.
+will revert to `none` if not configured. If no provider is specified, the tenant will be resolved to an
+empty string.
 
 #### Route source identifier provider
 
@@ -150,6 +151,26 @@ Below shows an example:
     }
 }
 ```
+
+#### Specified source identifier provider
+
+You can configure using a specific tenant id, typically used for single tenanted solutions or solutions that manage tenancy themselves and
+there is no need for a tenant being passed on the request.
+
+Below shows an example:
+
+```json
+{
+    "tenantResolution": {
+        "strategy": "specified",
+        "options": { 
+            "tenantId": "a18238e0-d78a-4f27-9bb7-8d6aa7440f1e"
+        }
+    }
+}
+```
+
+The value in `tenantId` will then **always** be the value passed further in.
 
 ### OAuth Bearer Tokens
 

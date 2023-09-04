@@ -11,5 +11,8 @@ namespace Aksio.IngressMiddleware.Tenancy;
 public class NoneSourceIdentifierResolver : ITenantSourceIdentifierResolver
 {
     /// <inheritdoc/>
+    public Task<bool> CanResolve(Config config, HttpRequest request) => Task.FromResult(true);
+
+    /// <inheritdoc/>
     public Task<string> Resolve(Config config, HttpRequest request) => Task.FromResult(string.Empty);
 }

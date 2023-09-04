@@ -14,7 +14,8 @@ public static class TenantSourceIdentifierResolvers
     {
         { TenantSourceIdentifierResolverType.None, typeof(NoneSourceIdentifierResolver) },
         { TenantSourceIdentifierResolverType.Claim, typeof(ClaimsSourceIdentifierResolver) },
-        { TenantSourceIdentifierResolverType.Route, typeof(RouteSourceIdentifierResolver) }
+        { TenantSourceIdentifierResolverType.Route, typeof(RouteSourceIdentifierResolver) },
+        { TenantSourceIdentifierResolverType.Specified, typeof(SpecifiedSourceIdentifierResolver) }
     };
 
     /// <summary>

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
@@ -5,8 +6,6 @@ using System.Text.RegularExpressions;
 using Aksio.IngressMiddleware.Configuration;
 
 namespace Aksio.IngressMiddleware.Tenancy;
-
-#pragma warning disable MA0009 // We trust RegEx coming from configuration not to be a potential DOS attack
 
 /// <summary>
 /// Represents a source identifier resolver for routes.
@@ -28,7 +27,20 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
     }
 
     /// <inheritdoc/>
+    public Task<bool> CanResolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request) => Task.FromResult(TryResolveTenant(options, request, out _)); 
+
+    /// <inheritdoc/>
     public Task<string> Resolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request)
+    {
+        if( TryResolveTenant(options, request, out var tenant))
+        {
+            return Task.FromResult(tenant);
+        }
+
+        return Task.FromResult(string.Empty);
+    }
+
+    bool TryResolveTenant(RouteSourceIdentifierResolverOptions options, HttpRequest request, out string tenant)
     {
         var originalUri = request.Headers[Headers.OriginalUri].FirstOrDefault() ?? string.Empty;
         _logger.ResolvingUsingOriginalUri(originalUri);
@@ -47,11 +59,12 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
             if (!string.IsNullOrEmpty(value))
             {
                 _logger.SourceIdentifierMatched(value);
-                return Task.FromResult(value);
+                tenant = value;
+                return true;
             }
         }
 
-        _logger.RouteNotMatched();
-        return Task.FromResult(string.Empty);
+        tenant = string.Empty;
+        return false;
     }
 }

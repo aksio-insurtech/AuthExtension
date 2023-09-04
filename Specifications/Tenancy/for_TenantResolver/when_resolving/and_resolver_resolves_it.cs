@@ -8,30 +8,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Aksio.IngressMiddleware.Tenancy.for_TenantResolver.when_resolving;
 
-public class and_resolver_resolves_it : Specification
+public class and_resolver_resolves_it : given.a_tenant_resolver
 {
     string tenant_id = "c392e7be-5cb4-4d1b-a461-7077e197309c";
-    TenantResolver resolver;
-    Mock<ITenantSourceIdentifierResolver> source_identifier_resolver;
-    DefaultHttpContext context;
-    Config config;
     TenantId result;
 
     void Establish()
     {
-        source_identifier_resolver = new();
-        config = new();
         config.Tenants[tenant_id] = new TenantConfig
         {
             SourceIdentifiers = new[] { "3610" }
         };
-
-        resolver = new(
-            config,
-            source_identifier_resolver.Object,
-            Mock.Of<ILogger<TenantResolver>>());
-
-        context = new();
 
         source_identifier_resolver.Setup(_ => _.Resolve(config, context.Request)).ReturnsAsync("3610");
     }

@@ -53,6 +53,11 @@ public class RequestAugmenter : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
+        if (await _tenantResolver.CanResolve(Request) == false)
+        {
+            return StatusCode(StatusCodes.Status401Unauthorized);
+        }
+
         var tenantId = await _tenantResolver.Resolve(Request);
         Response.Headers[Headers.TenantId] = tenantId.ToString();
 

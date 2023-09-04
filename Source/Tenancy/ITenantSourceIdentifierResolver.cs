@@ -11,6 +11,14 @@ namespace Aksio.IngressMiddleware.Tenancy;
 public interface ITenantSourceIdentifierResolver
 {
     /// <summary>
+    /// Check if the resolver can resolve the tenant from the given <see cref="HttpRequest"/>.
+    /// </summary>
+    /// <param name="config"><see cref="Config"/> instance.</param>
+    /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
+    /// <returns>True if it can, false if not.</returns>
+    Task<bool> CanResolve(Config config, HttpRequest request);
+
+    /// <summary>
     /// Resolve the tenant from the given <see cref="HttpRequest"/>.
     /// </summary>
     /// <param name="config"><see cref="Config"/> instance.</param>
@@ -25,6 +33,15 @@ public interface ITenantSourceIdentifierResolver
 /// <typeparam name="TOptions">Type of options.</typeparam>
 public interface ITenantSourceIdentifierResolver<TOptions> : ITenantSourceIdentifierResolver
 {
+    /// <summary>
+    /// Check if the resolver can resolve the tenant from the given <see cref="HttpRequest"/>. 
+    /// </summary>
+    /// <param name="config"><see cref="Config"/> instance.</param>
+    /// <param name="options">The options associated with the resolver.</param>
+    /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
+    /// <returns>True if it can, false if not.</returns>
+    Task<bool> CanResolve(Config config, TOptions options, HttpRequest request);
+
     /// <summary>
     /// Resolve the tenant from the given <see cref="HttpRequest"/>.
     /// </summary>
