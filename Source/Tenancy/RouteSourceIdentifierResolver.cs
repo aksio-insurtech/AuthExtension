@@ -28,7 +28,20 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
     }
 
     /// <inheritdoc/>
+    public Task<bool> CanResolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request) => Task.FromResult(TryResolveTenant(options, request, out _));
+
+    /// <inheritdoc/>
     public Task<string> Resolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request)
+    {
+        if (TryResolveTenant(options, request, out var tenant))
+        {
+            return Task.FromResult(tenant);
+        }
+
+        return Task.FromResult(string.Empty);
+    }
+
+    bool TryResolveTenant(RouteSourceIdentifierResolverOptions options, HttpRequest request, out string tenant)
     {
         var originalUri = request.Headers[Headers.OriginalUri].FirstOrDefault() ?? string.Empty;
         _logger.ResolvingUsingOriginalUri(originalUri);
@@ -47,11 +60,12 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
             if (!string.IsNullOrEmpty(value))
             {
                 _logger.SourceIdentifierMatched(value);
-                return Task.FromResult(value);
+                tenant = value;
+                return true;
             }
         }
 
-        _logger.RouteNotMatched();
-        return Task.FromResult(string.Empty);
+        tenant = string.Empty;
+        return false;
     }
 }

@@ -15,7 +15,20 @@ public class ClaimsSourceIdentifierResolver : TenantSourceIdentifierResolver, IT
     const string TenantIdClaim = "http://schemas.microsoft.com/identity/claims/tenantid";
 
     /// <inheritdoc/>
+    public Task<bool> CanResolve(Config config, ClaimsSourceIdentifierResolverOptions options, HttpRequest request) => Task.FromResult(TryGetTenantId(request, out _));
+
+    /// <inheritdoc/>
     public Task<string> Resolve(Config config, ClaimsSourceIdentifierResolverOptions options, HttpRequest request)
+    {
+        if (TryGetTenantId(request, out var tenant))
+        {
+            return Task.FromResult(tenant);
+        }
+
+        return Task.FromResult(string.Empty);
+    }
+
+    bool TryGetTenantId(HttpRequest request, out string tenant)
     {
         if (request.Headers.ContainsKey(Headers.Principal))
         {
@@ -28,11 +41,13 @@ public class ClaimsSourceIdentifierResolver : TenantSourceIdentifierResolver, IT
                 var tenantObject = claimsAsArray.Cast<JsonObject>().FirstOrDefault(_ => _.TryGetPropertyValue("typ", out var type) && type!.ToString() == TenantIdClaim);
                 if (tenantObject is not null && tenantObject.TryGetPropertyValue("val", out var tenantValue) && tenantValue is not null)
                 {
-                    return Task.FromResult(tenantValue.ToString());
+                    tenant = tenantValue.ToString();
+                    return true;
                 }
             }
         }
 
-        return Task.FromResult(string.Empty);
+        tenant = string.Empty;
+        return false;
     }
 }

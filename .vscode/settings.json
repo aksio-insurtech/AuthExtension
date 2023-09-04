@@ -4,10 +4,12 @@
         "Cratis",
         "idporten",
         "JWKS",
+        "mutualtls",
         "onbehalfof",
         "Porten",
         "Referer",
         "Trudesk",
         "Zumo"
-    ]
+    ],
+    "dotnet.defaultSolution": "IngressMiddleware.sln"
 }

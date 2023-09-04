@@ -28,6 +28,7 @@ public class a_request_augmenter : Specification
         identity_details_resolver = new();
         impersonation_flow = new();
         tenant_resolver = new();
+        tenant_resolver.Setup(_ => _.CanResolve(IsAny<HttpRequest>())).ReturnsAsync(true);
         tenant_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>())).ReturnsAsync(tenant_id);
         bearer_tokens = new();
         mutual_tls = new();

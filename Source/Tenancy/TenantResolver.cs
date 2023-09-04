@@ -32,6 +32,9 @@ public class TenantResolver : ITenantResolver
     }
 
     /// <inheritdoc/>
+    public Task<bool> CanResolve(HttpRequest request) => _resolver.CanResolve(_config, request);
+
+    /// <inheritdoc/>
     public async Task<TenantId> Resolve(HttpRequest request)
     {
         var tenantId = string.Empty;

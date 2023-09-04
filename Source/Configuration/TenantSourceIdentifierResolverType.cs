@@ -21,5 +21,10 @@ public enum TenantSourceIdentifierResolverType
     /// <summary>
     /// The tenant identifier is resolved from a claim.
     /// </summary>
-    Claim = 2
+    Claim = 2,
+
+    /// <summary>
+    /// The tenant identifier is resolved to a specific single tenant.
+    /// </summary>
+    Specified = 3
 }
