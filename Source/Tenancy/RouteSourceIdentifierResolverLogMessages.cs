@@ -3,7 +3,7 @@
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
-internal static partial class RouteSourceIdentifierResolverLogMessages
+static partial class RouteSourceIdentifierResolverLogMessages
 {
     [LoggerMessage(0, LogLevel.Information, "Resolving tenant from route using original URI: {originalUri}")]
     internal static partial void ResolvingUsingOriginalUri(this ILogger<RouteSourceIdentifierResolver> logger, string originalUri);

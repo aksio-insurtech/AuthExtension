@@ -20,10 +20,7 @@ public class a_tenant_resolver : Specification
         source_identifier_resolver = new();
         config = new();
 
-        resolver = new(
-            config,
-            source_identifier_resolver.Object,
-            Mock.Of<ILogger<TenantResolver>>());
+        resolver = new(config, source_identifier_resolver.Object, Mock.Of<ILogger<TenantResolver>>());
 
         context = new();
     }

@@ -16,7 +16,7 @@ public class config_with_two_claims : Aksio.IngressMiddleware.Impersonation.give
 
     void Establish()
     {
-        config = new Config();
+        config = new();
         config.Impersonation.Authorization.Claims = new[]
         {
             new Claim(first_claim_type, first_claim_value),
@@ -29,8 +29,5 @@ public class config_with_no_claims : Aksio.IngressMiddleware.Impersonation.given
 {
     protected Config config;
 
-    void Establish()
-    {
-        config = new Config();
-    }
+    void Establish() => config = new();
 }

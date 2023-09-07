@@ -13,7 +13,7 @@ public class a_impersonation_flow : Specification
 
     void Establish()
     {
-        config = new Config();
+        config = new();
         flow = new(config, Mock.Of<ILogger<ImpersonationFlow>>());
     }
 }

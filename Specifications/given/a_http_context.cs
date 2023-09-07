@@ -9,8 +9,5 @@ public class a_http_context : Specification
 {
     protected DefaultHttpContext http_context;
 
-    void Establish()
-    {
-        http_context = new();
-    }
+    void Establish() => http_context = new();
 }

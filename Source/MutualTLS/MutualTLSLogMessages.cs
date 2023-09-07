@@ -1,9 +1,9 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace IngressMiddleware.MutualTLS;
+namespace Aksio.IngressMiddleware.MutualTLS;
 
-internal static partial class MutualTLSLogMessages
+static partial class MutualTLSLogMessages
 {
     [LoggerMessage(
         0,

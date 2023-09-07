@@ -23,5 +23,6 @@ public class and_route_is_not_impersonate_route_without_principal : given.a_impe
 
     void Because() => result = flow.ShouldImpersonate(http_context.Request);
 
-    [Fact] void should_not_impersonate() => result.ShouldBeFalse();
+    [Fact]
+    void should_not_impersonate() => result.ShouldBeFalse();
 }

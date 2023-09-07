@@ -10,13 +10,16 @@ public class when_handling_regular_route_that_fails_identity_resolution : given.
 {
     IActionResult result;
 
-    void Establish()
-    {
-        identity_details_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id)).ReturnsAsync(false);
-    }
+    void Establish() =>
+        identity_details_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id))
+            .ReturnsAsync(false);
 
     async Task Because() => result = await augmenter.Get();
 
-    [Fact] void should_return_forbidden() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status403Forbidden);
-    [Fact] void should_never_handle_bearer_tokens() => bearer_tokens.Verify(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id), Never);
+    [Fact]
+    void should_return_forbidden() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status403Forbidden);
+
+    [Fact]
+    void should_never_handle_bearer_tokens() =>
+        bearer_tokens.Verify(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id), Never);
 }

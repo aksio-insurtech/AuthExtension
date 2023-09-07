@@ -6,7 +6,7 @@ using Aksio.Cratis.Execution;
 
 namespace Aksio.IngressMiddleware.Identities;
 
-internal static partial class IdentityDetailsResolverLogMessages
+static partial class IdentityDetailsResolverLogMessages
 {
     [LoggerMessage(0, LogLevel.Information, "Identity details url is not configured, skipping identity details resolution")]
     internal static partial void IdentityDetailsUrlNotConfigured(this ILogger<IdentityDetailsResolver> logger);

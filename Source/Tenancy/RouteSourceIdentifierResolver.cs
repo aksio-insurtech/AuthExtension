@@ -11,7 +11,8 @@ namespace Aksio.IngressMiddleware.Tenancy;
 /// <summary>
 /// Represents a source identifier resolver for routes.
 /// </summary>
-public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITenantSourceIdentifierResolver<RouteSourceIdentifierResolverOptions>
+public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver,
+    ITenantSourceIdentifierResolver<RouteSourceIdentifierResolverOptions>
 {
     const string SourceIdentifier = "sourceIdentifier";
 
@@ -28,7 +29,8 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
     }
 
     /// <inheritdoc/>
-    public Task<bool> CanResolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request) => Task.FromResult(TryResolveTenant(options, request, out _));
+    public Task<bool> CanResolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request) =>
+        Task.FromResult(TryResolveTenant(options, request, out _));
 
     /// <inheritdoc/>
     public Task<string> Resolve(Config config, RouteSourceIdentifierResolverOptions options, HttpRequest request)
@@ -48,7 +50,9 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
 
         if (!_regularExpressions.ContainsKey(options.RegularExpression))
         {
-            _regularExpressions[options.RegularExpression] = new Regex(options.RegularExpression, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+            _regularExpressions[options.RegularExpression] = new Regex(
+                options.RegularExpression,
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture);
         }
 
         var regex = _regularExpressions[options.RegularExpression];
@@ -65,6 +69,7 @@ public class RouteSourceIdentifierResolver : TenantSourceIdentifierResolver, ITe
             }
         }
 
+        _logger.RouteNotMatched();
         tenant = string.Empty;
         return false;
     }

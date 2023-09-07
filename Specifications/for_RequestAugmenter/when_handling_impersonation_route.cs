@@ -13,7 +13,13 @@ public class when_handling_impersonation_route : given.a_request_augmenter
 
     async Task Because() => result = await augmenter.Get();
 
-    [Fact] void should_return_ok() => result.ShouldBeOfExactType<OkResult>();
-    [Fact] void should_not_resolve_identity_details() => identity_details_resolver.Verify(_ => _.Resolve(request, response, tenant_id), Never);
-    [Fact] void should_not_handle_bearer_tokens() => bearer_tokens.Verify(_ => _.Handle(request, response, tenant_id), Never);
+    [Fact]
+    void should_return_ok() => result.ShouldBeOfExactType<OkResult>();
+
+    [Fact]
+    void should_not_resolve_identity_details() =>
+        identity_details_resolver.Verify(_ => _.Resolve(request, response, tenant_id), Never);
+
+    [Fact]
+    void should_not_handle_bearer_tokens() => bearer_tokens.Verify(_ => _.Handle(request, response, tenant_id), Never);
 }

@@ -18,5 +18,6 @@ public class and_it_is : given.a_impersonation_flow
 
     void Because() => result = flow.IsImpersonateRoute(http_context.Request);
 
-    [Fact] void should_be_the_impersonation_route() => result.ShouldBeTrue();
+    [Fact]
+    void should_be_the_impersonation_route() => result.ShouldBeTrue();
 }

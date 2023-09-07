@@ -22,5 +22,6 @@ public class and_client_principal_has_wrong_identity_provider : given.a_http_con
 
     async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, client_principal);
 
-    [Fact] void should_not_be_authorized() => result.ShouldBeFalse();
+    [Fact]
+    void should_not_be_authorized() => result.ShouldBeFalse();
 }

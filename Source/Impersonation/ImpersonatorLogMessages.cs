@@ -3,7 +3,7 @@
 
 namespace Aksio.IngressMiddleware.Impersonation;
 
-internal static partial class ImpersonatorLogMessages
+static partial class ImpersonatorLogMessages
 {
     [LoggerMessage(0, LogLevel.Information, "Impersonation not authorized for principal {PrincipalId} ({PrincipalName})")]
     internal static partial void ImpersonationNotAuthorized(this ILogger<Impersonator> logger, string principalId, string principalName);

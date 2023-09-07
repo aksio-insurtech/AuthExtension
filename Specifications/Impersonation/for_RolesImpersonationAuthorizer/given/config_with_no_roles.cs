@@ -9,8 +9,5 @@ public class config_with_no_roles : IngressMiddleware.Impersonation.given.a_http
 {
     protected Config config;
 
-    void Establish()
-    {
-        config = new Config();
-    }
+    void Establish() => config = new();
 }

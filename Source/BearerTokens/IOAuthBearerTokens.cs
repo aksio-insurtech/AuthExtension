@@ -11,6 +11,12 @@ namespace Aksio.IngressMiddleware.BearerTokens;
 public interface IOAuthBearerTokens
 {
     /// <summary>
+    /// Checks if OAuth bearer token is configured, and thus should be called.
+    /// </summary>
+    /// <returns>True if configured.</returns>
+    bool IsEnabled();
+
+    /// <summary>
     /// Handle the OAuth bearer token.
     /// </summary>
     /// <param name="request"><see cref="HttpRequest"/>.</param>

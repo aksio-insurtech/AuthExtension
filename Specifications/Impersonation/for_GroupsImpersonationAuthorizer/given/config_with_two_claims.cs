@@ -13,7 +13,7 @@ public class config_with_two_groups : IngressMiddleware.Impersonation.given.a_ht
 
     void Establish()
     {
-        config = new Config();
+        config = new();
         config.Impersonation.Authorization.Groups = new[]
         {
             first_group,

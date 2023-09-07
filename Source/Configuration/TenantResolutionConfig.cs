@@ -13,7 +13,7 @@ public class TenantResolutionConfig
     /// <summary>
     /// Gets or sets the strategy to use for resolving the tenant identifier.
     /// </summary>
-    public TenantSourceIdentifierResolverType Strategy { get; set; } = TenantSourceIdentifierResolverType.None;
+    public TenantSourceIdentifierResolverType Strategy { get; set; } = TenantSourceIdentifierResolverType.Undefined;
 
     /// <summary>
     /// Gets or sets the options for the strategy.

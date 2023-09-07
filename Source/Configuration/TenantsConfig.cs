@@ -6,6 +6,6 @@ namespace Aksio.IngressMiddleware.Configuration;
 /// <summary>
 /// Represents the configuration for all tenants.
 /// </summary>
-public class TenantsConfig : Dictionary<string, TenantConfig>
+public class TenantsConfig : Dictionary<Guid, TenantConfig>
 {
 }

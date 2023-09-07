@@ -1,7 +1,7 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace IngressMiddleware.MutualTLS;
+namespace Aksio.IngressMiddleware.MutualTLS;
 
 /// <summary>
 /// Defines a system that can handle mTLS/Mutual TLS, a.k.a. client certificate requests.

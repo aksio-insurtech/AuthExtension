@@ -4,10 +4,9 @@
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Web;
-using Aksio.IngressMiddleware;
 using Aksio.IngressMiddleware.Configuration;
 
-namespace IngressMiddleware.MutualTLS;
+namespace Aksio.IngressMiddleware.MutualTLS;
 
 /// <summary>
 /// Represents an implementation of <see cref="IMutualTLS"/>.
