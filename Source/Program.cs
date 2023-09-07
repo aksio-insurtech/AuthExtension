@@ -8,6 +8,7 @@ using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
 using Aksio.IngressMiddleware.Tenancy;
+using IngressMiddleware.MutualTLS;
 
 #pragma warning disable CA1050, MA0047, MA0036
 

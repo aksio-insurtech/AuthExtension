@@ -19,6 +19,6 @@ public class when_handling_a_mtls_client_with_wrong_serialnumber : given.a_mutua
     void should_return_forbidden() => ((StatusCodeResult)_result).StatusCode.ShouldEqual(StatusCodes.Status401Unauthorized);
 
     [Fact]
-    void should_log_access_denied() =>
-        LoggerFactory.Sink.LogEntries.ShouldContain(_ => _.EventId == 5 && _.LogLevel == LogLevel.Error);
+    void should_log_the_attempted_serialnumber() =>
+        LoggerFactory.Sink.LogEntries.ShouldContain(_ => _.EventId == 5 && _.LogLevel == LogLevel.Error && _.Properties.Any(p => (p.Value as string) == ClientCertificateSerial.ToUpper()));
 }

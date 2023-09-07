@@ -1,3 +1,28 @@
+# [v4.3.1] - 2023-9-4 [PR: #70](https://github.com/aksio-insurtech/IngressMiddleware/pull/70)
+
+### Added
+
+- Tenant resolution can now result in a **401 - unauthorized** if it was not able to resolve it. 
+- New source tenant identifier resolver for specifying a specific tenant identifier that will resolve always and set a specific tenant identifier explicitly.
+
+
+# [v4.3.0] - 2023-8-2 [PR: #69](https://github.com/aksio-insurtech/IngressMiddleware/pull/69)
+
+### Changed
+
+- Changed some logging in mTLS handling.
+
+
+# [v4.2.1] - 2023-7-31 [PR: #68](https://github.com/aksio-insurtech/IngressMiddleware/pull/68)
+
+### Changed
+
+- Updated Aksio Application and Fundamentals NuGet packages
+
+### Fixed
+
+- Added MutualTLS to service locator during startup.
+
 # [v4.2.0] - 2023-7-31 [PR: #66](https://github.com/aksio-insurtech/IngressMiddleware/pull/66)
 
 ### Added

@@ -78,6 +78,13 @@ Its format is:
     "OAuthBearerTokens": {
         "authority": "The URL for the well-known document that describes the authority"
     },
+    "mutualTLS": {
+      "authorityCertificate": "base64 representation of root certificate to validate against",
+      "acceptedSerialNumbers": [
+        "serial1",
+        "serial2"
+      ]
+    },
     "impersonation": {
         "identityProviders": [
             "aad"
@@ -174,9 +181,25 @@ The value in `tenantId` will then **always** be the value passed further in.
 
 ### OAuth Bearer Tokens
 
-The `OAuthBearerToken` configuration is optional. It won't run any authorization if the config is left out.
+The `oAuthBearerToken` configuration is optional. It won't run any authorization if the config is left out.
 
 > Note: The specific identity provider configurations are optional. You can have either or all.
+
+### Mutual TLS / Client Certificate
+
+The `mutualTLS` configuration is optional.
+
+If used, a `authorityCertificate` needs to be specified in base64 format.
+For get the appropriate value use with virksomhetssertifikat in test environment, you can use this command: 
+```sh
+curl -s http://crt.test4.buypass.no/crt/BPClass3T4RotCA.cer --output - |base64
+```
+For production, use this command:
+```sh
+curl -s https://crt.buypass.no/crt/BPClass3Rot.cer --output - |base64
+```
+
+And then the `acceptedSerialNumbers` must be set, if you have the certificate and are unsure of the serial number you can use an online tool like this: https://www.sslshopper.com/certificate-decoder.html.
 
 ### Identity Details
 

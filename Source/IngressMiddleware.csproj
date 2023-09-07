@@ -16,8 +16,8 @@
     </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aksio.Cratis.Applications" />
-		<PackageReference Include="Aksio.Cratis.Fundamentals" />
+		<PackageReference Include="Aksio.Applications.Serilog" />
+		<PackageReference Include="Aksio.Fundamentals" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
         <PackageReference Include="Aksio.Defaults" PrivateAssets="All" Condition="'$(PublishReadyToRun)' != 'true'" />
