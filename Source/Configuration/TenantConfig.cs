@@ -11,7 +11,7 @@ public record TenantConfig
     /// <summary>
     /// Gets or sets the domain name that represents the tenant.
     /// </summary>
-    public string Domain { get; set; } = "localhost";
+    public string Domain { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the behalf of string.

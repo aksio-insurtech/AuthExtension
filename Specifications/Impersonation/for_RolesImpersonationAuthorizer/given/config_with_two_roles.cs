@@ -13,7 +13,7 @@ public class config_with_two_roles : IngressMiddleware.Impersonation.given.a_htt
 
     void Establish()
     {
-        config = new Config();
+        config = new();
         config.Impersonation.Authorization.Roles = new[]
         {
             first_role,

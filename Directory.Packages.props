@@ -3,18 +3,24 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Aksio.Applications.Serilog" Version="1.1.14" />
+    <PackageVersion Include="Aksio.Applications.Serilog" Version="1.2.0" />
+    <PackageVersion Include="Aksio.Cratis.Applications" Version="8.19.1" />
+    <PackageVersion Include="Aksio.Cratis.Fundamentals" Version="8.19.1" />
     <PackageVersion Include="Aksio.Defaults" Version="1.6.10" />
     <PackageVersion Include="Aksio.Defaults.Specs" Version="1.6.10" />
-    <PackageVersion Include="Aksio.Fundamentals" Version="1.3.10" />
-    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="6.30.1" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.30.1" />
-    <PackageVersion Include="MELT" Version="0.8.0" />
+    <PackageVersion Include="Aksio.Fundamentals" Version="1.5.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.21" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="6.32.3" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.32.3" />
+    <PackageVersion Include="MELT" Version="0.9.0" />
     <!-- Specifications -->
     <PackageVersion Include="Aksio.Specifications" Version="2.0.1" />
-    <PackageVersion Include="xunit" Version="2.4.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.2" />
-    <PackageVersion Include="moq" Version="4.18.4" />
-    <PackageVersion Include="Microsoft.NET.Test.SDK" Version="16.10.0" />
+    <PackageVersion Include="xunit" Version="2.5.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="moq" Version="4.20.69" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
   </ItemGroup>
 </Project>

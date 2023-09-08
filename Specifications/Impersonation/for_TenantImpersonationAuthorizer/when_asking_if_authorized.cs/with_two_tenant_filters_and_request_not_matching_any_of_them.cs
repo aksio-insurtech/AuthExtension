@@ -9,9 +9,12 @@ public class with_two_tenant_filters_and_request_not_matching_any_of_them : give
 {
     bool result;
 
-    void Establish() => tenant_resolver.Setup(_ => _.Resolve(http_context.Request)).Returns(Task.FromResult(new TenantId(Guid.Parse("b3551c0e-9c68-40c5-9711-742042b5ed44"))));
+    void Establish() =>
+        tenant_resolver.Setup(_ => _.Resolve(http_context.Request))
+            .Returns(Task.FromResult(new TenantId(Guid.Parse("b3551c0e-9c68-40c5-9711-742042b5ed44"))));
 
     async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
 
-    [Fact] void should_not_be_authorized() => result.ShouldBeFalse();
+    [Fact]
+    void should_not_be_authorized() => result.ShouldBeFalse();
 }

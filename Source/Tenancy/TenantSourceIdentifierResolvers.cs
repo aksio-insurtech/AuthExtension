@@ -13,8 +13,8 @@ public static class TenantSourceIdentifierResolvers
     static readonly Dictionary<TenantSourceIdentifierResolverType, Type> _resolvers = new()
     {
         { TenantSourceIdentifierResolverType.None, typeof(NoneSourceIdentifierResolver) },
-        { TenantSourceIdentifierResolverType.Claim, typeof(ClaimsSourceIdentifierResolver) },
         { TenantSourceIdentifierResolverType.Route, typeof(RouteSourceIdentifierResolver) },
+        { TenantSourceIdentifierResolverType.Claim, typeof(ClaimsSourceIdentifierResolver) },
         { TenantSourceIdentifierResolverType.Specified, typeof(SpecifiedSourceIdentifierResolver) }
     };
 
@@ -23,9 +23,16 @@ public static class TenantSourceIdentifierResolvers
     /// </summary>
     /// <param name="services"><see cref="IServiceCollection"/> to register with.</param>
     /// <returns><see cref="IServiceCollection"/> for continuation.</returns>
+    /// <exception cref="TenantResolutionStrategyNotConfigured">Thrown if tenant resolution strategy is not defined.</exception>
     public static IServiceCollection AddTenantSourceIdentifierResolver(this IServiceCollection services)
     {
         var config = services.BuildServiceProvider().GetRequiredService<Config>();
+
+        if (!_resolvers.ContainsKey(config.TenantResolution.Strategy))
+        {
+            throw new TenantResolutionStrategyNotConfigured();
+        }
+
         services.AddSingleton(sp => (sp.GetRequiredService(_resolvers[config.TenantResolution.Strategy]) as ITenantSourceIdentifierResolver)!);
         return services;
     }

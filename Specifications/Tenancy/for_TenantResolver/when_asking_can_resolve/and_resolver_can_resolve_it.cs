@@ -11,5 +11,6 @@ public class and_resolver_can_resolve_it : given.a_tenant_resolver
 
     async Task Because() => result = await resolver.CanResolve(context.Request);
 
-    [Fact] void should_be_able_to_resolve() => result.ShouldBeTrue();
+    [Fact]
+    void should_be_able_to_resolve() => result.ShouldBeTrue();
 }

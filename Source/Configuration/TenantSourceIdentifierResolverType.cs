@@ -9,22 +9,27 @@ namespace Aksio.IngressMiddleware.Configuration;
 public enum TenantSourceIdentifierResolverType
 {
     /// <summary>
+    /// Unconfigured.
+    /// </summary>
+    Undefined = 0,
+
+    /// <summary>
     /// No strategy is used.
     /// </summary>
-    None = 0,
+    None = 1,
 
     /// <summary>
     /// The tenant identifier is resolved from the route.
     /// </summary>
-    Route = 1,
+    Route = 2,
 
     /// <summary>
     /// The tenant identifier is resolved from a claim.
     /// </summary>
-    Claim = 2,
+    Claim = 3,
 
     /// <summary>
     /// The tenant identifier is resolved to a specific single tenant.
     /// </summary>
-    Specified = 3
+    Specified = 4
 }

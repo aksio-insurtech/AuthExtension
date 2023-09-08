@@ -15,7 +15,7 @@ public static class HttpRequestExtensions
     /// </summary>
     /// <param name="request"><see cref="HttpRequest"/> instance.</param>
     /// <returns>Original URI.</returns>
-    public static Uri GetOriginalUri(this HttpRequest request) => new(request.Headers[Headers.OriginalUri].ToString());
+    public static Uri? GetOriginalUri(this HttpRequest request) => request.Headers.ContainsKey(Headers.OriginalUri) ? new(request.Headers[Headers.OriginalUri].ToString()) : null;
 
     /// <summary>
     /// Gets the path from the original URI.
@@ -24,7 +24,12 @@ public static class HttpRequestExtensions
     /// <returns>The path.</returns>
     public static string GetPath(this HttpRequest request)
     {
-        var path = request.GetOriginalUri().PathAndQuery;
+        var path = request.GetOriginalUri()?.PathAndQuery;
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return string.Empty;
+        }
+
         path = HttpUtility.UrlDecode(path);
         var queryIndex = path.IndexOf('?');
         if (queryIndex > 0)
@@ -53,7 +58,7 @@ public static class HttpRequestExtensions
     /// <param name="request"><see cref="HttpRequest"/> instance.</param>
     /// <returns>True if it is, false if not.</returns>
     public static bool IsImpersonateRoute(this HttpRequest request) =>
-        request.GetOriginalUri().PathAndQuery.StartsWith(WellKnownPaths.Impersonation, StringComparison.InvariantCultureIgnoreCase);
+        request.GetOriginalUri()?.PathAndQuery.StartsWith(WellKnownPaths.Impersonation, StringComparison.InvariantCultureIgnoreCase) ?? false;
 
     /// <summary>
     /// Gets whether or not the principal is present in the request.

@@ -24,5 +24,6 @@ public class and_roles_are_configured_and_user_has_one_of_them : given.config_wi
 
     async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, principal);
 
-    [Fact] void should_not_be_authorized() => result.ShouldBeFalse();
+    [Fact]
+    void should_not_be_authorized() => result.ShouldBeFalse();
 }

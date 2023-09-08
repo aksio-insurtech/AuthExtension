@@ -22,7 +22,14 @@ public class and_cookie_is_not_available : given.a_impersonation_flow
 
     void Because() => result = flow.HandleImpersonatedPrincipal(http_context.Request, http_context.Response);
 
-    [Fact] void should_not_have_handled_it() => result.ShouldBeFalse();
-    [Fact] void should_not_set_principal_on_request_header() => http_context.Request.Headers.ContainsKey(Headers.Principal).ShouldBeFalse();
-    [Fact] void should_not_set_principal_on_response_header() => http_context.Response.Headers.ContainsKey(Headers.Principal).ShouldBeFalse();
+    [Fact]
+    void should_not_have_handled_it() => result.ShouldBeFalse();
+
+    [Fact]
+    void should_not_set_principal_on_request_header() =>
+        http_context.Request.Headers.ContainsKey(Headers.Principal).ShouldBeFalse();
+
+    [Fact]
+    void should_not_set_principal_on_response_header() =>
+        http_context.Response.Headers.ContainsKey(Headers.Principal).ShouldBeFalse();
 }

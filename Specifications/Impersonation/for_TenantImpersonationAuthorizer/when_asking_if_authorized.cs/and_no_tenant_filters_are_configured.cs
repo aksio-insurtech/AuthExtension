@@ -9,5 +9,6 @@ public class and_no_tenant_filters_are_configured : given.no_tenant_filters
 
     async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
 
-    [Fact] void should_be_authorized() => result.ShouldBeTrue();
+    [Fact]
+    void should_be_authorized() => result.ShouldBeTrue();
 }

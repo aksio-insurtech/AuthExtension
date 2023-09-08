@@ -1,12 +1,15 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
+using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
+using Aksio.IngressMiddleware.MutualTLS;
 using Aksio.IngressMiddleware.Tenancy;
-using IngressMiddleware.MutualTLS;
 using Microsoft.AspNetCore.Http;
 
 namespace Aksio.IngressMiddleware.for_RequestAugmenter.given;
@@ -22,6 +25,7 @@ public class a_request_augmenter : Specification
     protected RequestAugmenter augmenter;
     protected HttpRequest request;
     protected HttpResponse response;
+    protected Config config;
 
     void Establish()
     {
@@ -32,13 +36,23 @@ public class a_request_augmenter : Specification
         tenant_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>())).ReturnsAsync(tenant_id);
         bearer_tokens = new();
         mutual_tls = new();
+        config = new()
+        {
+            TenantResolution = new()
+            {
+                Strategy = TenantSourceIdentifierResolverType.Specified,
+                Options = JsonSerializer.Deserialize<JsonObject>(
+                    JsonSerializer.Serialize(new SpecifiedSourceIdentifierResolverOptions() { TenantId = tenant_id.ToString() }))
+            }
+        };
 
         augmenter = new(
             identity_details_resolver.Object,
             impersonation_flow.Object,
             tenant_resolver.Object,
             bearer_tokens.Object,
-            mutual_tls.Object)
+            mutual_tls.Object,
+            config)
         {
             ControllerContext = new()
             {

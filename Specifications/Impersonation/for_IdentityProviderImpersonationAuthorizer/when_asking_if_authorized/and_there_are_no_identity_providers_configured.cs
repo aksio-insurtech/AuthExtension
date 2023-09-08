@@ -18,5 +18,6 @@ public class and_there_are_no_identity_providers_configured : given.a_http_conte
 
     async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
 
-    [Fact] void should_not_be_authorized() => result.ShouldBeFalse();
+    [Fact]
+    void should_not_be_authorized() => result.ShouldBeFalse();
 }

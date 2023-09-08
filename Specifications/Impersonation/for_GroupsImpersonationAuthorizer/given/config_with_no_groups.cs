@@ -9,8 +9,5 @@ public class config_with_no_groups : IngressMiddleware.Impersonation.given.a_htt
 {
     protected Config config;
 
-    void Establish()
-    {
-        config = new Config();
-    }
+    void Establish() => config = new();
 }

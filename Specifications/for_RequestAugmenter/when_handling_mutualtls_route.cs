@@ -16,10 +16,8 @@ public class when_handling_enabled_mutualtls : given.a_request_augmenter
     Task Because() => augmenter.Get();
 
     [Fact]
-    void should_check_to_call_mutualtls_handler() =>
-        mutual_tls.Verify(_ => _.IsEnabled(), Once);
+    void should_check_to_call_mutualtls_handler() => mutual_tls.Verify(_ => _.IsEnabled(), Once);
 
     [Fact]
-    void should_call_mutualtls_handler() =>
-        mutual_tls.Verify(_ => _.Handle(request), Once);
+    void should_call_mutualtls_handler() => mutual_tls.Verify(_ => _.Handle(request), Once);
 }

@@ -22,5 +22,6 @@ public class and_client_principal_has_identity_provider_matching_one_of_the_allo
 
     async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, client_principal);
 
-    [Fact] void should_be_authorized() => result.ShouldBeTrue();
+    [Fact]
+    void should_be_authorized() => result.ShouldBeTrue();
 }

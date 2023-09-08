@@ -1,7 +1,6 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Text;
 using System.Text.Json.Nodes;
 using Aksio.IngressMiddleware.Configuration;
 
@@ -12,7 +11,10 @@ namespace Aksio.IngressMiddleware.Tenancy;
 /// </summary>
 public class ClaimsSourceIdentifierResolver : TenantSourceIdentifierResolver, ITenantSourceIdentifierResolver<ClaimsSourceIdentifierResolverOptions>
 {
-    const string TenantIdClaim = "http://schemas.microsoft.com/identity/claims/tenantid";
+    /// <summary>
+    /// The tenant id claim.
+    /// </summary>
+    public const string TenantIdClaim = "http://schemas.microsoft.com/identity/claims/tenantid";
 
     /// <inheritdoc/>
     public Task<bool> CanResolve(Config config, ClaimsSourceIdentifierResolverOptions options, HttpRequest request) => Task.FromResult(TryGetTenantId(request, out _));
@@ -33,8 +35,6 @@ public class ClaimsSourceIdentifierResolver : TenantSourceIdentifierResolver, IT
         if (request.Headers.ContainsKey(Headers.Principal))
         {
             var token = Convert.FromBase64String(request.Headers[Headers.Principal]);
-            var decodedToken = Encoding.Default.GetString(token);
-
             var node = JsonNode.Parse(token) as JsonObject;
             if (node is not null && node.TryGetPropertyValue("claims", out var claims) && claims is JsonArray claimsAsArray)
             {

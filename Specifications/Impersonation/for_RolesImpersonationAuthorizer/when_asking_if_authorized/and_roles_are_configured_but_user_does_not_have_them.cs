@@ -8,12 +8,10 @@ public class and_roles_are_configured_but_user_does_not_have_them : given.config
     RolesImpersonationAuthorizer authorizer;
     bool result;
 
-    void Establish()
-    {
-        authorizer = new(config);
-    }
+    void Establish() => authorizer = new(config);
 
     async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
 
-    [Fact] void should_not_be_authorized() => result.ShouldBeFalse();
+    [Fact]
+    void should_not_be_authorized() => result.ShouldBeFalse();
 }

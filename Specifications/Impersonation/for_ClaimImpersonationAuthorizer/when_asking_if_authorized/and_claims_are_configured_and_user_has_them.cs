@@ -27,5 +27,6 @@ public class and_claims_are_configured_and_user_has_them : given.config_with_two
 
     async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, principal);
 
-    [Fact] void should_be_authorized() => result.ShouldBeTrue();
+    [Fact]
+    void should_be_authorized() => result.ShouldBeTrue();
 }

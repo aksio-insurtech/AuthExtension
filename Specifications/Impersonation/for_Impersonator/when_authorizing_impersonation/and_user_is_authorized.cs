@@ -9,9 +9,12 @@ public class and_user_is_authorized : given.a_principal
 {
     IActionResult result;
 
-    void Establish() => authorizer.Setup(_ => _.IsAuthorized(impersonator.ControllerContext.HttpContext.Request, IsAny<ClientPrincipal>())).ReturnsAsync(true);
+    void Establish() =>
+        authorizer.Setup(_ => _.IsAuthorized(impersonator.ControllerContext.HttpContext.Request, IsAny<ClientPrincipal>()))
+            .ReturnsAsync(true);
 
     async Task Because() => result = await impersonator.Authorize();
 
-    [Fact] void should_return_ok() => result.ShouldBeOfExactType<OkResult>();
+    [Fact]
+    void should_return_ok() => result.ShouldBeOfExactType<OkResult>();
 }

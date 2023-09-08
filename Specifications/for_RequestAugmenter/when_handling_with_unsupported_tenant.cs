@@ -10,12 +10,10 @@ public class when_handling_with_unsupported_tenant : given.a_request_augmenter
 {
     IActionResult result;
 
-    void Establish()
-    {
-        tenant_resolver.Setup(_ => _.CanResolve(IsAny<HttpRequest>())).ReturnsAsync(false);
-    }
+    void Establish() => tenant_resolver.Setup(_ => _.CanResolve(IsAny<HttpRequest>())).ReturnsAsync(false);
 
     async Task Because() => result = await augmenter.Get();
 
-    [Fact] void should_return_unauthorized() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status401Unauthorized);
+    [Fact]
+    void should_return_unauthorized() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status401Unauthorized);
 }

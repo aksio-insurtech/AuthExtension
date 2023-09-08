@@ -40,7 +40,7 @@ public class IdPorten : Controller
         return Redirect(url);
     }
 
-    KeyValuePair<string, TenantConfig> GetTenant()
+    KeyValuePair<Guid, TenantConfig> GetTenant()
     {
         return Request.Query
             .Where(_ => _.Key == "redirect_uri")

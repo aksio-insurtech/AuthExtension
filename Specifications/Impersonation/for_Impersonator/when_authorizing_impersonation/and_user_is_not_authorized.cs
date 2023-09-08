@@ -10,9 +10,12 @@ public class and_user_is_not_authorized : given.a_principal
 {
     IActionResult result;
 
-    void Establish() => authorizer.Setup(_ => _.IsAuthorized(impersonator.ControllerContext.HttpContext.Request, IsAny<ClientPrincipal>())).ReturnsAsync(false);
+    void Establish() =>
+        authorizer.Setup(_ => _.IsAuthorized(impersonator.ControllerContext.HttpContext.Request, IsAny<ClientPrincipal>()))
+            .ReturnsAsync(false);
 
     async Task Because() => result = await impersonator.Authorize();
 
-    [Fact] void should_return_forbidden() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status403Forbidden);
+    [Fact]
+    void should_return_forbidden() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status403Forbidden);
 }

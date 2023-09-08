@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>true</ImplicitUsings>
-        <NoWarn>$(NoWarn);RCS1090;CA2252;CS8632;RCS1217;IDE0060;CA1819;CA1848;CA1849;CA2249;CA2254</NoWarn>
+        <NoWarn>$(NoWarn);RCS1090;CA2252;CS8632;RCS1217;IDE0060;CA1819;CA1848;CA1849;CA2249;CA2254;SA1205</NoWarn>
 
         <IsPackable>true</IsPackable>
         <Copyright>Copyright Aksio Insurtech</Copyright>
@@ -12,6 +12,7 @@
         <RepositoryUrl>https://github.com/aksio-insurtech/IngressMiddleware</RepositoryUrl>
         <PackageProjectUrl>https://github.com/aksio-insurtech/IngressMiddleware</PackageProjectUrl>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <RootNamespace>Aksio.IngressMiddleware</RootNamespace>
     </PropertyGroup>
 
 	<ItemGroup>

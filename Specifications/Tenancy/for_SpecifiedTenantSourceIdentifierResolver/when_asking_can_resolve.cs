@@ -3,7 +3,7 @@
 
 namespace Aksio.IngressMiddleware.Tenancy.for_SpecifiedTenantSourceIdentifierResolver;
 
-public class and_it_can : Specification
+public class when_asking_can_resolve : Specification
 {
     SpecifiedSourceIdentifierResolver resolver;
     bool result;
@@ -12,5 +12,6 @@ public class and_it_can : Specification
 
     async Task Because() => result = await resolver.CanResolve(null!, null!, null!);
 
-    [Fact] void should_be_able_to_resolve() => result.ShouldBeTrue();
+    [Fact]
+    void should_be_able_to_resolve() => result.ShouldBeTrue();
 }

@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware.Configuration;
-using IngressMiddleware.MutualTLS;
 using MELT;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -25,14 +24,14 @@ public class a_mutual_tls_instance : Specification
 
     protected string ClientCertificateSerial = "04f55d1db15d597c22d590";
 
-    protected MutualTLS MutualTls;
+    protected MutualTLS.MutualTLS MutualTls;
     protected HttpRequest Request;
 
     protected MutualTLSConfig MutualTLSConfig;
     protected Config Config;
 
     protected ITestLoggerFactory LoggerFactory;
-    protected ILogger<MutualTLS> Logger;
+    protected ILogger<MutualTLS.MutualTLS> Logger;
 
     void Establish()
     {
@@ -41,7 +40,7 @@ public class a_mutual_tls_instance : Specification
 
         // https://alessio.franceschelli.me/posts/dotnet/how-to-test-logging-when-using-microsoft-extensions-logging/
         LoggerFactory = TestLoggerFactory.Create();
-        Logger = LoggerFactory.CreateLogger<MutualTLS>();
+        Logger = LoggerFactory.CreateLogger<MutualTLS.MutualTLS>();
 
         MutualTLSConfig = new()
         {
