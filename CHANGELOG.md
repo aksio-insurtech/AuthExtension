@@ -1,3 +1,23 @@
+# [v4.4.0] - 2023-9-8 [PR: #72](https://github.com/aksio-insurtech/IngressMiddleware/pull/72)
+
+## Summary
+
+Added integration tests, and did some tweaking of the code to match and correct related issues
+
+### Added
+
+- TenantSourceIdentifierResolverType.Undefined (value 0) to avoid having "None" be the unconfigured value as that would be less secure
+
+### Changed
+
+- Split out parts of OAuthBearerTokens into IOAuthBearerTokenValidator for testability
+
+### Security
+
+- A resolver strategy must now be defined.
+- Unknown tenants are no longer accepted with claim strategy.
+
+
 # [v4.3.1] - 2023-9-4 [PR: #70](https://github.com/aksio-insurtech/IngressMiddleware/pull/70)
 
 ### Added
