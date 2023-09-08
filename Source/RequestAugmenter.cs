@@ -1,7 +1,6 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
@@ -114,7 +113,7 @@ public class RequestAugmenter : Controller
             // Require a configured strategy.
             case TenantSourceIdentifierResolverType.Undefined:
                 return null;
-            
+
             case TenantSourceIdentifierResolverType.None:
                 return TenantId.NotSet;
         }
