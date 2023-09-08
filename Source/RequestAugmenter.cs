@@ -1,6 +1,7 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
@@ -59,7 +60,8 @@ public class RequestAugmenter : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        // First determine the tenant id, it is required for all strategies except "None".
+        // First determine the tenant id, it will be populated for all strategies except "None" where it will be NotSet.
+        // If null, requirements for setting a tenant is not present and the user is not authorized.
         var tenantId = await ResolveTenantId();
         if (tenantId == null)
         {
@@ -107,15 +109,14 @@ public class RequestAugmenter : Controller
     /// <returns>The resolved tenant. TenantId.NotSet if resolver type is None, and null if not able to resolve tenant.</returns>
     async Task<TenantId?> ResolveTenantId()
     {
-        // Require a configured strategy.
-        if (_config.TenantResolution.Strategy == TenantSourceIdentifierResolverType.Undefined)
+        switch (_config.TenantResolution.Strategy)
         {
-            return null;
-        }
-
-        if (_config.TenantResolution.Strategy == TenantSourceIdentifierResolverType.None)
-        {
-            return TenantId.NotSet;
+            // Require a configured strategy.
+            case TenantSourceIdentifierResolverType.Undefined:
+                return null;
+            
+            case TenantSourceIdentifierResolverType.None:
+                return TenantId.NotSet;
         }
 
         if (!await _tenantResolver.CanResolve(Request))
