@@ -15,7 +15,7 @@ public class request_with_unknown_tenantid : factory_with_entraid_auth_with_scop
     async Task Because()
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/");
-        BuildAndSetPrincipalWithTenantClaim(requestMessage, "unknowntenant");
+        BuildAndSetPrincipalWithTenantClaim(requestMessage, "unknowntenant", AcceptedRoles.First());
 
         _responseMessage = await IngressClient.SendAsync(requestMessage);
     }

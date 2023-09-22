@@ -6,6 +6,7 @@ using System.Text.Json.Nodes;
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
+using Aksio.IngressMiddleware.EntraIdRoles;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
@@ -22,6 +23,7 @@ public class a_request_augmenter : Specification
     protected Mock<ITenantResolver> tenant_resolver;
     protected Mock<IOAuthBearerTokens> bearer_tokens;
     protected Mock<IMutualTLS> mutual_tls;
+    protected Mock<IEntraIdRoles> endtraid_roles;
     protected RequestAugmenter augmenter;
     protected HttpRequest request;
     protected HttpResponse response;
@@ -36,6 +38,7 @@ public class a_request_augmenter : Specification
         tenant_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>())).ReturnsAsync(tenant_id);
         bearer_tokens = new();
         mutual_tls = new();
+        endtraid_roles = new();
         config = new()
         {
             TenantResolution = new()
@@ -52,6 +55,7 @@ public class a_request_augmenter : Specification
             tenant_resolver.Object,
             bearer_tokens.Object,
             mutual_tls.Object,
+            endtraid_roles.Object,
             config)
         {
             ControllerContext = new()
