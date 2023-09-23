@@ -7,7 +7,7 @@ using Aksio.IngressMiddleware.Helpers;
 namespace Aksio.IngressMiddleware.EntraIdRoles;
 
 /// <summary>
-/// Represents an implementation of <see cref="MutualTLS.IMutualTLS"/>.
+/// Represents an implementation of <see cref="IEntraIdRoles"/>.
 /// </summary>
 public class EntraIdRoles : IEntraIdRoles
 {
@@ -15,7 +15,7 @@ public class EntraIdRoles : IEntraIdRoles
     readonly ILogger<EntraIdRoles> _logger;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MutualTLS.MutualTLS"/> class.
+    /// Initializes a new instance of the <see cref="EntraIdRoles"/> class.
     /// </summary>
     /// <param name="config"><see cref="Config"/> instance.</param>
     /// <param name="logger">Logger for logging.</param>
@@ -24,9 +24,6 @@ public class EntraIdRoles : IEntraIdRoles
         _config = config;
         _logger = logger;
     }
-
-    // /// <inheritdoc/>
-    // public bool IsEnabled() => _config.MutualTLS.IsEnabled;
 
     /// <inheritdoc/>
     public IActionResult Handle(HttpRequest request)
@@ -40,17 +37,25 @@ public class EntraIdRoles : IEntraIdRoles
             return new StatusCodeResult(StatusCodes.Status401Unauthorized);
         }
 
-        var principal = ClientPrincipal.FromBase64(request.Headers[Headers.PrincipalId], request.Headers[Headers.Principal]);
+        var principalId = request.Headers[Headers.PrincipalId].FirstOrDefault() ?? string.Empty;
+
+        if (_config.EntraIdRoles.NoRoleRequired)
+        {
+            _logger.AcceptingClientWithoutRole(principalId, clientIp);
+            return new OkResult();
+        }
+
+        var principal = ClientPrincipal.FromBase64(principalId, request.Headers[Headers.Principal]);
         var userRoles = principal.Claims.Where(c => c.Type == "roles").Select(c => c.Value).ToList();
 
         var matchedRoles = _config.EntraIdRoles.AcceptedRoles.Intersect(userRoles, StringComparer.OrdinalIgnoreCase).ToList();
         if (!matchedRoles.Any())
         {
-            _logger.UserDidNotHaveAnyMatchingRoles(userRoles, clientIp);
+            _logger.UserDidNotHaveAnyMatchingRoles(principalId, userRoles, clientIp);
             return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
-        _logger.UserLoggedInWithRoles(matchedRoles, clientIp);
+        _logger.UserLoggedInWithRoles(principalId, matchedRoles, clientIp);
         return new OkResult();
     }
 }

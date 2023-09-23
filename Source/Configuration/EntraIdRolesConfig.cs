@@ -9,7 +9,12 @@ namespace Aksio.IngressMiddleware.Configuration;
 public class EntraIdRolesConfig
 {
     /// <summary>
-    /// Gets or sets the list of accepted role values.
+    /// Can be set to true to set up an ingress that does not require a role (only Entra ID login).
+    /// </summary>
+    public bool NoRoleRequired { get; set; }
+
+    /// <summary>
+    /// The list of accepted role values.
     /// </summary>
     public IList<string> AcceptedRoles { get; set; } = new List<string>();
 }
