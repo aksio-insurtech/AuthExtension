@@ -14,7 +14,7 @@ static partial class EntraIdRolesLogMessages
     [LoggerMessage(
         1,
         LogLevel.Warning,
-        "Client did not have any accepted roles. User had roles: {UserRoles}. Principal id {PrincipalId}, lient address = {ClientIp}")]
+        "Client did not have any accepted roles. User had roles: {UserRoles}. Principal id {PrincipalId}, client address = {ClientIp}")]
     internal static partial void UserDidNotHaveAnyMatchingRoles(
         this ILogger<EntraIdRoles> logger,
         string principalId,
@@ -24,7 +24,7 @@ static partial class EntraIdRolesLogMessages
     [LoggerMessage(
         2,
         LogLevel.Information,
-        "Client logged in with role(s) {AcceptedRoles}. Principal id {PrincipalId}, lient address = {ClientIp}")]
+        "Client logged in with role(s) {AcceptedRoles}. Principal id {PrincipalId}, client address = {ClientIp}")]
     internal static partial void UserLoggedInWithRoles(
         this ILogger<EntraIdRoles> logger,
         string principalId,
