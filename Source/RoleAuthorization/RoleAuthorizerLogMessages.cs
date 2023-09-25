@@ -18,7 +18,7 @@ static partial class RoleAuthorizerLogMessages
     internal static partial void UserDidNotHaveAnyMatchingRoles(
         this ILogger<RoleAuthorizer> logger,
         string principalId,
-        List<string> userRoles,
+        IReadOnlyList<string> userRoles,
         string clientIp);
 
     [LoggerMessage(
@@ -28,7 +28,7 @@ static partial class RoleAuthorizerLogMessages
     internal static partial void UserLoggedInWithRoles(
         this ILogger<RoleAuthorizer> logger,
         string principalId,
-        List<string> acceptedRoles,
+        IReadOnlyList<string> acceptedRoles,
         string clientIp);
 
     [LoggerMessage(

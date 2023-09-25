@@ -16,5 +16,5 @@ public class RoleAuthorizationConfig
     /// <summary>
     /// The list of accepted role values.
     /// </summary>
-    public IList<string> AcceptedRoles { get; set; } = new List<string>();
+    public IEnumerable<string> AcceptedRoles { get; set; } = Enumerable.Empty<string>();
 }
