@@ -46,6 +46,11 @@ public class Config
     public MutualTLSConfig MutualTLS { get; set; } = new();
 
     /// <summary>
+    /// Gets or sets the <see cref="RoleAuthorizationConfig"/> configuration.
+    /// </summary>
+    public RoleAuthorizationConfig RoleAuthorization { get; set; } = new();
+
+    /// <summary>
     /// Loads the configuration from the file system.
     /// </summary>
     /// <returns>A new <see cref="Config"/> instance.</returns>

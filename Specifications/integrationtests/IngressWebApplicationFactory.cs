@@ -3,9 +3,11 @@
 
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Tenancy;
+using MELT;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Aksio.IngressMiddleware.integrationtests;
 
@@ -21,12 +23,19 @@ public class IngressWebApplicationFactory : WebApplicationFactory<Program>
     /// </summary>
     public List<(Type Interface, object Implementation)> TransientServicesToReplace = new();
 
+    /// <summary>
+    /// Get the test logger sink.
+    /// </summary>
+    public ITestLoggerSink TestLoggerSink => this.GetTestLoggerSink();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         if (Config == null)
         {
             throw new MissingTestConfig();
         }
+
+        builder.ConfigureLogging(logger => logger.AddTest());
 
         builder.ConfigureServices(
             services =>

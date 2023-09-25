@@ -6,16 +6,19 @@ using System.Text.Json;
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Tenancy;
 
-namespace Aksio.IngressMiddleware.integrationtests.entraid_auth.given;
+namespace Aksio.IngressMiddleware.integrationtests.role_authorization.given;
 
-public class factory_with_entraid_auth_with_scoped_tenancyresolution : Specification
+public class factory_with_role_auth_with_scoped_tenancyresolution : Specification
 {
     protected IngressWebApplicationFactory IngressFactory;
     protected HttpClient IngressClient;
     protected Config IngressConfig;
+    protected List<string> AcceptedRoles;
 
     void Establish()
     {
+        AcceptedRoles = new() { "testrole", "secondrole", "otherrole" };
+
         IngressConfig = new()
         {
             Tenants = new()
@@ -33,7 +36,11 @@ public class factory_with_entraid_auth_with_scoped_tenancyresolution : Specifica
             {
                 Strategy = TenantSourceIdentifierResolverType.Claim
             },
-            IdentityDetailsUrl = string.Empty
+            IdentityDetailsUrl = string.Empty,
+            RoleAuthorization = new()
+            {
+                AcceptedRoles = AcceptedRoles
+            }
         };
 
         IngressFactory = new()
@@ -49,14 +56,19 @@ public class factory_with_entraid_auth_with_scoped_tenancyresolution : Specifica
     /// </summary>
     /// <param name="requestMessage">The request.</param>
     /// <param name="claimedTenantId">Tenant id to claim.</param>
-    protected void BuildAndSetPrincipalWithTenantClaim(HttpRequestMessage requestMessage, string claimedTenantId)
+    /// <param name="roles">The list of "roles" claims to add.</param>
+    protected void BuildAndSetPrincipalWithTenantClaim(
+        HttpRequestMessage requestMessage,
+        string claimedTenantId,
+        params string[] roles)
     {
-        var principal = new RawClientPrincipal(
-            "testprovider",
-            "testuser",
-            "userdetails",
-            new[] { new RawClaim(ClaimsSourceIdentifierResolver.TenantIdClaim, claimedTenantId) });
+        var claims = new List<RawClaim>
+        {
+            new(ClaimsSourceIdentifierResolver.TenantIdClaim, claimedTenantId)
+        };
+        claims.AddRange(roles.Select(r => new RawClaim("roles", r)));
 
+        var principal = new RawClientPrincipal("testprovider", "testuser", "userdetails", claims);
         var jsonPrincipal = JsonSerializer.Serialize(principal, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
         requestMessage.Headers.Add(Headers.Principal, Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonPrincipal)));

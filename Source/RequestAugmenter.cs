@@ -7,6 +7,7 @@ using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
+using Aksio.IngressMiddleware.RoleAuthorization;
 using Aksio.IngressMiddleware.Tenancy;
 
 namespace Aksio.IngressMiddleware;
@@ -26,15 +27,17 @@ public class RequestAugmenter : Controller
     readonly ITenantResolver _tenantResolver;
     readonly IOAuthBearerTokens _bearerTokens;
     readonly IMutualTLS _mutualTls;
+    readonly IRoleAuthorizer _roleAuthorizer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RequestAugmenter"/> class.
     /// </summary>
-    /// <param name="identityDetailsResolver"><see cref="IIdentityDetailsResolver"/> to use.</param>
-    /// <param name="impersonationFlow"><see cref="IImpersonationFlow"/> to use for the impersonation process.</param>
-    /// <param name="tenantResolver"><see cref="ITenantResolver"/> to use.</param>
-    /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/> to use.</param>
-    /// <param name="mutualTls"><see cref="IMutualTLS"/> to use.</param>
+    /// <param name="identityDetailsResolver"><see cref="IIdentityDetailsResolver"/>.</param>
+    /// <param name="impersonationFlow"><see cref="IImpersonationFlow"/> (for the impersonation process).</param>
+    /// <param name="tenantResolver"><see cref="ITenantResolver"/>.</param>
+    /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/>.</param>
+    /// <param name="mutualTls"><see cref="IMutualTLS"/>.</param>
+    /// <param name="roleAuthorizer"><see cref="IRoleAuthorizer"/>.</param>
     /// <param name="config">The instance configuration.</param>
     public RequestAugmenter(
         IIdentityDetailsResolver identityDetailsResolver,
@@ -42,6 +45,7 @@ public class RequestAugmenter : Controller
         ITenantResolver tenantResolver,
         IOAuthBearerTokens bearerTokens,
         IMutualTLS mutualTls,
+        IRoleAuthorizer roleAuthorizer,
         Config config)
     {
         _identityDetailsResolver = identityDetailsResolver;
@@ -50,6 +54,7 @@ public class RequestAugmenter : Controller
         _bearerTokens = bearerTokens;
         _mutualTls = mutualTls;
         _config = config;
+        _roleAuthorizer = roleAuthorizer;
     }
 
     /// <summary>
@@ -74,8 +79,7 @@ public class RequestAugmenter : Controller
         }
 
         // Handle impersonation, if appropriate.
-        if (!_impersonationFlow.HandleImpersonatedPrincipal(Request, Response) &&
-            _impersonationFlow.ShouldImpersonate(Request))
+        if (!_impersonationFlow.HandleImpersonatedPrincipal(Request, Response) && _impersonationFlow.ShouldImpersonate(Request))
         {
             Response.Headers[Headers.ImpersonationRedirect] = WellKnownPaths.Impersonation;
             return StatusCode(StatusCodes.Status401Unauthorized);
@@ -98,7 +102,8 @@ public class RequestAugmenter : Controller
             return await _bearerTokens.Handle(Request, Response, tenantId);
         }
 
-        return Ok();
+        // Finally check the entra id requirement.
+        return _roleAuthorizer.Handle(Request);
     }
 
     /// <summary>

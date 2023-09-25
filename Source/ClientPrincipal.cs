@@ -47,7 +47,7 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
         var name = string.IsNullOrEmpty(rawPrincipal.name_typ) ? string.Empty : rawPrincipal.claims.FirstOrDefault(_ => _.Type == rawPrincipal.name_typ)?.Value ?? string.Empty;
         var roles = string.IsNullOrEmpty(rawPrincipal.role_typ) ? Enumerable.Empty<string>() : rawPrincipal.claims.Where(_ => _.Type == rawPrincipal.role_typ).Select(_ => _.Value).ToArray();
         var claims = rawPrincipal.claims?.ToClaims() ?? Enumerable.Empty<Claim>();
-        return new ClientPrincipal(rawPrincipal.auth_typ, userId ?? string.Empty, name, roles, claims)
+        return new(rawPrincipal.auth_typ, userId ?? string.Empty, name, roles, claims)
         {
             NameType = rawPrincipal.name_typ,
             RoleType = rawPrincipal.role_typ
