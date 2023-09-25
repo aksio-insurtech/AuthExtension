@@ -1,3 +1,18 @@
+# [v5.0.0] - 2023-9-25 [PR: #73](https://github.com/aksio-insurtech/IngressMiddleware/pull/73)
+
+## Summary
+
+A role is now needed to log in with Entra ID/AAD auth by default, but can be configured to not require.
+
+### Added
+
+- A role is now needed to log in with Entra ID/AAD auth by default.
+
+### Changed
+
+- Without a role, the user will now be rejected unless configured to not require a role.
+
+
 # [v4.4.0] - 2023-9-8 [PR: #72](https://github.com/aksio-insurtech/IngressMiddleware/pull/72)
 
 ## Summary
