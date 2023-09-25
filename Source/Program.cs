@@ -4,10 +4,10 @@
 using Aksio.IngressMiddleware;
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
-using Aksio.IngressMiddleware.EntraIdRoles;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
+using Aksio.IngressMiddleware.RoleAuthorization;
 using Aksio.IngressMiddleware.Tenancy;
 
 #pragma warning disable CA1050, MA0047, MA0036
@@ -26,7 +26,7 @@ builder.Services.AddTransient<IIdentityDetailsResolver, IdentityDetailsResolver>
 builder.Services.AddTransient<IOAuthBearerTokenValidator, OAuthBearerTokenValidator>();
 builder.Services.AddTransient<IOAuthBearerTokens, OAuthBearerTokens>();
 builder.Services.AddTransient<IMutualTLS, MutualTLS>();
-builder.Services.AddTransient<IEntraIdRoles, EntraIdRoles>();
+builder.Services.AddTransient<IRoleAuthorizer, RoleAuthorizer>();
 builder.Services.AddTransient<TenantImpersonationAuthorizer>();
 builder.Services.AddTransient<IdentityProviderImpersonationAuthorizer>();
 builder.Services.AddTransient<ClaimImpersonationAuthorizer>();

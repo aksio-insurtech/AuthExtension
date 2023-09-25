@@ -4,10 +4,10 @@
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
-using Aksio.IngressMiddleware.EntraIdRoles;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
+using Aksio.IngressMiddleware.RoleAuthorization;
 using Aksio.IngressMiddleware.Tenancy;
 
 namespace Aksio.IngressMiddleware;
@@ -27,7 +27,7 @@ public class RequestAugmenter : Controller
     readonly ITenantResolver _tenantResolver;
     readonly IOAuthBearerTokens _bearerTokens;
     readonly IMutualTLS _mutualTls;
-    readonly IEntraIdRoles _entraIdRoles;
+    readonly IRoleAuthorizer _roleAuthorizer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RequestAugmenter"/> class.
@@ -37,7 +37,7 @@ public class RequestAugmenter : Controller
     /// <param name="tenantResolver"><see cref="ITenantResolver"/>.</param>
     /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/>.</param>
     /// <param name="mutualTls"><see cref="IMutualTLS"/>.</param>
-    /// <param name="entraIdRoles"><see cref="IEntraIdRoles"/>.</param>
+    /// <param name="roleAuthorizer"><see cref="IRoleAuthorizer"/>.</param>
     /// <param name="config">The instance configuration.</param>
     public RequestAugmenter(
         IIdentityDetailsResolver identityDetailsResolver,
@@ -45,7 +45,7 @@ public class RequestAugmenter : Controller
         ITenantResolver tenantResolver,
         IOAuthBearerTokens bearerTokens,
         IMutualTLS mutualTls,
-        IEntraIdRoles entraIdRoles,
+        IRoleAuthorizer roleAuthorizer,
         Config config)
     {
         _identityDetailsResolver = identityDetailsResolver;
@@ -54,7 +54,7 @@ public class RequestAugmenter : Controller
         _bearerTokens = bearerTokens;
         _mutualTls = mutualTls;
         _config = config;
-        _entraIdRoles = entraIdRoles;
+        _roleAuthorizer = roleAuthorizer;
     }
 
     /// <summary>
@@ -103,7 +103,7 @@ public class RequestAugmenter : Controller
         }
 
         // Finally check the entra id requirement.
-        return _entraIdRoles.Handle(Request);
+        return _roleAuthorizer.Handle(Request);
     }
 
     /// <summary>

@@ -6,10 +6,10 @@ using System.Text.Json.Nodes;
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
-using Aksio.IngressMiddleware.EntraIdRoles;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
+using Aksio.IngressMiddleware.RoleAuthorization;
 using Aksio.IngressMiddleware.Tenancy;
 using Microsoft.AspNetCore.Http;
 
@@ -23,7 +23,7 @@ public class a_request_augmenter : Specification
     protected Mock<ITenantResolver> tenant_resolver;
     protected Mock<IOAuthBearerTokens> bearer_tokens;
     protected Mock<IMutualTLS> mutual_tls;
-    protected Mock<IEntraIdRoles> endtraid_roles;
+    protected Mock<IRoleAuthorizer> endtraid_roles;
     protected RequestAugmenter augmenter;
     protected HttpRequest request;
     protected HttpResponse response;

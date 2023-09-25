@@ -6,9 +6,9 @@ using System.Text.Json;
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Tenancy;
 
-namespace Aksio.IngressMiddleware.integrationtests.entraid_auth.given;
+namespace Aksio.IngressMiddleware.integrationtests.role_authorization.given;
 
-public class factory_with_entraid_auth_with_scoped_tenancyresolution : Specification
+public class factory_with_role_auth_with_scoped_tenancyresolution : Specification
 {
     protected IngressWebApplicationFactory IngressFactory;
     protected HttpClient IngressClient;
@@ -37,7 +37,7 @@ public class factory_with_entraid_auth_with_scoped_tenancyresolution : Specifica
                 Strategy = TenantSourceIdentifierResolverType.Claim
             },
             IdentityDetailsUrl = string.Empty,
-            EntraIdRoles = new()
+            RoleAuthorization = new()
             {
                 AcceptedRoles = AcceptedRoles
             }

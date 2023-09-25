@@ -1,11 +1,11 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Aksio.IngressMiddleware.integrationtests.entraid_auth.given;
+using Aksio.IngressMiddleware.integrationtests.role_authorization.given;
 
-namespace Aksio.IngressMiddleware.integrationtests.entraid_auth.scoped_tenantresolution;
+namespace Aksio.IngressMiddleware.integrationtests.role_authorization.scoped_tenantresolution;
 
-public class request_with_valid_tenantid : factory_with_entraid_auth_with_scoped_tenancyresolution
+public class request_with_valid_tenantid : factory_with_role_auth_with_scoped_tenancyresolution
 {
     HttpResponseMessage _responseMessage;
 

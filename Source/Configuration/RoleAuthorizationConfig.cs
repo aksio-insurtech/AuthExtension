@@ -6,7 +6,7 @@ namespace Aksio.IngressMiddleware.Configuration;
 /// <summary>
 /// Represents the configuration for entra id roles requirement.
 /// </summary>
-public class EntraIdRolesConfig
+public class RoleAuthorizationConfig
 {
     /// <summary>
     /// Can be set to true to set up an ingress that does not require a role (only Entra ID login).

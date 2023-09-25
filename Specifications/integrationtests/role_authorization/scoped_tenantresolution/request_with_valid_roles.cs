@@ -2,13 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Net;
-using Aksio.IngressMiddleware.integrationtests.entraid_auth.given;
+using Aksio.IngressMiddleware.integrationtests.role_authorization.given;
+using Aksio.IngressMiddleware.RoleAuthorization;
 using MELT;
 using Microsoft.Extensions.Logging;
 
-namespace Aksio.IngressMiddleware.integrationtests.entraid_auth.scoped_tenantresolution;
+namespace Aksio.IngressMiddleware.integrationtests.role_authorization.scoped_tenantresolution;
 
-public class request_with_invalid_roles : factory_with_entraid_auth_with_scoped_tenancyresolution
+public class request_with_valid_roles : factory_with_role_auth_with_scoped_tenancyresolution
 {
     HttpResponseMessage _responseMessage;
     List<LogEntry> _logEntries;
@@ -19,19 +20,19 @@ public class request_with_invalid_roles : factory_with_entraid_auth_with_scoped_
         BuildAndSetPrincipalWithTenantClaim(
             requestMessage,
             IngressConfig.Tenants.Values.Last().SourceIdentifiers.Last(),
-            "wrongrole",
-            "anotherwrongrole");
+            AcceptedRoles.First(),
+            AcceptedRoles.Last());
 
         _responseMessage = await IngressClient.SendAsync(requestMessage);
 
         _logEntries = IngressFactory.TestLoggerSink.LogEntries
-            .Where(l => l.LoggerName == typeof(EntraIdRoles.EntraIdRoles).FullName)
+            .Where(l => l.LoggerName == typeof(RoleAuthorizer).FullName)
             .ToList();
     }
 
     [Fact]
-    void should_be_unauthorized() => _responseMessage.StatusCode.ShouldEqual(HttpStatusCode.Forbidden);
+    void should_be_authorized() => _responseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
 
     [Fact]
-    void the_attempt_was_logged() => _logEntries.ShouldContain(l => l.EventId == 1 && l.LogLevel == LogLevel.Warning);
+    void the_attempt_was_logged() => _logEntries.ShouldContain(l => l.EventId == 2 && l.LogLevel == LogLevel.Information);
 }
