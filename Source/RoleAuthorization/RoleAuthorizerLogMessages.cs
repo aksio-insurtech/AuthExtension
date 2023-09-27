@@ -39,4 +39,23 @@ static partial class RoleAuthorizerLogMessages
         this ILogger<RoleAuthorizer> logger,
         string principalId,
         string clientIp);
+
+    [LoggerMessage(
+        4,
+        LogLevel.Warning,
+        "Client logged in with principal without audience claim ('aud'). Principal id {PrincipalId}, client address = {ClientIp}")]
+    internal static partial void ClientPrincipalDidNotHaveAudienceClaim(
+        this ILogger<RoleAuthorizer> logger,
+        string principalId,
+        string clientIp);
+
+    [LoggerMessage(
+        5,
+        LogLevel.Warning,
+        "Client logged in with an unknown audience claim, aud={Audience}. Principal id {PrincipalId}, client address = {ClientIp}")]
+    internal static partial void ClientPrincipalAudienceIsNotConfigured(
+        this ILogger<RoleAuthorizer> logger,
+        string audience,
+        string principalId,
+        string clientIp);
 }

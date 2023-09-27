@@ -38,17 +38,32 @@ public class RoleAuthorizer : IRoleAuthorizer
         }
 
         var principalId = request.Headers[Headers.PrincipalId].FirstOrDefault() ?? string.Empty;
+        var principal = ClientPrincipal.FromBase64(principalId, request.Headers[Headers.Principal]);
 
-        if (_config.RoleAuthorization.NoRoleRequired)
+        // Require the audience claim, this will represent the clientId which is used to authorize.
+        // In EntraID this is the app registration id.
+        if (!principal.Claims.Any(c => c.Type == "aud"))
+        {
+            _logger.ClientPrincipalDidNotHaveAudienceClaim(principalId, clientIp);
+            return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+        }
+
+        var audience = principal.Claims.FirstOrDefault(c => c.Type == "aud")!.Value;
+        if (!_config.Authorization.TryGetValue(audience, out var authorizationConfig))
+        {
+            _logger.ClientPrincipalAudienceIsNotConfigured(audience, principalId, clientIp);
+            return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+        }
+
+        if (authorizationConfig.NoAuthorizationRequired)
         {
             _logger.AcceptingClientWithoutRole(principalId, clientIp);
             return new OkResult();
         }
 
-        var principal = ClientPrincipal.FromBase64(principalId, request.Headers[Headers.Principal]);
         var userRoles = principal.Claims.Where(c => c.Type == "roles").Select(c => c.Value).ToList();
 
-        var matchedRoles = _config.RoleAuthorization.AcceptedRoles.Intersect(userRoles, StringComparer.OrdinalIgnoreCase).ToList();
+        var matchedRoles = authorizationConfig.Roles.Intersect(userRoles, StringComparer.OrdinalIgnoreCase).ToList();
         if (!matchedRoles.Any())
         {
             _logger.UserDidNotHaveAnyMatchingRoles(principalId, userRoles, clientIp);

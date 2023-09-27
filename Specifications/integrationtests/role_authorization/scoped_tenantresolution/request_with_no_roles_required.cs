@@ -14,14 +14,10 @@ public class request_with_no_roles_required : factory_with_role_auth_with_scoped
     HttpResponseMessage _responseMessage;
     List<LogEntry> _logEntries;
 
-    void Establish() => IngressConfig.RoleAuthorization.NoRoleRequired = true;
-
     async Task Because()
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/");
-        BuildAndSetPrincipalWithTenantClaim(
-            requestMessage,
-            IngressConfig.Tenants.Values.Last().SourceIdentifiers.Last());
+        BuildAndSetPrincipalWithTenantClaim(requestMessage, IngressConfig.Tenants.Values.Last().SourceIdentifiers.Last(), AudienceWithNoAuthRequired);
 
         _responseMessage = await IngressClient.SendAsync(requestMessage);
 

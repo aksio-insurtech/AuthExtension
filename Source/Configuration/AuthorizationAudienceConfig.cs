@@ -4,17 +4,17 @@
 namespace Aksio.IngressMiddleware.Configuration;
 
 /// <summary>
-/// Represents the configuration for entra id roles requirement.
+/// Represents the configuration for authorization requirement, such as roles.
 /// </summary>
-public class RoleAuthorizationConfig
+public class AuthorizationAudienceConfig
 {
     /// <summary>
     /// Can be set to true to set up an ingress that does not require a role (only Entra ID login).
     /// </summary>
-    public bool NoRoleRequired { get; set; }
+    public bool NoAuthorizationRequired { get; set; }
 
     /// <summary>
     /// The list of accepted role values.
     /// </summary>
-    public IEnumerable<string> AcceptedRoles { get; set; } = Enumerable.Empty<string>();
+    public IEnumerable<string> Roles { get; set; } = Enumerable.Empty<string>();
 }

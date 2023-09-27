@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Aksio.IngressMiddleware.integrationtests.role_authorization.scoped_tenantresolution;
 
-public class request_with_no_roles : factory_with_role_auth_with_scoped_tenancyresolution
+public class request_with_unknown_audience : factory_with_role_auth_with_scoped_tenancyresolution
 {
     HttpResponseMessage _responseMessage;
     List<LogEntry> _logEntries;
@@ -17,7 +17,7 @@ public class request_with_no_roles : factory_with_role_auth_with_scoped_tenancyr
     async Task Because()
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/");
-        BuildAndSetPrincipalWithTenantClaim(requestMessage, IngressConfig.Tenants.Values.Last().SourceIdentifiers.Last(), AudienceWithRoles);
+        BuildAndSetPrincipalWithTenantClaim(requestMessage, IngressConfig.Tenants.Values.Last().SourceIdentifiers.Last(), "unconfiguredaudience");
 
         _responseMessage = await IngressClient.SendAsync(requestMessage);
 
@@ -27,8 +27,8 @@ public class request_with_no_roles : factory_with_role_auth_with_scoped_tenancyr
     }
 
     [Fact]
-    void should_be_unauthorized() => _responseMessage.StatusCode.ShouldEqual(HttpStatusCode.Forbidden);
+    void should_be_unauthorized() => _responseMessage.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
 
     [Fact]
-    void the_attempt_was_logged() => _logEntries.ShouldContain(l => l.EventId == 1 && l.LogLevel == LogLevel.Warning);
+    void the_attempt_was_logged() => _logEntries.ShouldContain(l => l.EventId == 5 && l.LogLevel == LogLevel.Warning);
 }

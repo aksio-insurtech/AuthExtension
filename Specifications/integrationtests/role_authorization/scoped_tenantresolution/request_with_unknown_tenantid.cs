@@ -15,7 +15,11 @@ public class request_with_unknown_tenantid : factory_with_role_auth_with_scoped_
     async Task Because()
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/");
-        BuildAndSetPrincipalWithTenantClaim(requestMessage, "unknowntenant", AcceptedRoles.First());
+        BuildAndSetPrincipalWithTenantClaim(
+            requestMessage,
+            "unknowntenant",
+            AudienceWithRoles,
+            AcceptedRolesPrAudience.SelectMany(_ => _.Value.Roles).First());
 
         _responseMessage = await IngressClient.SendAsync(requestMessage);
     }
