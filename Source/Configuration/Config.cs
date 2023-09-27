@@ -45,19 +45,6 @@ public class Config
     /// </summary>
     public MutualTLSConfig MutualTLS { get; set; } = new();
 
-// TODO DOIT 
-// TODO DOIT 
-// TODO DOIT 
-// TODO DOIT 
-// TODO DOIT 
-#error TEST I DEV (eller QA?)
-#error og når det er på plass må appmanager PR ut.    
-// TODO DOIT 
-// TODO DOIT 
-// TODO DOIT 
-// TODO DOIT 
-// TODO DOIT 
-    
     /// <summary>
     /// Gets or sets the <see cref="AuthorizationAudienceConfig"/> configuration.
     /// The key is the aud[ience] claim, a.k.a. the clientId used for the authentication.

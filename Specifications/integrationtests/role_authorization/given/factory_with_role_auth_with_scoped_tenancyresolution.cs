@@ -13,7 +13,7 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
     protected IngressWebApplicationFactory IngressFactory;
     protected HttpClient IngressClient;
     protected Config IngressConfig;
-    protected Dictionary<string,AuthorizationAudienceConfig> AcceptedRolesPrAudience;
+    protected Dictionary<string, AuthorizationAudienceConfig> AcceptedRolesPrAudience;
     protected string AudienceWithRoles = "audienceWithRoles";
     protected string AudienceWithNoAuthRequired = "audienceWithNoAuth";
 
