@@ -1,3 +1,11 @@
+# [v5.1.0] - 2023-9-28 [PR: #74](https://github.com/aksio-insurtech/IngressMiddleware/pull/74)
+
+## Summary
+
+Changed roleAuthorization to simply be authorization, and changed it to match on each principal audience.
+This allows support for different requirement for different authentication sources.
+
+
 # [v5.0.0] - 2023-9-25 [PR: #73](https://github.com/aksio-insurtech/IngressMiddleware/pull/73)
 
 ## Summary
