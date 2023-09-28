@@ -278,7 +278,6 @@ __pycache__/
 # tools/**
 # !tools/packages.config
 
-yarn.lock
 package-json.lock
 package-lock.json
 dist
@@ -287,3 +286,4 @@ dist
 .eslintcache
 
 out
+/.DS_Store

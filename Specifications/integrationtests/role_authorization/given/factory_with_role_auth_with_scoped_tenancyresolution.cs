@@ -13,11 +13,21 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
     protected IngressWebApplicationFactory IngressFactory;
     protected HttpClient IngressClient;
     protected Config IngressConfig;
-    protected List<string> AcceptedRoles;
+    protected Dictionary<string, AuthorizationAudienceConfig> AcceptedRolesPrAudience;
+    protected string AudienceWithRoles = "audienceWithRoles";
+    protected string AudienceWithNoAuthRequired = "audienceWithNoAuth";
 
     void Establish()
     {
-        AcceptedRoles = new() { "testrole", "secondrole", "otherrole" };
+        AcceptedRolesPrAudience = new()
+        {
+            {
+                AudienceWithRoles, new() { Roles = new List<string> { "testrole", "secondrole", "otherrole" } }
+            },
+            {
+                AudienceWithNoAuthRequired, new() { NoAuthorizationRequired = true }
+            }
+        };
 
         IngressConfig = new()
         {
@@ -37,10 +47,7 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
                 Strategy = TenantSourceIdentifierResolverType.Claim
             },
             IdentityDetailsUrl = string.Empty,
-            RoleAuthorization = new()
-            {
-                AcceptedRoles = AcceptedRoles
-            }
+            Authorization = AcceptedRolesPrAudience
         };
 
         IngressFactory = new()
@@ -60,12 +67,18 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
     protected void BuildAndSetPrincipalWithTenantClaim(
         HttpRequestMessage requestMessage,
         string claimedTenantId,
+        string authAudience,
         params string[] roles)
     {
         var claims = new List<RawClaim>
         {
-            new(ClaimsSourceIdentifierResolver.TenantIdClaim, claimedTenantId)
+            new(ClaimsSourceIdentifierResolver.TenantIdClaim, claimedTenantId),
         };
+        if (!string.IsNullOrEmpty(authAudience))
+        {
+            claims.Add(new("aud", authAudience));
+        }
+
         claims.AddRange(roles.Select(r => new RawClaim("roles", r)));
 
         var principal = new RawClientPrincipal("testprovider", "testuser", "userdetails", claims);

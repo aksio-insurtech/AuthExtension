@@ -37,19 +37,6 @@ The `Tenant-ID` is mapped based on the domain host name which is configured in t
 
 To test the `Tenant-ID` injection in the response you can simply add your configured hosts to the operating systems hosts file to point to localhost/127.0.0.1 and then navigate to the URL + port 8080 with the sample reverse proxy setup.
 
-## Id-Porten
-
-The support for Id-Porten is based on a container app setup of a custom ingress that sits in front of the ingress for a Container App.
-Its purpose is to provide support for multi tenancy for this specific identity provider by adding on the custom `onbehalfof` based on
-a domain configuration for the tenant. It uses the domain name configured in the config as a basis to understand which value to set.
-
-Below is the target flow it has been designed for:
-
-![](./Images/idporten-flow.jpg)
-
-You can read more about the `onbehalfof` support for Id-porten [here](https://docs.digdir.no/docs/idporten/oidc/oidc_api_admin_leverandør.html#1-onbehalfof-i-id-porten) (Norwegian,
-English OIDC summary can be found [here](https://docs.digdir.no/docs/idporten/oidc/oidc_guide_english)).
-
 ## Config File
 
 All configuration is done through a well known file called `config.json` sitting in the `config` folder next to the binaries of the middleware.
@@ -106,11 +93,34 @@ Its format is:
                 }
             ]
         }
+    },
+    "authorization": {
+        "principal1_aud_claim_value": {
+            "noAuthorizationRequired": true
+        },
+        "other_principal_aud_claim_value": {
+            "roles": [
+                "caseworker"
+            ]
+        }
     }
 }
 ```
 
-### Tenant resolution
+## Id-Porten
+
+The support for Id-Porten is based on a container app setup of a custom ingress that sits in front of the ingress for a Container App.
+Its purpose is to provide support for multi tenancy for this specific identity provider by adding on the custom `onbehalfof` based on
+a domain configuration for the tenant. It uses the domain name configured in the config as a basis to understand which value to set.
+
+Below is the target flow it has been designed for:
+
+![](./Images/idporten-flow.jpg)
+
+You can read more about the `onbehalfof` support for Id-porten [here](https://docs.digdir.no/docs/idporten/oidc/oidc_api_admin_leverandør.html#1-onbehalfof-i-id-porten) (Norwegian,
+English OIDC summary can be found [here](https://docs.digdir.no/docs/idporten/oidc/oidc_guide_english)).
+
+## Tenant resolution
 
 Within every tenant you'll see an optional array of source identifiers (`sourceIdentifiers`).
 These are strings that can will be matched with a value provided by a source identifier provider.
@@ -124,7 +134,7 @@ Configuration of source providers is done through the `tenantResolution` key. Th
 will revert to `none` if not configured. If no provider is specified, the tenant will be resolved to an
 empty string.
 
-#### Route source identifier provider
+### Route source identifier provider
 
 Route values can be extracted using regular expression to provide a source identifier that will be mapped.
 In the regular expression you will have to provide an expression that contains a named group. If an expression
@@ -143,7 +153,7 @@ Below shows an example:
 }
 ```
 
-#### Claim source identifier provider
+### Claim source identifier provider
 
 You can configure using claims on the principal in the `x-ms-client-principal` as the source identifier for
 resolving a tenant. The claim-type supported for this is the one defined by Microsoft for tenant (http://schemas.microsoft.com/identity/claims/tenantid).
@@ -159,7 +169,7 @@ Below shows an example:
 }
 ```
 
-#### Specified source identifier provider
+### Specified source identifier provider
 
 You can configure using a specific tenant id, typically used for single tenanted solutions or solutions that manage tenancy themselves and
 there is no need for a tenant being passed on the request.
@@ -179,13 +189,18 @@ Below shows an example:
 
 The value in `tenantId` will then **always** be the value passed further in.
 
-### OAuth Bearer Tokens
+## Identity Details
+
+The result coming from the application specific identity details endpoint called ends up as a cookie with the string representation of what was returned.
+The cookie name is `.aksio-identity`.
+
+## OAuth Bearer Tokens
 
 The `oAuthBearerToken` configuration is optional. It won't run any authorization if the config is left out.
 
 > Note: The specific identity provider configurations are optional. You can have either or all.
 
-### Mutual TLS / Client Certificate
+## Mutual TLS / Client Certificate
 
 The `mutualTLS` configuration is optional.
 
@@ -201,12 +216,7 @@ curl -s https://crt.buypass.no/crt/BPClass3Rot.cer --output - |base64
 
 And then the `acceptedSerialNumbers` must be set, if you have the certificate and are unsure of the serial number you can use an online tool like this: https://www.sslshopper.com/certificate-decoder.html.
 
-### Identity Details
-
-The result coming from the application specific identity details endpoint called ends up as a cookie with the string representation of what was returned.
-The cookie name is `.aksio-identity`.
-
-### Impersonation
+## Impersonation
 
 The ingress middleware supports an impersonation flow, if configured for it.
 This allows you to typically have your regular flow go through the identity provider(s) you want for your users and dedicate one
@@ -216,40 +226,40 @@ The flow for this as follows:
 
 ![](./Images/impersonation-flow.jpg)
 
-#### Authorization of users allowed to impersonate
+### Authorization of users allowed to impersonate
 
 There are a few ways to limit what users are allowed to impersonate other users.
 
-##### Identity Provider
+#### Identity Provider
 
 You configure in the `config.json` under `impersonation` which identity provider(s) are allowed to perform impersonation.
 This information is typically found as a claim called `auth_type` in the client principal coming from the Microsoft Identity platform.
 If none are configured, impersonation is not allowed.
 
-##### Tenants
+#### Tenants
 
 The user resolves to a tenant from the tenancy mapping. You can filter what tenants are allowed.
 If none are configured, this filter is ignored.
 
-##### Roles
+#### Roles
 
 The user can have roles associated with it. You can filter what role(s) the user needs to have.
 This resolves based on the the claim called `roles`.
 If none are configured, this filter is ignored.
 
-##### Groups
+#### Groups
 
 The user can have groups associated with it. You can filter what group(s) the user needs to have.
 This resolves based on the the claim called `groups`.
 If none are configured, this filter is ignored.
 
-##### Claims
+#### Claims
 
 Part of the principal from the Microsoft Identity platform are a collection of claims.
 You can filter based on claim(s), specific types and values.
 If none are configured, this filter is ignored.
 
-#### Claims replacing
+### Claims replacing
 
 Impersonation happens by replacing claims that is later used as part of the request towards the identity details.
 The claims are replaced in the principal of the currently logged in user. This means that if you're using an identity provider that
@@ -285,3 +295,31 @@ input field.
 When a user has completed the impersonation flow, a cookie is added called `.aksio-identity-impersonation`.
 This cookie will be used in subsequent requests and will replace the `x-ms-client-principal` header with the value
 of the cookie.
+
+
+## Authorization
+
+The `authorization` configuration is required.
+This will inspect the client principal to extract the `aud`ience claim.
+
+Each object in the authorization node should have the same name as the aud claim.<br>
+For example, when using Entra ID (AAD) app-registration this would be the application id (a.k.a. clientid).
+
+It currently has two options, either you set noAuthorizationRequired to true - or you add a list of roles that should be required to access this application.
+Using roles is important for multi-tenanted applications, as this enables you as a system developer to enforce the customers that log in with their own Entra ID to also explicitly give access to a proper subset of users (as opposed to accidentally giving access to their entire Entra ID user list).
+
+In this example, we have `audienceguid1` which does not require any configured roles (which potentially mean that anyone with an account in the Entra ID can log into the system!) - and we have `audienceguid2`, which requires the role caseworker to be assigned to the user trying to log in.
+``` json
+    "authorization": {
+        "audienceguid1": {
+            "noAuthorizationRequired": true
+        },
+        "audienceguid2": {
+            "roles": [
+                "caseworker"
+            ]
+        }
+    }
+```
+
+See ConfiguringEntraIdRoles.md for a detailed explanation on how to set up an multi-tenanted appregistration in Entra ID with roles. 

@@ -5,6 +5,8 @@ using System.Text.Json;
 
 namespace Aksio.IngressMiddleware.Configuration;
 
+#pragma warning disable MA0016
+
 /// <summary>
 /// Represents the root configuration object for the ingress middleware.
 /// </summary>
@@ -46,9 +48,10 @@ public class Config
     public MutualTLSConfig MutualTLS { get; set; } = new();
 
     /// <summary>
-    /// Gets or sets the <see cref="RoleAuthorizationConfig"/> configuration.
+    /// Gets or sets the <see cref="AuthorizationAudienceConfig"/> configuration.
+    /// The key is the aud[ience] claim, a.k.a. the clientId used for the authentication.
     /// </summary>
-    public RoleAuthorizationConfig RoleAuthorization { get; set; } = new();
+    public Dictionary<string, AuthorizationAudienceConfig> Authorization { get; set; } = new();
 
     /// <summary>
     /// Loads the configuration from the file system.

@@ -20,6 +20,7 @@ public class request_with_invalid_roles : factory_with_role_auth_with_scoped_ten
         BuildAndSetPrincipalWithTenantClaim(
             requestMessage,
             IngressConfig.Tenants.Values.Last().SourceIdentifiers.Last(),
+            AudienceWithRoles,
             "wrongrole",
             "anotherwrongrole");
 

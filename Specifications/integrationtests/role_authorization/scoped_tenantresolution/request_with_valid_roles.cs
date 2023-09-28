@@ -20,8 +20,9 @@ public class request_with_valid_roles : factory_with_role_auth_with_scoped_tenan
         BuildAndSetPrincipalWithTenantClaim(
             requestMessage,
             IngressConfig.Tenants.Values.Last().SourceIdentifiers.Last(),
-            AcceptedRoles.First(),
-            AcceptedRoles.Last());
+            AudienceWithRoles,
+            AcceptedRolesPrAudience[AudienceWithRoles].Roles.First(),
+            AcceptedRolesPrAudience[AudienceWithRoles].Roles.Last());
 
         _responseMessage = await IngressClient.SendAsync(requestMessage);
 
