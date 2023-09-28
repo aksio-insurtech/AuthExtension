@@ -5,6 +5,8 @@ using System.Text.Json;
 
 namespace Aksio.IngressMiddleware.Configuration;
 
+#pragma warning disable MA0016
+
 /// <summary>
 /// Represents the root configuration object for the ingress middleware.
 /// </summary>
