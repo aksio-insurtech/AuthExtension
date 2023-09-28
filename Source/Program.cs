@@ -17,6 +17,8 @@ UnhandledExceptionsManager.Setup();
 var config = Config.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.UseDefaultLogging();
+
 builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddSingleton(config);

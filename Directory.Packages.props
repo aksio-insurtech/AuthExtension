@@ -3,7 +3,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Aksio.Applications.Serilog" Version="1.2.0" />
+    <PackageVersion Include="Aksio.Applications" Version="1.2.2" />
+    <PackageVersion Include="Aksio.Applications.Serilog" Version="1.2.2" />
     <PackageVersion Include="Aksio.Cratis.Applications" Version="8.19.1" />
     <PackageVersion Include="Aksio.Cratis.Fundamentals" Version="8.19.1" />
     <PackageVersion Include="Aksio.Defaults" Version="1.6.10" />
@@ -11,8 +12,8 @@
     <PackageVersion Include="Aksio.Fundamentals" Version="1.5.1" />
     <PackageVersion Include="MELT.AspNetCore" Version="0.9.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.21" />
-    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="6.32.3" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.32.3" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.0.1" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.0.1" />
     <PackageVersion Include="MELT" Version="0.9.0" />
     <!-- Specifications -->
     <PackageVersion Include="Aksio.Specifications" Version="2.0.1" />
