@@ -17,7 +17,10 @@ UnhandledExceptionsManager.Setup();
 var config = Config.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+
+#pragma warning disable CA2000 // Dispose objects before losing scope => Disposed by the host
 builder.UseDefaultLogging();
+#pragma warning restore CA2000
 
 builder.Services.AddMvc();
 builder.Services.AddControllers();
