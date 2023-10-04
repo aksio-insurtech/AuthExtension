@@ -38,9 +38,4 @@
         <PackageReference Include="Aksio.Defaults.Specs" PrivateAssets="All" Condition="'$(PublishReadyToRun)' != 'true'"/>
     </ItemGroup>
 
-
-    <ItemGroup>
-        <Folder Include="Tenancy\for_TenantResolver\when_resolving\"/>
-    </ItemGroup>
-
 </Project>

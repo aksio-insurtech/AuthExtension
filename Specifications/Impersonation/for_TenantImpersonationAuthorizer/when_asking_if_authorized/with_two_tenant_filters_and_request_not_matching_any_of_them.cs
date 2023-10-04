@@ -7,14 +7,14 @@ namespace Aksio.IngressMiddleware.Impersonation.for_TenantImpersonationAuthorize
 
 public class with_two_tenant_filters_and_request_not_matching_any_of_them : given.two_tenant_filters
 {
-    bool result;
+    bool _result;
 
     void Establish() =>
-        tenant_resolver.Setup(_ => _.Resolve(http_context.Request))
-            .Returns(Task.FromResult(new TenantId(Guid.Parse("b3551c0e-9c68-40c5-9711-742042b5ed44"))));
+        TenantResolver.Setup(_ => _.Resolve(HttpContext.Request))
+            .Returns(new TenantId(Guid.Parse("b3551c0e-9c68-40c5-9711-742042b5ed44")));
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
+    async Task Because() => _result = await Authorizer.IsAuthorized(HttpContext.Request, ClientPrincipal.Empty);
 
     [Fact]
-    void should_not_be_authorized() => result.ShouldBeFalse();
+    void should_not_be_authorized() => _result.ShouldBeFalse();
 }

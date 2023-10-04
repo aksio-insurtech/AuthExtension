@@ -66,7 +66,7 @@ public class RequestAugmenter : Controller
     {
         // First determine the tenant id, it will be populated for all strategies except "None" where it will be NotSet.
         // If null, requirements for setting a tenant is not present and the user is not authorized.
-        var tenantId = await ResolveTenantId();
+        var tenantId = ResolveTenantId();
         if (tenantId == null)
         {
             return StatusCode(StatusCodes.Status401Unauthorized);
@@ -107,30 +107,16 @@ public class RequestAugmenter : Controller
     }
 
     /// <summary>
-    /// Attempts to resolve the tenant id.
-    /// Will return null if it fails to determine one, and the configured strategy is not None.
+    /// Attempts to resolve the tenant id, and set the Response.Header for tenantid based on the result.
+    /// Will return null if it fails to determine one, and Response.Header for tenantid is removed.
     /// </summary>
     /// <returns>The resolved tenant. TenantId.NotSet if resolver type is None, and null if not able to resolve tenant.</returns>
-    async Task<TenantId?> ResolveTenantId()
+    TenantId? ResolveTenantId()
     {
-        switch (_config.TenantResolution.Strategy)
+        var tenantId = _tenantResolver.Resolve(Request);
+        if (tenantId == null)
         {
-            // Require a configured strategy.
-            case TenantSourceIdentifierResolverType.Undefined:
-                return null;
-
-            case TenantSourceIdentifierResolverType.None:
-                return TenantId.NotSet;
-        }
-
-        if (!await _tenantResolver.CanResolve(Request))
-        {
-            return null;
-        }
-
-        var tenantId = await _tenantResolver.Resolve(Request);
-        if (tenantId == TenantId.NotSet && _config.TenantResolution.Strategy != TenantSourceIdentifierResolverType.None)
-        {
+            Response.Headers.Remove(Headers.TenantId);
             return null;
         }
 

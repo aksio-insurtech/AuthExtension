@@ -4,7 +4,7 @@
 using System.Text;
 using System.Text.Json;
 using Aksio.IngressMiddleware.Configuration;
-using Aksio.IngressMiddleware.Tenancy;
+using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
 namespace Aksio.IngressMiddleware.integrationtests.role_authorization.given;
 
@@ -42,9 +42,12 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
                     new() { SourceIdentifiers = new[] { "sourceid_3", "sourceid_4" } }
                 }
             },
-            TenantResolution = new()
+            TenantResolutions = new[]
             {
-                Strategy = TenantSourceIdentifierResolverType.Claim
+                new TenantResolutionConfig()
+                {
+                    Strategy = TenantSourceIdentifierResolverType.Claim
+                }
             },
             IdentityDetailsUrl = string.Empty,
             Authorization = AcceptedRolesPrAudience
@@ -72,7 +75,7 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
     {
         var claims = new List<RawClaim>
         {
-            new(ClaimsSourceIdentifierResolver.TenantIdClaim, claimedTenantId),
+            new(ClaimsSourceIdentifier.TenantIdClaim, claimedTenantId),
         };
         if (!string.IsNullOrEmpty(authAudience))
         {

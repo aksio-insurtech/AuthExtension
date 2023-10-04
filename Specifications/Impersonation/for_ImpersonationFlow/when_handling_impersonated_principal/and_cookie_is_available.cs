@@ -3,33 +3,33 @@
 
 using Microsoft.AspNetCore.Http;
 
-namespace Aksio.IngressMiddleware.Impersonation.when_handling_impersonated_principal;
+namespace Aksio.IngressMiddleware.Impersonation.for_ImpersonationFlow.when_handling_impersonated_principal;
 
 public class and_cookie_is_available : given.a_impersonation_flow
 {
-    DefaultHttpContext http_context;
-    Mock<IRequestCookieCollection> cookies;
-    bool result;
-    string principal = "some-principal";
+    DefaultHttpContext _httpContext;
+    Mock<IRequestCookieCollection> _cookies;
+    bool _result;
+    string _principal = "some-principal";
 
     void Establish()
     {
-        http_context = new();
-        cookies = new();
-        http_context.Request.Cookies = cookies.Object;
+        _httpContext = new();
+        _cookies = new();
+        _httpContext.Request.Cookies = _cookies.Object;
 
-        cookies.Setup(_ => _[Cookies.Impersonation]).Returns(principal);
-        cookies.Setup(_ => _.ContainsKey(Cookies.Impersonation)).Returns(true);
+        _cookies.Setup(_ => _[Cookies.Impersonation]).Returns(_principal);
+        _cookies.Setup(_ => _.ContainsKey(Cookies.Impersonation)).Returns(true);
     }
 
-    void Because() => result = flow.HandleImpersonatedPrincipal(http_context.Request, http_context.Response);
+    void Because() => _result = Flow.HandleImpersonatedPrincipal(_httpContext.Request, _httpContext.Response);
 
     [Fact]
-    void should_have_handled_it() => result.ShouldBeTrue();
+    void should_have_handled_it() => _result.ShouldBeTrue();
 
     [Fact]
-    void should_set_principal_on_request_header() => http_context.Request.Headers[Headers.Principal].ShouldEqual(principal);
+    void should_set_principal_on_request_header() => _httpContext.Request.Headers[Headers.Principal].ShouldEqual(_principal);
 
     [Fact]
-    void should_set_principal_on_response_header() => http_context.Response.Headers[Headers.Principal].ShouldEqual(principal);
+    void should_set_principal_on_response_header() => _httpContext.Response.Headers[Headers.Principal].ShouldEqual(_principal);
 }

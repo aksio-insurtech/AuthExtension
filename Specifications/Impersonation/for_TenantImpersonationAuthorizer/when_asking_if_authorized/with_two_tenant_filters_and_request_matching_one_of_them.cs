@@ -7,14 +7,13 @@ namespace Aksio.IngressMiddleware.Impersonation.for_TenantImpersonationAuthorize
 
 public class with_two_tenant_filters_and_request_matching_one_of_them : given.two_tenant_filters
 {
-    bool result;
+    bool _result;
 
     void Establish() =>
-        tenant_resolver.Setup(_ => _.Resolve(http_context.Request))
-            .Returns(Task.FromResult(new TenantId(Guid.Parse(second_tenant))));
+        TenantResolver.Setup(_ => _.Resolve(HttpContext.Request)).Returns(new TenantId(Guid.Parse(SecondTenant)));
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
+    async Task Because() => _result = await Authorizer.IsAuthorized(HttpContext.Request, ClientPrincipal.Empty);
 
     [Fact]
-    void should_be_authorized() => result.ShouldBeTrue();
+    void should_be_authorized() => _result.ShouldBeTrue();
 }

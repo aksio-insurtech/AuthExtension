@@ -27,7 +27,7 @@ public class a_mutual_tls_instance : Specification
     protected MutualTLS.MutualTLS MutualTls;
     protected HttpRequest Request;
 
-    protected MutualTLSConfig MutualTLSConfig;
+    protected MutualTLSConfig MutualTlsConfig;
     protected Config Config;
 
     protected ITestLoggerFactory LoggerFactory;
@@ -42,7 +42,7 @@ public class a_mutual_tls_instance : Specification
         LoggerFactory = TestLoggerFactory.Create();
         Logger = LoggerFactory.CreateLogger<MutualTLS.MutualTLS>();
 
-        MutualTLSConfig = new()
+        MutualTlsConfig = new()
         {
             AuthorityCertificate = AuthorityCertificate,
             AcceptedSerialNumbers = new List<string> { ClientCertificateSerial }
@@ -50,7 +50,7 @@ public class a_mutual_tls_instance : Specification
 
         Config = new()
         {
-            MutualTLS = MutualTLSConfig
+            MutualTLS = MutualTlsConfig
         };
 
         MutualTls = new(Config, Logger);

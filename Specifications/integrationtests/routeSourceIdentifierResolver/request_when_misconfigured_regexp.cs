@@ -4,7 +4,8 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Aksio.IngressMiddleware.Configuration;
-using Aksio.IngressMiddleware.Tenancy;
+using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
+using Microsoft.AspNetCore.Http;
 
 namespace Aksio.IngressMiddleware.integrationtests.routeSourceIdentifierResolver;
 
@@ -17,11 +18,14 @@ public class request_when_misconfigured_regexp : Specification
     {
         var ingressConfig = new Config()
         {
-            TenantResolution = new()
+            TenantResolutions = new[]
             {
-                Strategy = TenantSourceIdentifierResolverType.Route,
-                Options = JsonSerializer.Deserialize<JsonObject>(
-                    JsonSerializer.Serialize(new RouteSourceIdentifierResolverOptions() { RegularExpression = ".*" }))
+                new TenantResolutionConfig()
+                {
+                    Strategy = TenantSourceIdentifierResolverType.Route,
+                    Options = JsonSerializer.Deserialize<JsonObject>(
+                        JsonSerializer.Serialize(new RouteSourceIdentifierOptions() { RegularExpression = ".*" }))
+                }
             }
         };
 
@@ -36,11 +40,12 @@ public class request_when_misconfigured_regexp : Specification
     async Task Because()
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/");
+        
         requestMessage.Headers.Add(Headers.OriginalUri, "/2345/somethingelse");
 
         _responseMessage = await _ingressClient.SendAsync(requestMessage);
     }
 
     [Fact]
-    void access_denied() => _responseMessage.IsSuccessStatusCode.ShouldBeFalse();
+    void access_denied() => _responseMessage.StatusCode.Equals(StatusCodes.Status401Unauthorized);
 }

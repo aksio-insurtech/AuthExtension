@@ -4,16 +4,16 @@
 using Aksio.IngressMiddleware.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Aksio.IngressMiddleware.Impersonation.given;
+namespace Aksio.IngressMiddleware.Impersonation.for_ImpersonationFlow.given;
 
 public class a_impersonation_flow : Specification
 {
-    protected ImpersonationFlow flow;
-    protected Config config;
+    protected ImpersonationFlow Flow;
+    protected Config Config;
 
     void Establish()
     {
-        config = new();
-        flow = new(config, Mock.Of<ILogger<ImpersonationFlow>>());
+        Config = new();
+        Flow = new(Config, Mock.Of<ILogger<ImpersonationFlow>>());
     }
 }

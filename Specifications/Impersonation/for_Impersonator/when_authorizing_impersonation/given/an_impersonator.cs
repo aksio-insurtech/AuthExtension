@@ -10,24 +10,24 @@ namespace Aksio.IngressMiddleware.Impersonation.for_Impersonator.when_authorizin
 
 public class an_impersonator : Specification
 {
-    protected Impersonator impersonator;
-    protected Mock<IServiceProvider> service_provider;
-    protected Mock<IImpersonationAuthorizer> authorizer;
-    protected Mock<ITenantResolver> tenant_resolver;
-    protected Mock<IIdentityDetailsResolver> identity_details_resolver;
+    protected Impersonator Impersonator;
+    protected Mock<IServiceProvider> ServiceProvider;
+    protected Mock<IImpersonationAuthorizer> Authorizer;
+    protected Mock<ITenantResolver> TenantResolver;
+    protected Mock<IIdentityDetailsResolver> IdentityDetailsResolver;
 
     void Establish()
     {
-        service_provider = new();
-        authorizer = new();
-        tenant_resolver = new();
-        identity_details_resolver = new();
-        service_provider.Setup(_ => _.GetService(IsAny<Type>())).Returns(authorizer.Object);
+        ServiceProvider = new();
+        Authorizer = new();
+        TenantResolver = new();
+        IdentityDetailsResolver = new();
+        ServiceProvider.Setup(_ => _.GetService(IsAny<Type>())).Returns(Authorizer.Object);
 
-        impersonator = new(
-            service_provider.Object,
-            identity_details_resolver.Object,
-            tenant_resolver.Object,
+        Impersonator = new(
+            ServiceProvider.Object,
+            IdentityDetailsResolver.Object,
+            TenantResolver.Object,
             Mock.Of<ILogger<Impersonator>>())
         {
             ControllerContext = new()

@@ -11,59 +11,62 @@ using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
 using Aksio.IngressMiddleware.RoleAuthorization;
 using Aksio.IngressMiddleware.Tenancy;
+using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 using Microsoft.AspNetCore.Http;
 
 namespace Aksio.IngressMiddleware.for_RequestAugmenter.given;
 
 public class a_request_augmenter : Specification
 {
-    protected static readonly TenantId tenant_id = new(Guid.Parse("117a700a-f271-49af-a301-5d54cc2a8c9d"));
-    protected Mock<IIdentityDetailsResolver> identity_details_resolver;
-    protected Mock<IImpersonationFlow> impersonation_flow;
-    protected Mock<ITenantResolver> tenant_resolver;
-    protected Mock<IOAuthBearerTokens> bearer_tokens;
-    protected Mock<IMutualTLS> mutual_tls;
-    protected Mock<IRoleAuthorizer> endtraid_roles;
-    protected RequestAugmenter augmenter;
-    protected HttpRequest request;
-    protected HttpResponse response;
-    protected Config config;
+    protected static readonly TenantId TenantId = new(Guid.Parse("117a700a-f271-49af-a301-5d54cc2a8c9d"));
+    protected Mock<IIdentityDetailsResolver> IdentityDetailsResolver;
+    protected Mock<IImpersonationFlow> ImpersonationFlow;
+    protected Mock<ITenantResolver> TenantResolver;
+    protected Mock<IOAuthBearerTokens> BearerTokens;
+    protected Mock<IMutualTLS> MutualTls;
+    protected Mock<IRoleAuthorizer> EndtraidRoles;
+    protected RequestAugmenter Augmenter;
+    protected HttpRequest Request;
+    protected HttpResponse Response;
+    protected Config Config;
 
     void Establish()
     {
-        identity_details_resolver = new();
-        impersonation_flow = new();
-        tenant_resolver = new();
-        tenant_resolver.Setup(_ => _.CanResolve(IsAny<HttpRequest>())).ReturnsAsync(true);
-        tenant_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>())).ReturnsAsync(tenant_id);
-        bearer_tokens = new();
-        mutual_tls = new();
-        endtraid_roles = new();
-        config = new()
+        IdentityDetailsResolver = new();
+        ImpersonationFlow = new();
+        TenantResolver = new();
+        TenantResolver.Setup(_ => _.Resolve(IsAny<HttpRequest>())).Returns(TenantId);
+        BearerTokens = new();
+        MutualTls = new();
+        EndtraidRoles = new();
+        Config = new()
         {
-            TenantResolution = new()
+            TenantResolutions = new[]
             {
-                Strategy = TenantSourceIdentifierResolverType.Specified,
-                Options = JsonSerializer.Deserialize<JsonObject>(
-                    JsonSerializer.Serialize(new SpecifiedSourceIdentifierResolverOptions() { TenantId = tenant_id.ToString() }))
+                new TenantResolutionConfig()
+                {
+                    Strategy = TenantSourceIdentifierResolverType.Specified,
+                    Options = JsonSerializer.Deserialize<JsonObject>(
+                        JsonSerializer.Serialize(new SpecifiedSourceIdentifierOptions() { SourceIdentifier = TenantId.ToString() }))
+                }
             }
         };
 
-        augmenter = new(
-            identity_details_resolver.Object,
-            impersonation_flow.Object,
-            tenant_resolver.Object,
-            bearer_tokens.Object,
-            mutual_tls.Object,
-            endtraid_roles.Object,
-            config)
+        Augmenter = new(
+            IdentityDetailsResolver.Object,
+            ImpersonationFlow.Object,
+            TenantResolver.Object,
+            BearerTokens.Object,
+            MutualTls.Object,
+            EndtraidRoles.Object,
+            Config)
         {
             ControllerContext = new()
             {
                 HttpContext = new DefaultHttpContext()
             }
         };
-        request = augmenter.ControllerContext.HttpContext.Request;
-        response = augmenter.ControllerContext.HttpContext.Response;
+        Request = Augmenter.ControllerContext.HttpContext.Request;
+        Response = Augmenter.ControllerContext.HttpContext.Response;
     }
 }

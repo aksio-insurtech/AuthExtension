@@ -2,32 +2,33 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware.Configuration;
+using Aksio.IngressMiddleware.given;
 using Aksio.IngressMiddleware.Security;
 
-namespace Aksio.IngressMiddleware.Impersonation.for_ClaimImpersonationAuthorizer.when_asking_if_authorized.given;
+namespace Aksio.IngressMiddleware.Impersonation.for_ClaimImpersonationAuthorizer.given;
 
-public class config_with_two_claims : Aksio.IngressMiddleware.Impersonation.given.a_http_context
+public class config_with_two_claims : a_http_context
 {
-    protected const string first_claim_type = "first_claim";
-    protected const string first_claim_value = "first_claim_value";
-    protected const string second_claim_type = "second_claim";
-    protected const string second_claim_value = "second_claim_value";
-    protected Config config;
+    protected const string FirstClaimType = "first_claim";
+    protected const string FirstClaimValue = "first_claim_value";
+    protected const string SecondClaimType = "second_claim";
+    protected const string SecondClaimValue = "second_claim_value";
+    protected Config Config;
 
     void Establish()
     {
-        config = new();
-        config.Impersonation.Authorization.Claims = new[]
+        Config = new();
+        Config.Impersonation.Authorization.Claims = new[]
         {
-            new Claim(first_claim_type, first_claim_value),
-            new Claim(second_claim_type, second_claim_value)
+            new Claim(FirstClaimType, FirstClaimValue),
+            new Claim(SecondClaimType, SecondClaimValue)
         };
     }
 }
 
-public class config_with_no_claims : Aksio.IngressMiddleware.Impersonation.given.a_http_context
+public class config_with_no_claims : a_http_context
 {
-    protected Config config;
+    protected Config Config;
 
-    void Establish() => config = new();
+    void Establish() => Config = new();
 }

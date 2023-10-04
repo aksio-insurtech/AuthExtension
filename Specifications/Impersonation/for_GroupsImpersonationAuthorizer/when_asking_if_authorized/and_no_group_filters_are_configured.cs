@@ -5,13 +5,13 @@ namespace Aksio.IngressMiddleware.Impersonation.for_GroupsImpersonationAuthorize
 
 public class and_no_group_filters_are_configured : given.config_with_no_groups
 {
-    GroupsImpersonationAuthorizer authorizer;
-    bool result;
+    GroupsImpersonationAuthorizer _authorizer;
+    bool _result;
 
-    void Establish() => authorizer = new(config);
+    void Establish() => _authorizer = new(Config);
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
+    async Task Because() => _result = await _authorizer.IsAuthorized(HttpContext.Request, ClientPrincipal.Empty);
 
     [Fact]
-    void should_be_authorized() => result.ShouldBeTrue();
+    void should_be_authorized() => _result.ShouldBeTrue();
 }

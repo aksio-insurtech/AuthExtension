@@ -12,16 +12,16 @@ namespace Aksio.IngressMiddleware.Tenancy;
 public class TenantResolver : ITenantResolver
 {
     readonly Config _config;
-    readonly ITenantSourceIdentifierResolver _resolver;
+    readonly ISourceIdentifierResolver _resolver;
     readonly ILogger<TenantResolver> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TenantResolver"/> class.
     /// </summary>
     /// <param name="config"><see cref="Config"/> instance.</param>
-    /// <param name="resolver">The <see cref="ITenantSourceIdentifierResolver"/> to use.</param>
+    /// <param name="resolver">The <see cref="ISourceIdentifierResolver"/> to use.</param>
     /// <param name="logger">Logger for logging.</param>
-    public TenantResolver(Config config, ITenantSourceIdentifierResolver resolver, ILogger<TenantResolver> logger)
+    public TenantResolver(Config config, ISourceIdentifierResolver resolver, ILogger<TenantResolver> logger)
     {
         _config = config;
         _resolver = resolver;
@@ -29,37 +29,36 @@ public class TenantResolver : ITenantResolver
     }
 
     /// <inheritdoc/>
-    public Task<bool> CanResolve(HttpRequest request) => _resolver.CanResolve(_config, request);
-
-    /// <inheritdoc/>
-    public async Task<TenantId> Resolve(HttpRequest request)
+    public TenantId? Resolve(HttpRequest request)
     {
-        var sourceIdentifier = await _resolver.Resolve(_config, request);
-
-        if (!string.IsNullOrEmpty(sourceIdentifier))
+        // Get the source identifier, using the configured strategies.
+        var sourceIdentifier = _resolver.Resolve(_config, request);
+        if (sourceIdentifier == null) 
         {
-            _logger.AttemptingToResolveUsingSourceIdentifier();
-
-            var tenantId = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier)).Key;
-            if (tenantId != Guid.Empty)
-            {
-                _logger.SettingTenantIdBasedOnSourceIdentifierAndStrategy(
-                    tenantId,
-                    sourceIdentifier,
-                    _config.TenantResolution.Strategy.ToString());
-                return tenantId;
-            }
+            _logger.TenantIdNotResolved();
+            return null;
         }
 
-        _logger.AttemptingToResolveUsingHost(request.Host.Host);
-        var hostResolvedTenantId = _config.Tenants.FirstOrDefault(_ => _.Value.Domain.Equals(request.Host.Host)).Key;
-        if (hostResolvedTenantId != Guid.Empty)
+        // string.Empty signifies that no lookup was done, but it is acceptable (used by NoneSourceIdentifierResolver).
+        if (sourceIdentifier == string.Empty)
         {
-            _logger.SettingTenantIdBasedOnConfiguredHost(hostResolvedTenantId, request.Host.Host);
-            return hostResolvedTenantId;
+            _logger.TenantIdNotResolved();
+            return TenantId.NotSet;            
         }
 
-        _logger.TenantIdNotResolved();
-        return TenantId.NotSet;
+        // If we got a source identifier, find the appropriate tenantid for this identifier.
+        _logger.AttemptingToResolveUsingSourceIdentifier(sourceIdentifier);
+        var tenantId = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier)).Key;
+        if (tenantId == Guid.Empty)
+        {
+            _logger.TenantIdNotResolved();
+            return null;
+        }
+
+        _logger.SettingTenantIdBasedOnSourceIdentifierAndStrategy(
+            tenantId,
+            sourceIdentifier,
+            _config.TenantResolutions.Select(r => r.Strategy.ToString()));
+        return tenantId;
     }
 }

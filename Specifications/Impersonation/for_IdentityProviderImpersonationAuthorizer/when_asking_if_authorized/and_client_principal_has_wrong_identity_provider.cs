@@ -7,21 +7,21 @@ namespace Aksio.IngressMiddleware.Impersonation.for_IdentityProviderImpersonatio
 
 public class and_client_principal_has_wrong_identity_provider : given.a_http_context
 {
-    IdentityProviderImpersonationAuthorizer authorizer;
-    bool result;
-    ClientPrincipal client_principal;
+    IdentityProviderImpersonationAuthorizer _authorizer;
+    bool _result;
+    ClientPrincipal _clientPrincipal;
 
     void Establish()
     {
         var config = new Config();
         config.Impersonation.IdentityProviders = new[] { "aad", "twitter" };
-        authorizer = new(config);
+        _authorizer = new(config);
 
-        client_principal = ClientPrincipal.Empty with { IdentityProvider = "something" };
+        _clientPrincipal = ClientPrincipal.Empty with { IdentityProvider = "something" };
     }
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, client_principal);
+    async Task Because() => _result = await _authorizer.IsAuthorized(HttpContext.Request, _clientPrincipal);
 
     [Fact]
-    void should_not_be_authorized() => result.ShouldBeFalse();
+    void should_not_be_authorized() => _result.ShouldBeFalse();
 }

@@ -7,17 +7,17 @@ namespace Aksio.IngressMiddleware.Impersonation.for_IdentityProviderImpersonatio
 
 public class and_there_are_no_identity_providers_configured : given.a_http_context
 {
-    IdentityProviderImpersonationAuthorizer authorizer;
-    bool result;
+    IdentityProviderImpersonationAuthorizer _authorizer;
+    bool _result;
 
     void Establish()
     {
         var config = new Config();
-        authorizer = new(config);
+        _authorizer = new(config);
     }
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
+    async Task Because() => _result = await _authorizer.IsAuthorized(HttpContext.Request, ClientPrincipal.Empty);
 
     [Fact]
-    void should_not_be_authorized() => result.ShouldBeFalse();
+    void should_not_be_authorized() => _result.ShouldBeFalse();
 }

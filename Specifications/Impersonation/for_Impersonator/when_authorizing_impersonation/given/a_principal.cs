@@ -5,5 +5,5 @@ namespace Aksio.IngressMiddleware.Impersonation.for_Impersonator.when_authorizin
 
 public class a_principal : an_impersonator
 {
-    void Establish() => impersonator.ControllerContext.HttpContext.Request.Headers.Add(Headers.Principal, "e30=");
+    void Establish() => Impersonator.ControllerContext.HttpContext.Request.Headers.Add(Headers.Principal, "e30=");
 }

@@ -1,12 +1,12 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Aksio.IngressMiddleware.Tenancy;
+namespace Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
 /// <summary>
-/// Represents configuration options for <see cref="RouteSourceIdentifierResolver"/>.
+/// Represents configuration options for <see cref="RouteSourceIdentifier"/>.
 /// </summary>
-public class RouteSourceIdentifierResolverOptions
+public class RouteSourceIdentifierOptions
 {
     /// <summary>
     /// Gets or sets the regular expression to use for extracting the source identifier.

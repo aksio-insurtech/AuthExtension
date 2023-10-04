@@ -31,5 +31,10 @@ public enum TenantSourceIdentifierResolverType
     /// <summary>
     /// The tenant identifier is resolved to a specific single tenant.
     /// </summary>
-    Specified = 4
+    Specified = 4,
+    
+    /// <summary>
+    /// Resolve tenant identifier with request hostname.
+    /// </summary>
+    Host = 5
 }

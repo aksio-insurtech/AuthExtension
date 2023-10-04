@@ -2,12 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware.Configuration;
+using Aksio.IngressMiddleware.given;
 
-namespace Aksio.IngressMiddleware.Impersonation.for_GroupsImpersonationAuthorizer.when_asking_if_authorized.given;
+namespace Aksio.IngressMiddleware.Impersonation.for_GroupsImpersonationAuthorizer.given;
 
-public class config_with_no_groups : IngressMiddleware.Impersonation.given.a_http_context
+public class config_with_no_groups : a_http_context
 {
-    protected Config config;
+    protected Config Config;
 
-    void Establish() => config = new();
+    void Establish() => Config = new();
 }

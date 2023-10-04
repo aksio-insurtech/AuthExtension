@@ -45,11 +45,11 @@ public class IngressWebApplicationFactory : WebApplicationFactory<Program>
                 services.Remove(configSingleton);
                 services.AddSingleton(Config);
 
-                // And then we have to set the tenant resolver again (as it is set up through Program.cs before we get here, and can override the config)
-                var resolver = services.SingleOrDefault(d => d.ServiceType == typeof(ITenantSourceIdentifierResolver));
-                services.Remove(resolver);
-                services.AddTenantSourceIdentifierResolver();
-
+                // // And then we have to set the tenant resolver again (as it is set up through Program.cs before we get here, and can override the config)
+                // var resolver = services.SingleOrDefault(d => d.ServiceType == typeof(ISourceIdentifierResolver));
+                // services.Remove(resolver);
+                // services.AddTenantSourceIdentifierResolver();
+                
                 foreach (var testService in TransientServicesToReplace)
                 {
                     var service = services.SingleOrDefault(d => d.ServiceType == testService.Interface);

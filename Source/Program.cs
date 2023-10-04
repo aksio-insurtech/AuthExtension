@@ -9,6 +9,8 @@ using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
 using Aksio.IngressMiddleware.RoleAuthorization;
 using Aksio.IngressMiddleware.Tenancy;
+using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
+using Aksio.Types;
 
 #pragma warning disable CA1050, MA0047, MA0036
 
@@ -25,7 +27,6 @@ builder.UseDefaultLogging();
 builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddSingleton(config);
-builder.Services.AddTenantSourceIdentifierResolver();
 builder.Services.AddTransient<ITenantResolver, TenantResolver>();
 builder.Services.AddTransient<IIdentityDetailsResolver, IdentityDetailsResolver>();
 builder.Services.AddTransient<IOAuthBearerTokenValidator, OAuthBearerTokenValidator>();
@@ -38,9 +39,13 @@ builder.Services.AddTransient<ClaimImpersonationAuthorizer>();
 builder.Services.AddTransient<RolesImpersonationAuthorizer>();
 builder.Services.AddTransient<GroupsImpersonationAuthorizer>();
 builder.Services.AddSingleton<IImpersonationFlow, ImpersonationFlow>();
-builder.Services.AddSingleton<NoneSourceIdentifierResolver>();
-builder.Services.AddSingleton<ClaimsSourceIdentifierResolver>();
-builder.Services.AddSingleton<RouteSourceIdentifierResolver>();
+
+foreach (var sourceIdentifier in new Types().FindMultiple<ISourceIdentifier>())
+{
+    builder.Services.AddSingleton(typeof(ISourceIdentifier), sourceIdentifier);
+}
+builder.Services.AddSingleton<ISourceIdentifierResolver, SourceIdentifierResolver>();
+builder.Services.VerifyTenantSourceIdentifierConfiguration();
 
 builder.Services.AddHttpClient();
 

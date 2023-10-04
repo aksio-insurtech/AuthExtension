@@ -9,15 +9,15 @@ public class when_handling_disabled_mutualtls : given.a_request_augmenter
 {
     void Establish()
     {
-        mutual_tls.Setup(_ => _.IsEnabled()).Returns(false);
-        mutual_tls.Setup(_ => _.Handle(request)).Returns(new OkResult());
+        MutualTls.Setup(_ => _.IsEnabled()).Returns(false);
+        MutualTls.Setup(_ => _.Handle(Request)).Returns(new OkResult());
     }
 
-    Task Because() => augmenter.Get();
+    Task Because() => Augmenter.Get();
 
     [Fact]
-    void should_check_to_call_mutualtls_handler() => mutual_tls.Verify(_ => _.IsEnabled(), Once);
+    void should_check_to_call_mutualtls_handler() => MutualTls.Verify(_ => _.IsEnabled(), Once);
 
     [Fact]
-    void should_not_call_mutualtls_handler() => mutual_tls.Verify(_ => _.Handle(request), Never);
+    void should_not_call_mutualtls_handler() => MutualTls.Verify(_ => _.Handle(Request), Never);
 }

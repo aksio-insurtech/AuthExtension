@@ -1,23 +1,27 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using Aksio.IngressMiddleware.Tenancy.for_SpecifiedTenantSourceIdentifierResolver.given;
+using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
+
 namespace Aksio.IngressMiddleware.Tenancy.for_SpecifiedTenantSourceIdentifierResolver;
 
-public class when_resolving_directly : Specification
+public class when_resolving_directly : specified_identifier_specification
 {
-    SpecifiedSourceIdentifierResolver resolver;
-    SpecifiedSourceIdentifierResolverOptions options;
-    string expectedTenantId = "someTenantIdentifier";
-    string resolvedTenant;
+    JsonObject _options;
+    string _expectedSourceIdentifier = "someTenantIdentifier";
+    string _resolvedTenant;
 
     void Establish()
     {
-        options = new() { TenantId = expectedTenantId };
-        resolver = new();
+        _options = JsonSerializer.Deserialize<JsonObject>(
+            JsonSerializer.Serialize(new SpecifiedSourceIdentifierOptions() { SourceIdentifier = _expectedSourceIdentifier }));
     }
 
-    async Task Because() => resolvedTenant = await resolver.Resolve(null!, options, null!);
+    void Because() => _resolvedTenant = Resolver.Resolve(_options, null!);
 
     [Fact]
-    void returned_correct_tenant() => resolvedTenant.ShouldEqual(expectedTenantId);
+    void returned_correct_tenant() => _resolvedTenant.ShouldEqual(_expectedSourceIdentifier);
 }

@@ -5,10 +5,10 @@ namespace Aksio.IngressMiddleware.Impersonation.for_TenantImpersonationAuthorize
 
 public class and_no_tenant_filters_are_configured : given.no_tenant_filters
 {
-    bool result;
+    bool _result;
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
+    async Task Because() => _result = await Authorizer.IsAuthorized(HttpContext.Request, ClientPrincipal.Empty);
 
     [Fact]
-    void should_be_authorized() => result.ShouldBeTrue();
+    void should_be_authorized() => _result.ShouldBeTrue();
 }

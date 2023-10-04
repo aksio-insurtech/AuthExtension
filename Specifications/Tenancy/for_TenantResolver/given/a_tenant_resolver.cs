@@ -9,19 +9,19 @@ namespace Aksio.IngressMiddleware.Tenancy.for_TenantResolver.given;
 
 public class a_tenant_resolver : Specification
 {
-    protected TenantResolver resolver;
-    protected Mock<ITenantSourceIdentifierResolver> source_identifier_resolver;
+    protected TenantResolver Resolver;
+    protected Mock<ISourceIdentifierResolver> SourceIdentifierResolver;
 
-    protected Config config;
-    protected DefaultHttpContext context;
+    protected Config Config;
+    protected DefaultHttpContext Context;
 
     void Establish()
     {
-        source_identifier_resolver = new();
-        config = new();
+        SourceIdentifierResolver = new();
+        Config = new();
 
-        resolver = new(config, source_identifier_resolver.Object, Mock.Of<ILogger<TenantResolver>>());
+        Resolver = new(Config, SourceIdentifierResolver.Object, Mock.Of<ILogger<TenantResolver>>());
 
-        context = new();
+        Context = new();
     }
 }

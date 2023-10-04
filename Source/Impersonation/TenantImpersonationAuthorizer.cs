@@ -28,14 +28,21 @@ public class TenantImpersonationAuthorizer : IImpersonationAuthorizer
     }
 
     /// <inheritdoc/>
-    public async Task<bool> IsAuthorized(HttpRequest request, ClientPrincipal principal)
+    public Task<bool> IsAuthorized(HttpRequest request, ClientPrincipal principal)
     {
         if (!_config.Impersonation.Authorization.Tenants.Any())
         {
-            return true;
+            return Task.FromResult(true);
         }
 
-        var tenantId = await _tenantResolver.Resolve(request);
-        return _config.Impersonation.Authorization.Tenants.Any(_ => _.Equals(tenantId.ToString(), StringComparison.InvariantCultureIgnoreCase));
+        var tenantId = _tenantResolver.Resolve(request);
+        if (tenantId == null)
+        {
+            return Task.FromResult(false);
+        }
+
+        return Task.FromResult(
+            _config.Impersonation.Authorization.Tenants.Any(
+                _ => _.Equals(tenantId.ToString(), StringComparison.InvariantCultureIgnoreCase)));
     }
 }

@@ -26,9 +26,12 @@ public class factory_with_mtls_auth : Specification
 
         IngressConfig = new()
         {
-            TenantResolution = new()
+            TenantResolutions = new[]
             {
-                Strategy = TenantSourceIdentifierResolverType.None
+                new TenantResolutionConfig()
+                {
+                    Strategy = TenantSourceIdentifierResolverType.None
+                }
             },
             MutualTLS = new()
             {

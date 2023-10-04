@@ -8,18 +8,18 @@ namespace Aksio.IngressMiddleware.for_RequestAugmenter;
 
 public class when_handling_regular_route_that_fails_identity_resolution : given.a_request_augmenter
 {
-    IActionResult result;
+    IActionResult _result;
 
     void Establish() =>
-        identity_details_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id))
+        IdentityDetailsResolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), TenantId))
             .ReturnsAsync(false);
 
-    async Task Because() => result = await augmenter.Get();
+    async Task Because() => _result = await Augmenter.Get();
 
     [Fact]
-    void should_return_forbidden() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status403Forbidden);
+    void should_return_forbidden() => ((StatusCodeResult)_result).StatusCode.ShouldEqual(StatusCodes.Status403Forbidden);
 
     [Fact]
     void should_never_handle_bearer_tokens() =>
-        bearer_tokens.Verify(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id), Never);
+        BearerTokens.Verify(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), TenantId), Never);
 }

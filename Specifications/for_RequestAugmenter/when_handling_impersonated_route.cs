@@ -8,34 +8,34 @@ namespace Aksio.IngressMiddleware.for_RequestAugmenter;
 
 public class when_handling_impersonated_route : given.a_request_augmenter
 {
-    IActionResult result;
-    string cookie_value;
+    IActionResult _result;
+    string _cookieValue;
 
     void Establish()
     {
-        identity_details_resolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id))
+        IdentityDetailsResolver.Setup(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), TenantId))
             .ReturnsAsync(true);
-        bearer_tokens.Setup(_ => _.IsEnabled()).Returns(true);
-        bearer_tokens.Setup(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id)).ReturnsAsync(new OkResult());
-        cookie_value = Guid.NewGuid().ToString();
+        BearerTokens.Setup(_ => _.IsEnabled()).Returns(true);
+        BearerTokens.Setup(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), TenantId)).ReturnsAsync(new OkResult());
+        _cookieValue = Guid.NewGuid().ToString();
 
-        impersonation_flow.Setup(_ => _.HandleImpersonatedPrincipal(IsAny<HttpRequest>(), IsAny<HttpResponse>())).Returns(true);
+        ImpersonationFlow.Setup(_ => _.HandleImpersonatedPrincipal(IsAny<HttpRequest>(), IsAny<HttpResponse>())).Returns(true);
     }
 
-    async Task Because() => result = await augmenter.Get();
+    async Task Because() => _result = await Augmenter.Get();
 
     [Fact]
     void should_ask_impersonation_flow_to_handle_impersonated_principal() =>
-        impersonation_flow.Verify(_ => _.HandleImpersonatedPrincipal(IsAny<HttpRequest>(), IsAny<HttpResponse>()), Once);
+        ImpersonationFlow.Verify(_ => _.HandleImpersonatedPrincipal(IsAny<HttpRequest>(), IsAny<HttpResponse>()), Once);
 
     [Fact]
-    void should_return_ok() => result.ShouldBeOfExactType<OkResult>();
+    void should_return_ok() => _result.ShouldBeOfExactType<OkResult>();
 
     [Fact]
     void should_resolve_identity_details() =>
-        identity_details_resolver.Verify(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id), Once);
+        IdentityDetailsResolver.Verify(_ => _.Resolve(IsAny<HttpRequest>(), IsAny<HttpResponse>(), TenantId), Once);
 
     [Fact]
     void should_handle_bearer_tokens() =>
-        bearer_tokens.Verify(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), tenant_id), Once);
+        BearerTokens.Verify(_ => _.Handle(IsAny<HttpRequest>(), IsAny<HttpResponse>(), TenantId), Once);
 }
