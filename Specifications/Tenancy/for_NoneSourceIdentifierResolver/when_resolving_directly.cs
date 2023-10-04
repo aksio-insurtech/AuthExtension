@@ -1,10 +1,7 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using Aksio.IngressMiddleware.Tenancy.for_NoneSourceIdentifierResolver.given;
-using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
 namespace Aksio.IngressMiddleware.Tenancy.for_NoneSourceIdentifierResolver;
 
