@@ -3,6 +3,9 @@
 
 namespace Aksio.IngressMiddleware.Tenancy;
 
+/// <summary>
+/// SourceIdentifierResolver log messages.
+/// </summary>
 public static partial class SourceIdentifierResolverLogMessages
 {
     [LoggerMessage(
@@ -12,5 +15,4 @@ public static partial class SourceIdentifierResolverLogMessages
     internal static partial void ResolvedSourceIdentifierWithStrategy(
         this ILogger<SourceIdentifierResolver> logger,
         string sourceIdentifier, string strategy);
-
 }

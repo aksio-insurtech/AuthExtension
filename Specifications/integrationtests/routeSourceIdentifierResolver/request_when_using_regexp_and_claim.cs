@@ -36,8 +36,7 @@ public class request_when_using_regex_and_claim : route_source_specification
                     Strategy = TenantSourceIdentifierResolverType.Route,
                     Options = JsonSerializer.Deserialize<JsonObject>(
                         JsonSerializer.Serialize(
-                            new RouteSourceIdentifierOptions()
-                                { RegularExpression = "^/(?<sourceIdentifier>[\\d]{4})/" }))
+                            new RouteSourceIdentifierOptions() { RegularExpression = "^/(?<sourceIdentifier>[\\d]{4})/" }))
                 },
                 new() { Strategy = TenantSourceIdentifierResolverType.Claim },
                 new()
@@ -45,7 +44,8 @@ public class request_when_using_regex_and_claim : route_source_specification
                     Strategy = TenantSourceIdentifierResolverType.Host,
                     Options = JsonSerializer.Deserialize<JsonObject>(
                         JsonSerializer.Serialize(
-                            new RequestHostSourceIdentifierOptions() { Hostnames = new Dictionary<string,string> {{ "testhost.no", _expectedSourceIdentifier} } }))
+                            new RequestHostSourceIdentifierOptions()
+                                { Hostnames = new Dictionary<string, string> { { "testhost.no", _expectedSourceIdentifier } } }))
                 }
             },
             Authorization = new()
@@ -72,7 +72,6 @@ public class request_when_using_regex_and_claim : route_source_specification
         requestMessage.Headers.Add(Headers.OriginalUri, $"/{_expectedSourceIdentifier}/blahblah");
 
         _responseMessage = await _ingressClient.SendAsync(requestMessage);
-
     }
 
     [Fact]

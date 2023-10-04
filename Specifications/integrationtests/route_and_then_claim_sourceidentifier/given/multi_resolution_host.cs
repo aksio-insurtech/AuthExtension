@@ -23,7 +23,7 @@ public class multi_resolution_host : Specification
         ExpectedRouteSourceIdentifier = "1122";
         ExpectedEntraIdTenantSourceIdentifier = Guid.NewGuid().ToString();
         ExpectedEntraIdTenantId = Guid.NewGuid();
-        
+
         var ingressConfig = new Config()
         {
             Tenants = new()
@@ -56,7 +56,9 @@ public class multi_resolution_host : Specification
                 }
             }
         };
-            var ingressFactory = new IngressWebApplicationFactory { Config = ingressConfig
+        var ingressFactory = new IngressWebApplicationFactory
+        {
+            Config = ingressConfig
         };
 
         _ingressClient = ingressFactory.CreateClient();

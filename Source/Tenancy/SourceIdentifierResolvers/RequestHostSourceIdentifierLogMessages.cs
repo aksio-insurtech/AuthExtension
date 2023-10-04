@@ -3,6 +3,9 @@
 
 namespace Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
+/// <summary>
+/// RequestHostSourceIdentifier log messages.
+/// </summary>
 public static partial class RequestHostSourceIdentifierLogMessages
 {
     [LoggerMessage(

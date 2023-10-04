@@ -3,6 +3,9 @@
 
 namespace Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
+/// <summary>
+/// SpecifiedSourceIdentifier log messages.
+/// </summary>
 public static partial class SpecifiedSourceIdentifierLogMessages
 {
     [LoggerMessage(0, LogLevel.Information, "Setting source identifier to specified identifier '{SourceIdentifier}'")]

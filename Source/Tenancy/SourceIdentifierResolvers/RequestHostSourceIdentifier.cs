@@ -14,6 +14,9 @@ public class RequestHostSourceIdentifier : ISourceIdentifier
 {
     readonly ILogger<RequestHostSourceIdentifier> _logger;
 
+    /// <inheritdoc/>
+    public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.Host;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RequestHostSourceIdentifier"/> class.
     /// </summary>
@@ -22,9 +25,6 @@ public class RequestHostSourceIdentifier : ISourceIdentifier
     {
         _logger = logger;
     }
-
-    /// <inheritdoc/>
-    public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.Host;
 
     /// <inheritdoc/>
     public string? Resolve(JsonObject options, HttpRequest request)

@@ -33,17 +33,17 @@ public class TenantResolver : ITenantResolver
     {
         // Get the source identifier, using the configured strategies.
         var sourceIdentifier = _resolver.Resolve(_config, request);
-        if (sourceIdentifier == null) 
+        if (sourceIdentifier == null)
         {
             _logger.TenantIdNotResolved();
             return null;
         }
 
         // string.Empty signifies that no lookup was done, but it is acceptable (used by NoneSourceIdentifierResolver).
-        if (sourceIdentifier == string.Empty)
+        if (sourceIdentifier.Length == 0)
         {
             _logger.TenantIdNotResolved();
-            return TenantId.NotSet;            
+            return TenantId.NotSet;
         }
 
         // If we got a source identifier, find the appropriate tenantid for this identifier.

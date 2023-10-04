@@ -3,7 +3,6 @@
 
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
-using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
@@ -21,7 +20,6 @@ namespace Aksio.IngressMiddleware;
 [Route("/")]
 public class RequestAugmenter : Controller
 {
-    readonly Config _config;
     readonly IIdentityDetailsResolver _identityDetailsResolver;
     readonly IImpersonationFlow _impersonationFlow;
     readonly ITenantResolver _tenantResolver;
@@ -38,22 +36,19 @@ public class RequestAugmenter : Controller
     /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/>.</param>
     /// <param name="mutualTls"><see cref="IMutualTLS"/>.</param>
     /// <param name="roleAuthorizer"><see cref="IRoleAuthorizer"/>.</param>
-    /// <param name="config">The instance configuration.</param>
     public RequestAugmenter(
         IIdentityDetailsResolver identityDetailsResolver,
         IImpersonationFlow impersonationFlow,
         ITenantResolver tenantResolver,
         IOAuthBearerTokens bearerTokens,
         IMutualTLS mutualTls,
-        IRoleAuthorizer roleAuthorizer,
-        Config config)
+        IRoleAuthorizer roleAuthorizer)
     {
         _identityDetailsResolver = identityDetailsResolver;
         _impersonationFlow = impersonationFlow;
         _tenantResolver = tenantResolver;
         _bearerTokens = bearerTokens;
         _mutualTls = mutualTls;
-        _config = config;
         _roleAuthorizer = roleAuthorizer;
     }
 

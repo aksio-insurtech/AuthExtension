@@ -13,6 +13,9 @@ public class NoneSourceIdentifier : ISourceIdentifier
 {
     readonly ILogger<NoneSourceIdentifier> _logger;
 
+    /// <inheritdoc/>
+    public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.None;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="NoneSourceIdentifier"/> class.
     /// </summary>
@@ -21,9 +24,6 @@ public class NoneSourceIdentifier : ISourceIdentifier
     {
         _logger = logger;
     }
-    
-    /// <inheritdoc/>
-    public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.None;
 
     /// <inheritdoc/>
     public string Resolve(JsonObject options, HttpRequest request)

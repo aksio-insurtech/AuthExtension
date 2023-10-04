@@ -40,7 +40,7 @@ public class request_when_misconfigured_regexp : Specification
     async Task Because()
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/");
-        
+
         requestMessage.Headers.Add(Headers.OriginalUri, "/2345/somethingelse");
 
         _responseMessage = await _ingressClient.SendAsync(requestMessage);

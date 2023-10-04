@@ -3,6 +3,9 @@
 
 namespace Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
+/// <summary>
+/// NoneSourceIdentifier log message.
+/// </summary>
 public static partial class NoneSourceIdentifierLogMessages
 {
     [LoggerMessage(0, LogLevel.Information, "Setting source identifier to empty")]

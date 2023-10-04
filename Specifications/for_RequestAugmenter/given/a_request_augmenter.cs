@@ -39,18 +39,6 @@ public class a_request_augmenter : Specification
         BearerTokens = new();
         MutualTls = new();
         EndtraidRoles = new();
-        Config = new()
-        {
-            TenantResolutions = new[]
-            {
-                new TenantResolutionConfig()
-                {
-                    Strategy = TenantSourceIdentifierResolverType.Specified,
-                    Options = JsonSerializer.Deserialize<JsonObject>(
-                        JsonSerializer.Serialize(new SpecifiedSourceIdentifierOptions() { SourceIdentifier = TenantId.ToString() }))
-                }
-            }
-        };
 
         Augmenter = new(
             IdentityDetailsResolver.Object,
@@ -58,8 +46,7 @@ public class a_request_augmenter : Specification
             TenantResolver.Object,
             BearerTokens.Object,
             MutualTls.Object,
-            EndtraidRoles.Object,
-            Config)
+            EndtraidRoles.Object)
         {
             ControllerContext = new()
             {

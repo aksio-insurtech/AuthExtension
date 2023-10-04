@@ -1,3 +1,6 @@
+// Copyright (c) Aksio Insurtech. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Aksio.IngressMiddleware.integrationtests.route_and_then_claim_sourceidentifier.given;
 
 namespace Aksio.IngressMiddleware.integrationtests.route_and_then_claim_sourceidentifier;

@@ -17,7 +17,6 @@ public class request_when_using_regexp : multi_resolution_host
         requestMessage.Headers.Add(Headers.OriginalUri, $"/{ExpectedRouteSourceIdentifier}/blahblah");
 
         _responseMessage = await _ingressClient.SendAsync(requestMessage);
-
     }
 
     [Fact]

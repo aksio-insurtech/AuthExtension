@@ -11,12 +11,15 @@ namespace Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 /// </summary>
 public class ClaimsSourceIdentifier : ISourceIdentifier
 {
-    readonly ILogger<ClaimsSourceIdentifier> _logger;
-
     /// <summary>
     /// The tenant id claim.
     /// </summary>
     public const string TenantIdClaim = "http://schemas.microsoft.com/identity/claims/tenantid";
+
+    /// <inheritdoc/>
+    public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.Claim;
+
+    readonly ILogger<ClaimsSourceIdentifier> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ClaimsSourceIdentifier"/> class.
@@ -26,9 +29,6 @@ public class ClaimsSourceIdentifier : ISourceIdentifier
     {
         _logger = logger;
     }
-
-    /// <inheritdoc/>
-    public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.Claim;
 
     /// <inheritdoc/>
     public string? Resolve(JsonObject options, HttpRequest request)
@@ -49,7 +49,7 @@ public class ClaimsSourceIdentifier : ISourceIdentifier
                     tenantValue is not null)
                 {
                     _logger.SettingSourceIdentifierBasedOnTenantClaim(tenantValue.ToString());
-                    
+
                     return tenantValue.ToString();
                 }
             }

@@ -3,6 +3,9 @@
 
 namespace Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
+/// <summary>
+/// ClaimsSourceIdentifier log messages.
+/// </summary>
 public static partial class ClaimsSourceIdentifierLogMessages
 {
     [LoggerMessage(

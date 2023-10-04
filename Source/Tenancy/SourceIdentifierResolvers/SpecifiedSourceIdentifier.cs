@@ -14,6 +14,9 @@ public class SpecifiedSourceIdentifier : ISourceIdentifier
 {
     readonly ILogger<SpecifiedSourceIdentifier> _logger;
 
+    /// <inheritdoc/>
+    public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.Specified;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SpecifiedSourceIdentifier"/> class.
     /// </summary>
@@ -22,9 +25,6 @@ public class SpecifiedSourceIdentifier : ISourceIdentifier
     {
         _logger = logger;
     }
-
-    /// <inheritdoc/>
-    public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.Specified;
 
     /// <inheritdoc/>
     public string? Resolve(JsonObject options, HttpRequest request)

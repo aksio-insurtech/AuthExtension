@@ -38,6 +38,7 @@ public class RouteSourceIdentifier : ISourceIdentifier
         var config = options.Deserialize<RouteSourceIdentifierOptions>(Globals.JsonSerializerOptions)!;
 
         var originalUri = request.Headers[Headers.OriginalUri].FirstOrDefault() ?? string.Empty;
+
         // TODO: this needs a revisit, as this log-message might end up containing sensitive information.
         _logger.ResolvingUsingOriginalUri(originalUri);
 

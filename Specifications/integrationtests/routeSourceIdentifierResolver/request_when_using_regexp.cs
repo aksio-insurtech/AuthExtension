@@ -63,7 +63,6 @@ public class request_when_using_regexp : route_source_specification
         requestMessage.Headers.Add(Headers.OriginalUri, $"/{_expectedSourceIdentifier}/blahblah");
 
         _responseMessage = await _ingressClient.SendAsync(requestMessage);
-
     }
 
     [Fact]

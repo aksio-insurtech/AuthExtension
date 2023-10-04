@@ -11,7 +11,7 @@ public class specified_identifier_specification : Specification
 {
     protected SpecifiedSourceIdentifier Resolver;
     protected ITestLoggerFactory LoggerFactory;
-    
+
     void Establish()
     {
         // https://alessio.franceschelli.me/posts/dotnet/how-to-test-logging-when-using-microsoft-extensions-logging/
