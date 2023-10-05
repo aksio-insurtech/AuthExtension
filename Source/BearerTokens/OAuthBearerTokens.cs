@@ -78,7 +78,7 @@ public class OAuthBearerTokens : IOAuthBearerTokens
         {
             if (!_oauthValidator.ValidateToken(token, out var jwtToken))
             {
-                _logger.InvalidToken(token, clientIp);
+                _logger.InvalidToken(GetTokenPayload(token), clientIp);
                 return Unauthorized(response, "invalid_token", "Given token is invalid");
             }
 
@@ -95,8 +95,22 @@ public class OAuthBearerTokens : IOAuthBearerTokens
             return Unauthorized(response, "invalid_token", $"Could not validate token ; {ex.Message}");
         }
 
-        _logger.LoggedInWithToken(token, clientIp);
+        _logger.LoggedInWithToken(GetTokenPayload(token), clientIp);
         return new OkResult();
+    }
+
+    string GetTokenPayload(string token)
+    {
+        try
+        {
+            var rawPayload = new JwtSecurityTokenHandler().ReadJwtToken(token).RawPayload;
+            return Encoding.UTF8.GetString(Convert.FromBase64String(rawPayload));
+        }
+        catch
+        {
+            // If we cannot parse, return it as-is to aid debugging.
+            return token;
+        }
     }
 
     void AddPrincipalHeader(HttpResponse response, JwtSecurityToken jwtToken)

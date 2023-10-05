@@ -26,9 +26,9 @@ static partial class OAuthBearerTokensLogMessages
     [LoggerMessage(6, LogLevel.Error, "OAuth cannot refresh json webkey set! Client address = {ClientIp}")]
     internal static partial void CannotRefreshJsonWebkeySet(this ILogger<OAuthBearerTokens> logger, string clientIp);
 
-    [LoggerMessage(7, LogLevel.Warning, "OAuth received invalid token from client address = {ClientIp}. Token was: {Token}")]
-    internal static partial void InvalidToken(this ILogger<OAuthBearerTokens> logger, string token, string clientIp);
+    [LoggerMessage(7, LogLevel.Warning, "OAuth received invalid token from client address = {ClientIp}. Token payload was: {TokenPayload}")]
+    internal static partial void InvalidToken(this ILogger<OAuthBearerTokens> logger, string tokenPayload, string clientIp);
 
-    [LoggerMessage(8, LogLevel.Information, "OAuth accepted login from client address = {ClientIp} for token {Token}")]
-    internal static partial void LoggedInWithToken(this ILogger<OAuthBearerTokens> logger, string token, string clientIp);
+    [LoggerMessage(8, LogLevel.Information, "OAuth accepted login from client address = {ClientIp} for token payload {TokenPayload}")]
+    internal static partial void LoggedInWithToken(this ILogger<OAuthBearerTokens> logger, string tokenPayload, string clientIp);
 }
