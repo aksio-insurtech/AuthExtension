@@ -7,19 +7,19 @@ namespace Aksio.IngressMiddleware.for_RequestAugmenter;
 
 public class when_handling_impersonation_route : given.a_request_augmenter
 {
-    IActionResult result;
+    IActionResult _result;
 
-    void Establish() => impersonation_flow.Setup(_ => _.IsImpersonateRoute(request)).Returns(true);
+    void Establish() => ImpersonationFlow.Setup(_ => _.IsImpersonateRoute(Request)).Returns(true);
 
-    async Task Because() => result = await augmenter.Get();
+    async Task Because() => _result = await Augmenter.Get();
 
     [Fact]
-    void should_return_ok() => result.ShouldBeOfExactType<OkResult>();
+    void should_return_ok() => _result.ShouldBeOfExactType<OkResult>();
 
     [Fact]
     void should_not_resolve_identity_details() =>
-        identity_details_resolver.Verify(_ => _.Resolve(request, response, tenant_id), Never);
+        IdentityDetailsResolver.Verify(_ => _.Resolve(Request, Response, TenantId), Never);
 
     [Fact]
-    void should_not_handle_bearer_tokens() => bearer_tokens.Verify(_ => _.Handle(request, response, tenant_id), Never);
+    void should_not_handle_bearer_tokens() => BearerTokens.Verify(_ => _.Handle(Request, Response, TenantId), Never);
 }

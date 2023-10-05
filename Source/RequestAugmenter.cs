@@ -3,7 +3,6 @@
 
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
-using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
@@ -21,13 +20,13 @@ namespace Aksio.IngressMiddleware;
 [Route("/")]
 public class RequestAugmenter : Controller
 {
-    readonly Config _config;
     readonly IIdentityDetailsResolver _identityDetailsResolver;
     readonly IImpersonationFlow _impersonationFlow;
     readonly ITenantResolver _tenantResolver;
     readonly IOAuthBearerTokens _bearerTokens;
     readonly IMutualTLS _mutualTls;
     readonly IRoleAuthorizer _roleAuthorizer;
+    readonly ILogger<RequestAugmenter> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RequestAugmenter"/> class.
@@ -38,7 +37,7 @@ public class RequestAugmenter : Controller
     /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/>.</param>
     /// <param name="mutualTls"><see cref="IMutualTLS"/>.</param>
     /// <param name="roleAuthorizer"><see cref="IRoleAuthorizer"/>.</param>
-    /// <param name="config">The instance configuration.</param>
+    /// <param name="logger">The logger.</param>
     public RequestAugmenter(
         IIdentityDetailsResolver identityDetailsResolver,
         IImpersonationFlow impersonationFlow,
@@ -46,15 +45,15 @@ public class RequestAugmenter : Controller
         IOAuthBearerTokens bearerTokens,
         IMutualTLS mutualTls,
         IRoleAuthorizer roleAuthorizer,
-        Config config)
+        ILogger<RequestAugmenter> logger)
     {
         _identityDetailsResolver = identityDetailsResolver;
         _impersonationFlow = impersonationFlow;
         _tenantResolver = tenantResolver;
         _bearerTokens = bearerTokens;
         _mutualTls = mutualTls;
-        _config = config;
         _roleAuthorizer = roleAuthorizer;
+        _logger = logger;
     }
 
     /// <summary>
@@ -66,9 +65,9 @@ public class RequestAugmenter : Controller
     {
         // First determine the tenant id, it will be populated for all strategies except "None" where it will be NotSet.
         // If null, requirements for setting a tenant is not present and the user is not authorized.
-        var tenantId = await ResolveTenantId();
-        if (tenantId == null)
+        if (!TryResolveTenantId(out var tenantId))
         {
+            _logger.UnauthorizedBecauseNoTenantIdWasResolved();
             return StatusCode(StatusCodes.Status401Unauthorized);
         }
 
@@ -107,34 +106,20 @@ public class RequestAugmenter : Controller
     }
 
     /// <summary>
-    /// Attempts to resolve the tenant id.
-    /// Will return null if it fails to determine one, and the configured strategy is not None.
+    /// Attempts to resolve the tenant id, and set the Response.Header for tenantid based on the result.
+    /// Will return false if it fails to determine one, and Response.Header for tenantid is removed.
     /// </summary>
-    /// <returns>The resolved tenant. TenantId.NotSet if resolver type is None, and null if not able to resolve tenant.</returns>
-    async Task<TenantId?> ResolveTenantId()
+    /// <param name="tenantId">The resolved tenant, TenantId.NotSet if resolver type is None.</param>
+    /// <returns>True if successful, false if unable to resolve tenant.</returns>
+    bool TryResolveTenantId(out TenantId tenantId)
     {
-        switch (_config.TenantResolution.Strategy)
+        if (!_tenantResolver.TryResolve(Request, out tenantId))
         {
-            // Require a configured strategy.
-            case TenantSourceIdentifierResolverType.Undefined:
-                return null;
-
-            case TenantSourceIdentifierResolverType.None:
-                return TenantId.NotSet;
-        }
-
-        if (!await _tenantResolver.CanResolve(Request))
-        {
-            return null;
-        }
-
-        var tenantId = await _tenantResolver.Resolve(Request);
-        if (tenantId == TenantId.NotSet && _config.TenantResolution.Strategy != TenantSourceIdentifierResolverType.None)
-        {
-            return null;
+            Response.Headers.Remove(Headers.TenantId);
+            return false;
         }
 
         Response.Headers[Headers.TenantId] = tenantId.ToString();
-        return tenantId;
+        return true;
     }
 }

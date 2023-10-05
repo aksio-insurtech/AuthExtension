@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware.Configuration;
-using Aksio.IngressMiddleware.Tenancy;
 using MELT;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -44,11 +43,6 @@ public class IngressWebApplicationFactory : WebApplicationFactory<Program>
                 var configSingleton = services.SingleOrDefault(d => d.ServiceType == typeof(Config));
                 services.Remove(configSingleton);
                 services.AddSingleton(Config);
-
-                // And then we have to set the tenant resolver again (as it is set up through Program.cs before we get here, and can override the config)
-                var resolver = services.SingleOrDefault(d => d.ServiceType == typeof(ITenantSourceIdentifierResolver));
-                services.Remove(resolver);
-                services.AddTenantSourceIdentifierResolver();
 
                 foreach (var testService in TransientServicesToReplace)
                 {

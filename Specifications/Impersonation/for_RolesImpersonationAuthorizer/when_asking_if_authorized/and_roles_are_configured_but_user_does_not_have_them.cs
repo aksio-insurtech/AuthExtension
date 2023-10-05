@@ -5,13 +5,13 @@ namespace Aksio.IngressMiddleware.Impersonation.for_RolesImpersonationAuthorizer
 
 public class and_roles_are_configured_but_user_does_not_have_them : given.config_with_two_roles
 {
-    RolesImpersonationAuthorizer authorizer;
-    bool result;
+    RolesImpersonationAuthorizer _authorizer;
+    bool _result;
 
-    void Establish() => authorizer = new(config);
+    void Establish() => _authorizer = new(Config);
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, ClientPrincipal.Empty);
+    async Task Because() => _result = await _authorizer.IsAuthorized(HttpContext.Request, ClientPrincipal.Empty);
 
     [Fact]
-    void should_not_be_authorized() => result.ShouldBeFalse();
+    void should_not_be_authorized() => _result.ShouldBeFalse();
 }

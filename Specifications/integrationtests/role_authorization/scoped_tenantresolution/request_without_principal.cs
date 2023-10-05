@@ -18,7 +18,14 @@ public class request_without_principal : factory_with_role_auth_with_scoped_tena
     /// <summary>
     /// Set stratety to none, to get past tenancy checking when we do not have a defined principal.
     /// </summary>
-    void Establish() => IngressConfig.TenantResolution.Strategy = TenantSourceIdentifierResolverType.None;
+    void Establish() =>
+        IngressConfig.TenantResolutions = new[]
+        {
+            new TenantResolutionConfig()
+            {
+                Strategy = TenantSourceIdentifierResolverType.None
+            }
+        };
 
     async Task Because()
     {

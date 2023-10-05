@@ -3,33 +3,33 @@
 
 using Microsoft.AspNetCore.Http;
 
-namespace Aksio.IngressMiddleware.Impersonation.when_handling_impersonated_principal;
+namespace Aksio.IngressMiddleware.Impersonation.for_ImpersonationFlow.when_handling_impersonated_principal;
 
 public class and_cookie_is_not_available : given.a_impersonation_flow
 {
-    DefaultHttpContext http_context;
-    Mock<IRequestCookieCollection> cookies;
-    bool result;
+    DefaultHttpContext _httpContext;
+    Mock<IRequestCookieCollection> _cookies;
+    bool _result;
 
     void Establish()
     {
-        http_context = new();
-        cookies = new();
-        http_context.Request.Cookies = cookies.Object;
+        _httpContext = new();
+        _cookies = new();
+        _httpContext.Request.Cookies = _cookies.Object;
 
-        cookies.Setup(_ => _.ContainsKey(Cookies.Impersonation)).Returns(false);
+        _cookies.Setup(_ => _.ContainsKey(Cookies.Impersonation)).Returns(false);
     }
 
-    void Because() => result = flow.HandleImpersonatedPrincipal(http_context.Request, http_context.Response);
+    void Because() => _result = Flow.HandleImpersonatedPrincipal(_httpContext.Request, _httpContext.Response);
 
     [Fact]
-    void should_not_have_handled_it() => result.ShouldBeFalse();
+    void should_not_have_handled_it() => _result.ShouldBeFalse();
 
     [Fact]
     void should_not_set_principal_on_request_header() =>
-        http_context.Request.Headers.ContainsKey(Headers.Principal).ShouldBeFalse();
+        _httpContext.Request.Headers.ContainsKey(Headers.Principal).ShouldBeFalse();
 
     [Fact]
     void should_not_set_principal_on_response_header() =>
-        http_context.Response.Headers.ContainsKey(Headers.Principal).ShouldBeFalse();
+        _httpContext.Response.Headers.ContainsKey(Headers.Principal).ShouldBeFalse();
 }

@@ -11,7 +11,7 @@ public class when_authority_certificate_is_missing : given.a_mutual_tls_instance
 {
     IActionResult _result;
 
-    void Establish() => MutualTLSConfig.AuthorityCertificate = "not a real certificate";
+    void Establish() => MutualTlsConfig.AuthorityCertificate = "not a real certificate";
 
     void Because() => _result = MutualTls.Handle(Request);
 

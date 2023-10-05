@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Aksio.IngressMiddleware.BearerTokens;
 using Aksio.IngressMiddleware.Configuration;
-using Aksio.IngressMiddleware.Tenancy;
+using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
 namespace Aksio.IngressMiddleware.integrationtests.oauth_bearertoken.given;
 
@@ -37,12 +37,15 @@ public class factory_with_oauth_bearertoken_auth_with_route_tenancyresolution : 
                     new() { SourceIdentifiers = new[] { "2345", "5454" } }
                 }
             },
-            TenantResolution = new()
+            TenantResolutions = new[]
             {
-                Strategy = TenantSourceIdentifierResolverType.Route,
-                Options = JsonSerializer.Deserialize<JsonObject>(
-                    JsonSerializer.Serialize(
-                        new RouteSourceIdentifierResolverOptions() { RegularExpression = "^/(?<sourceIdentifier>[\\d]{4})/" }))
+                new TenantResolutionConfig()
+                {
+                    Strategy = TenantSourceIdentifierResolverType.Route,
+                    Options = JsonSerializer.Deserialize<JsonObject>(
+                        JsonSerializer.Serialize(
+                            new RouteSourceIdentifierOptions() { RegularExpression = "^/(?<sourceIdentifier>[\\d]{4})/" }))
+                }
             },
             OAuthBearerTokens = new() { Authority = "dummy://url" }
         };

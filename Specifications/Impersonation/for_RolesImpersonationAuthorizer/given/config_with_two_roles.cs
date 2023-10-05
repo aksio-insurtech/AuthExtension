@@ -2,22 +2,23 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Aksio.IngressMiddleware.Configuration;
+using Aksio.IngressMiddleware.given;
 
-namespace Aksio.IngressMiddleware.Impersonation.for_RolesImpersonationAuthorizer.when_asking_if_authorized.given;
+namespace Aksio.IngressMiddleware.Impersonation.for_RolesImpersonationAuthorizer.given;
 
-public class config_with_two_roles : IngressMiddleware.Impersonation.given.a_http_context
+public class config_with_two_roles : a_http_context
 {
-    protected const string first_role = "first_role";
-    protected const string second_role = "second_role";
-    protected Config config;
+    protected const string FirstRole = "first_role";
+    protected const string SecondRole = "second_role";
+    protected Config Config;
 
     void Establish()
     {
-        config = new();
-        config.Impersonation.Authorization.Roles = new[]
+        Config = new();
+        Config.Impersonation.Authorization.Roles = new[]
         {
-            first_role,
-            second_role
+            FirstRole,
+            SecondRole
         };
     }
 }

@@ -23,9 +23,10 @@ public class Config
     public TenantsConfig Tenants { get; set; } = new();
 
     /// <summary>
-    /// Gets or sets the <see cref="TenantResolution"/> configuration.
+    /// Gets or sets the <see cref="TenantResolutionConfig"/> configurations.
+    /// This sets one or more resolution strategies, which are processed in order until a tenant source identifier is resolved.
     /// </summary>
-    public TenantResolutionConfig TenantResolution { get; set; } = new();
+    public IEnumerable<TenantResolutionConfig> TenantResolutions { get; set; } = new List<TenantResolutionConfig>();
 
     /// <summary>
     /// Gets or sets the URL to use for getting identity details.

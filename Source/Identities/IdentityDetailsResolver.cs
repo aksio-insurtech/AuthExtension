@@ -52,7 +52,7 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
         if (!request.Cookies.ContainsKey(Cookies.Identity)
             && request.HasPrincipal())
         {
-            return await Resolve(request, response, request.Headers[Headers.Principal].ToString(), tenantId);
+            return await Resolve(request, response, request.Headers[Headers.Principal].ToString() ?? string.Empty, tenantId);
         }
 
         return true;

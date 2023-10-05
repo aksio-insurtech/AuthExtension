@@ -1,6 +1,9 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -8,26 +11,32 @@ namespace Aksio.IngressMiddleware.Tenancy.for_RouteSourceIdentifierResolver;
 
 public class when_resolving_a_route_that_matches : Specification
 {
-    RouteSourceIdentifierResolver resolver;
-    RouteSourceIdentifierResolverOptions options;
-    HttpContext context;
-    string result;
+    RouteSourceIdentifier _resolver;
+    JsonObject _options;
+    HttpContext _context;
+    string _result;
+    bool _success;
 
     void Establish()
     {
-        options = new()
-        {
-            RegularExpression = "^/(?<sourceIdentifier>[\\d]{4})/"
-        };
+        _options = JsonSerializer.Deserialize<JsonObject>(
+            JsonSerializer.Serialize(
+                new RouteSourceIdentifierOptions()
+                {
+                    RegularExpression = "^/(?<sourceIdentifier>[\\d]{4})/"
+                }));
 
-        context = new DefaultHttpContext();
-        context.Request.Headers[Headers.OriginalUri] = "/3610/bar";
+        _context = new DefaultHttpContext();
+        _context.Request.Headers[Headers.OriginalUri] = "/3610/bar";
 
-        resolver = new(Mock.Of<ILogger<RouteSourceIdentifierResolver>>());
+        _resolver = new(Mock.Of<ILogger<RouteSourceIdentifier>>());
     }
 
-    async Task Because() => result = await resolver.Resolve(new(), options, context.Request);
+    void Because() => _success = _resolver.TryResolve(_options, _context.Request, out _result);
 
     [Fact]
-    void should_resolve_the_source_identifier() => result.ShouldEqual("3610");
+    void should_report_success() => _success.ShouldBeTrue();
+
+    [Fact]
+    void should_resolve_the_source_identifier() => _result.ShouldEqual("3610");
 }

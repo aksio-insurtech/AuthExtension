@@ -3,11 +3,11 @@
 
 using Microsoft.AspNetCore.Http;
 
-namespace Aksio.IngressMiddleware.Impersonation.given;
+namespace Aksio.IngressMiddleware.given;
 
 public class a_http_context : Specification
 {
-    protected DefaultHttpContext http_context;
+    protected DefaultHttpContext HttpContext;
 
-    void Establish() => http_context = new();
+    void Establish() => HttpContext = new();
 }

@@ -7,26 +7,26 @@ namespace Aksio.IngressMiddleware.Impersonation.for_GroupsImpersonationAuthorize
 
 public class and_groups_are_configured_and_user_has_them_and_more : given.config_with_two_groups
 {
-    GroupsImpersonationAuthorizer authorizer;
-    bool result;
-    ClientPrincipal principal;
+    GroupsImpersonationAuthorizer _authorizer;
+    bool _result;
+    ClientPrincipal _principal;
 
     void Establish()
     {
-        authorizer = new(config);
+        _authorizer = new(Config);
 
-        principal = ClientPrincipal.Empty with
+        _principal = ClientPrincipal.Empty with
         {
             Claims = new[]
             {
-                new Claim("groups", second_group),
-                new Claim("groups", first_group)
+                new Claim("groups", SecondGroup),
+                new Claim("groups", FirstGroup)
             }
         };
     }
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, principal);
+    async Task Because() => _result = await _authorizer.IsAuthorized(HttpContext.Request, _principal);
 
     [Fact]
-    void should_be_authorized() => result.ShouldBeTrue();
+    void should_be_authorized() => _result.ShouldBeTrue();
 }

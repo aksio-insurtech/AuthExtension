@@ -11,16 +11,10 @@ namespace Aksio.IngressMiddleware.Tenancy;
 public interface ITenantResolver
 {
     /// <summary>
-    /// Check if the resolver can resolve the tenant from the given <see cref="HttpRequest"/>.
-    /// </summary>
-    /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
-    /// <returns>True if it can resolve it, false if not.</returns>
-    Task<bool> CanResolve(HttpRequest request);
-
-    /// <summary>
     /// Resolve the tenant from the given <see cref="HttpRequest"/>.
     /// </summary>
     /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
-    /// <returns>Resolved <see cref="TenantId"/>.</returns>
-    Task<TenantId> Resolve(HttpRequest request);
+    /// <param name="tenantId">The resolved tenantid.</param>
+    /// <returns>True if successful, false if unable to resolve.</returns>
+    bool TryResolve(HttpRequest request, out TenantId tenantId);
 }

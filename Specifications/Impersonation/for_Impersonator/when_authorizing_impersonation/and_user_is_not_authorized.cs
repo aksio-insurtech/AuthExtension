@@ -8,14 +8,14 @@ namespace Aksio.IngressMiddleware.Impersonation.for_Impersonator.when_authorizin
 
 public class and_user_is_not_authorized : given.a_principal
 {
-    IActionResult result;
+    IActionResult _result;
 
     void Establish() =>
-        authorizer.Setup(_ => _.IsAuthorized(impersonator.ControllerContext.HttpContext.Request, IsAny<ClientPrincipal>()))
+        Authorizer.Setup(_ => _.IsAuthorized(Impersonator.ControllerContext.HttpContext.Request, IsAny<ClientPrincipal>()))
             .ReturnsAsync(false);
 
-    async Task Because() => result = await impersonator.Authorize();
+    async Task Because() => _result = await Impersonator.Authorize();
 
     [Fact]
-    void should_return_forbidden() => ((StatusCodeResult)result).StatusCode.ShouldEqual(StatusCodes.Status403Forbidden);
+    void should_return_forbidden() => ((StatusCodeResult)_result).StatusCode.ShouldEqual(StatusCodes.Status403Forbidden);
 }

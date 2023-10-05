@@ -1,7 +1,6 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Aksio.Collections;
 using Aksio.IngressMiddleware.Configuration;
 using Aksio.IngressMiddleware.Helpers;
 
@@ -52,24 +51,18 @@ public class ImpersonationFlow : IImpersonationFlow
             return false;
         }
 
-        _logger.LogInformation("Checking if request should be impersonated. IsImpersonateRoute: {IsImpersonateRoute}, HasPrincipal: {HasPrincipal}", IsImpersonateRoute(request), request.HasPrincipal());
+        _logger.CheckingIfRequestShouldBeImpersonated(IsImpersonateRoute(request), request.HasPrincipal());
         if (!IsImpersonateRoute(request) && request.HasPrincipal())
         {
             var principal = ClientPrincipal.FromBase64(request.Headers[Headers.PrincipalId], request.Headers[Headers.Principal]);
-
-            _logger.LogInformation("Principal has identity provider: {IdentityProvider}", principal.IdentityProvider);
-
-            _config.Impersonation.IdentityProviders.ForEach(_ => _logger.LogInformation("Configured identity provider: {IdentityProvider}", _));
-
             if (_config.Impersonation.IdentityProviders.Any(_ => _.Equals(principal.IdentityProvider, StringComparison.InvariantCultureIgnoreCase)))
             {
-                _logger.LogInformation("Request should be impersonated");
+                _logger.ShouldImpersonate(principal.UserId, principal.IdentityProvider);
                 return true;
             }
         }
 
-        _logger.LogInformation("Request should not be impersonated");
-
+        _logger.ShouldNotImpersonate();
         return false;
     }
 }

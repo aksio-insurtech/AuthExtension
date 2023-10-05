@@ -3,21 +3,21 @@
 
 using Microsoft.AspNetCore.Http;
 
-namespace Aksio.IngressMiddleware.Impersonation.when_asking_if_should_impersonate;
+namespace Aksio.IngressMiddleware.Impersonation.for_ImpersonationFlow.when_asking_if_should_impersonate;
 
 public class and_route_is_impersonate_route : given.a_impersonation_flow
 {
-    DefaultHttpContext http_context;
-    bool result;
+    DefaultHttpContext _httpContext;
+    bool _result;
 
     void Establish()
     {
-        http_context = new();
-        http_context.Request.Headers[Headers.OriginalUri] = WellKnownPaths.Impersonation;
+        _httpContext = new();
+        _httpContext.Request.Headers[Headers.OriginalUri] = WellKnownPaths.Impersonation;
     }
 
-    void Because() => result = flow.ShouldImpersonate(http_context.Request);
+    void Because() => _result = Flow.ShouldImpersonate(_httpContext.Request);
 
     [Fact]
-    void should_not_impersonate() => result.ShouldBeFalse();
+    void should_not_impersonate() => _result.ShouldBeFalse();
 }

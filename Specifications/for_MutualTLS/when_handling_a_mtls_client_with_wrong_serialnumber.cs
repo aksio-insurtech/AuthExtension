@@ -11,7 +11,7 @@ public class when_handling_a_mtls_client_with_wrong_serialnumber : given.a_mutua
 {
     IActionResult _result;
 
-    void Establish() => MutualTLSConfig.AcceptedSerialNumbers = new List<string> { "1" };
+    void Establish() => MutualTlsConfig.AcceptedSerialNumbers = new List<string> { "1" };
 
     void Because() => _result = MutualTls.Handle(Request);
 

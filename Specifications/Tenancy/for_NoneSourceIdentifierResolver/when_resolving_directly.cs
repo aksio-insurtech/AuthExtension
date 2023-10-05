@@ -1,23 +1,20 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Aksio.IngressMiddleware.Tenancy.for_NoneSourceIdentifierResolver.given;
+
 namespace Aksio.IngressMiddleware.Tenancy.for_NoneSourceIdentifierResolver;
 
-public class when_resolving_directly : Specification
+public class when_resolving_directly : none_identifier_specification
 {
-    SpecifiedSourceIdentifierResolver resolver;
-    SpecifiedSourceIdentifierResolverOptions options;
-    string expectedTenantId = "someTenantIdentifier";
-    string resolvedTenant;
+    string _resolvedTenant;
+    bool _success;
 
-    void Establish()
-    {
-        options = new() { TenantId = expectedTenantId };
-        resolver = new();
-    }
-
-    async Task Because() => resolvedTenant = await resolver.Resolve(null!, options, null!);
+    void Because() => _success = Resolver.TryResolve(null!, null!, out _resolvedTenant);
 
     [Fact]
-    void returned_correct_tenant() => resolvedTenant.ShouldEqual(expectedTenantId);
+    void should_report_success() => _success.ShouldBeTrue();
+
+    [Fact]
+    void returns_empty_string() => _resolvedTenant.ShouldEqual(string.Empty);
 }

@@ -7,25 +7,25 @@ namespace Aksio.IngressMiddleware.Impersonation.for_ClaimImpersonationAuthorizer
 
 public class and_claims_are_configured_and_user_has_one_of_them : given.config_with_two_claims
 {
-    ClaimImpersonationAuthorizer authorizer;
-    bool result;
-    ClientPrincipal principal;
+    ClaimImpersonationAuthorizer _authorizer;
+    bool _result;
+    ClientPrincipal _principal;
 
     void Establish()
     {
-        authorizer = new(config);
+        _authorizer = new(Config);
 
-        principal = ClientPrincipal.Empty with
+        _principal = ClientPrincipal.Empty with
         {
             Claims = new[]
             {
-                new Claim(second_claim_type, second_claim_value)
+                new Claim(SecondClaimType, SecondClaimValue)
             }
         };
     }
 
-    async Task Because() => result = await authorizer.IsAuthorized(http_context.Request, principal);
+    async Task Because() => _result = await _authorizer.IsAuthorized(HttpContext.Request, _principal);
 
     [Fact]
-    void should_not_be_authorized() => result.ShouldBeFalse();
+    void should_not_be_authorized() => _result.ShouldBeFalse();
 }
