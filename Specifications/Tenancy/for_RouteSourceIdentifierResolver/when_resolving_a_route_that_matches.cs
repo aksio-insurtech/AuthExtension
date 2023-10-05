@@ -15,6 +15,7 @@ public class when_resolving_a_route_that_matches : Specification
     JsonObject _options;
     HttpContext _context;
     string _result;
+    bool _success;
 
     void Establish()
     {
@@ -31,7 +32,10 @@ public class when_resolving_a_route_that_matches : Specification
         _resolver = new(Mock.Of<ILogger<RouteSourceIdentifier>>());
     }
 
-    void Because() => _result = _resolver.Resolve(_options, _context.Request);
+    void Because() => _success = _resolver.TryResolve(_options, _context.Request, out _result);
+
+    [Fact]
+    void should_report_success() => _success.ShouldBeTrue();
 
     [Fact]
     void should_resolve_the_source_identifier() => _result.ShouldEqual("3610");

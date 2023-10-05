@@ -15,7 +15,8 @@ public class with_two_resolvers_using_the_first : a_sourceidentifier_resolver
     Config _config;
     DefaultHttpContext _httpContext;
     string _expectedSourceIdentifier = "1234";
-    string? _result;
+    string _result;
+    bool _success;
 
     void Establish()
     {
@@ -43,7 +44,10 @@ public class with_two_resolvers_using_the_first : a_sourceidentifier_resolver
         _httpContext = GetHttpContext(null, $"/{_expectedSourceIdentifier}/other/route");
     }
 
-    void Because() => _result = _resolver.Resolve(_config, _httpContext.Request);
+    void Because() => _success = _resolver.TryResolve(_config, _httpContext.Request, out _result);
+
+    [Fact]
+    void should_report_success() => _success.ShouldBeTrue();
 
     [Fact]
     void should_resolve_to_the_source_identifier() => _result.ShouldEqual(_expectedSourceIdentifier);

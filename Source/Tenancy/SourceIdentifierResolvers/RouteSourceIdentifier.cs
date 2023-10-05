@@ -33,7 +33,7 @@ public class RouteSourceIdentifier : ISourceIdentifier
     }
 
     /// <inheritdoc/>
-    public string? Resolve(JsonObject options, HttpRequest request)
+    public bool TryResolve(JsonObject options, HttpRequest request, out string sourceIdentifier)
     {
         var config = options.Deserialize<RouteSourceIdentifierOptions>(Globals.JsonSerializerOptions)!;
 
@@ -58,11 +58,13 @@ public class RouteSourceIdentifier : ISourceIdentifier
             if (!string.IsNullOrEmpty(value))
             {
                 _logger.SourceIdentifierMatched(value);
-                return value;
+                sourceIdentifier = value;
+                return true;
             }
         }
 
         _logger.RouteNotMatched();
-        return null;
+        sourceIdentifier = string.Empty;
+        return false;
     }
 }

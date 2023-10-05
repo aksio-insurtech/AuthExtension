@@ -14,6 +14,7 @@ public interface ITenantResolver
     /// Resolve the tenant from the given <see cref="HttpRequest"/>.
     /// </summary>
     /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
-    /// <returns>Resolved <see cref="TenantId"/>.</returns>
-    TenantId? Resolve(HttpRequest request);
+    /// <param name="tenantId">The resolved tenantid.</param>
+    /// <returns>True if successful, false if unable to resolve.</returns>
+    bool TryResolve(HttpRequest request, out TenantId tenantId);
 }

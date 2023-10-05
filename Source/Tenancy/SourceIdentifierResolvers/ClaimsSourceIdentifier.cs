@@ -31,14 +31,15 @@ public class ClaimsSourceIdentifier : ISourceIdentifier
     }
 
     /// <inheritdoc/>
-    public string? Resolve(JsonObject options, HttpRequest request)
+    public bool TryResolve(JsonObject options, HttpRequest request, out string sourceIdentifier)
     {
         if (request.Headers.TryGetValue(Headers.Principal, out var header))
         {
             var token = Convert.FromBase64String(header);
             if (JsonNode.Parse(token) is not JsonObject node)
             {
-                return null;
+                sourceIdentifier = string.Empty;
+                return false;
             }
 
             if (node.TryGetPropertyValue("claims", out var claims) && claims is JsonArray claimsAsArray)
@@ -50,12 +51,14 @@ public class ClaimsSourceIdentifier : ISourceIdentifier
                 {
                     _logger.SettingSourceIdentifierBasedOnTenantClaim(tenantValue.ToString());
 
-                    return tenantValue.ToString();
+                    sourceIdentifier = tenantValue.ToString();
+                    return true;
                 }
             }
         }
 
         _logger.TenantClaimNotMatched();
-        return null;
+        sourceIdentifier = string.Empty;
+        return false;
     }
 }

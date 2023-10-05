@@ -8,10 +8,13 @@ namespace Aksio.IngressMiddleware.Impersonation.for_TenantImpersonationAuthorize
 public class with_two_tenant_filters_and_request_not_matching_any_of_them : given.two_tenant_filters
 {
     bool _result;
+    TenantId _unknownTenantId;
 
-    void Establish() =>
-        TenantResolver.Setup(_ => _.Resolve(HttpContext.Request))
-            .Returns(new TenantId(Guid.Parse("b3551c0e-9c68-40c5-9711-742042b5ed44")));
+    void Establish()
+    {
+        _unknownTenantId = new TenantId(Guid.Parse("b3551c0e-9c68-40c5-9711-742042b5ed44"));
+        TenantResolver.Setup(_ => _.TryResolve(HttpContext.Request, out _unknownTenantId)).Returns(true);
+    }
 
     async Task Because() => _result = await Authorizer.IsAuthorized(HttpContext.Request, ClientPrincipal.Empty);
 

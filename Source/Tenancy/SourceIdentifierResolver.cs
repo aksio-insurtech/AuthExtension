@@ -24,7 +24,7 @@ public class SourceIdentifierResolver : ISourceIdentifierResolver
     }
 
     /// <inheritdoc/>
-    public string? Resolve(Config config, HttpRequest request)
+    public bool TryResolve(Config config, HttpRequest request, out string sourceIdentifier)
     {
         // Process the strategies in configured order.
         foreach (var strategy in config.TenantResolutions)
@@ -34,15 +34,15 @@ public class SourceIdentifierResolver : ISourceIdentifierResolver
                 throw new TenantResolutionStrategyNotConfigured();
             }
 
-            var sourceIdentifier = _resolvers[strategy.Strategy].Resolve(strategy.Options, request);
-            if (sourceIdentifier != null)
+            if (_resolvers[strategy.Strategy].TryResolve(strategy.Options, request, out sourceIdentifier))
             {
                 _logger.ResolvedSourceIdentifierWithStrategy(sourceIdentifier, strategy.Strategy.ToString());
-                return sourceIdentifier;
+                return true;
             }
         }
 
         _logger.CouldNotResolveSourceIdentifierWithAnyConfiguredStrategy();
-        return null;
+        sourceIdentifier = string.Empty;
+        return false;
     }
 }

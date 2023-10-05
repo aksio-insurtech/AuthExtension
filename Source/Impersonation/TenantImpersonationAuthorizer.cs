@@ -35,8 +35,7 @@ public class TenantImpersonationAuthorizer : IImpersonationAuthorizer
             return Task.FromResult(true);
         }
 
-        var tenantId = _tenantResolver.Resolve(request);
-        if (tenantId == null)
+        if (!_tenantResolver.TryResolve(request, out var tenantId))
         {
             return Task.FromResult(false);
         }

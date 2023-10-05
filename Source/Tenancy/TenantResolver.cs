@@ -29,36 +29,38 @@ public class TenantResolver : ITenantResolver
     }
 
     /// <inheritdoc/>
-    public TenantId? Resolve(HttpRequest request)
+    public bool TryResolve(HttpRequest request, out TenantId tenantId)
     {
         // Get the source identifier, using the configured strategies.
-        var sourceIdentifier = _resolver.Resolve(_config, request);
-        if (sourceIdentifier == null)
+        if (!_resolver.TryResolve(_config, request, out var sourceIdentifier))
         {
             // Logged by source identifier resolver.
-            return null;
+            tenantId = TenantId.NotSet;
+            return false;
         }
 
         // string.Empty signifies that no tenant lookup was done, but it is acceptable (used by NoneSourceIdentifierResolver).
         if (sourceIdentifier.Length == 0)
         {
             _logger.SourceIdentifierEmptyUsingTenantIdNotSet();
-            return TenantId.NotSet;
+            tenantId = TenantId.NotSet;
+            return true;
         }
 
         // If we got a source identifier, find the appropriate tenantid for this identifier.
         _logger.AttemptingToResolveUsingSourceIdentifier(sourceIdentifier);
-        var tenantId = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier)).Key;
-        if (tenantId == Guid.Empty)
+        tenantId = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier)).Key;
+        if (tenantId == TenantId.NotSet)
         {
             _logger.TenantIdNotResolved(sourceIdentifier);
-            return null;
+            tenantId = Guid.Empty;
+            return false;
         }
 
         _logger.SettingTenantIdBasedOnSourceIdentifierAndStrategy(
             tenantId,
             sourceIdentifier,
             _config.TenantResolutions.Select(r => r.Strategy.ToString()));
-        return tenantId;
+        return true;
     }
 }

@@ -15,6 +15,7 @@ public class when_resolving_a_route_that_does_not_match : Specification
     JsonObject _options;
     HttpContext _context;
     string _result;
+    bool _success;
 
     void Establish()
     {
@@ -31,8 +32,8 @@ public class when_resolving_a_route_that_does_not_match : Specification
         _resolver = new(Mock.Of<ILogger<RouteSourceIdentifier>>());
     }
 
-    void Because() => _result = _resolver.Resolve(_options, _context.Request);
+    void Because() => _success = _resolver.TryResolve(_options, _context.Request, out _result);
 
     [Fact]
-    void should_not_resolve_the_source_identifier() => _result?.ShouldBeNull();
+    void should_not_resolve_the_source_identifier() => _success.ShouldBeFalse();
 }

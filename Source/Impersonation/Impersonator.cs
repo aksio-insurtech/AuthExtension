@@ -75,8 +75,7 @@ public class Impersonator : Controller
         Response.Headers[Headers.Principal] = newPrincipalAsBase64;
         Response.Cookies.Append(Cookies.Impersonation, newPrincipalAsBase64, new CookieOptions { Expires = null! });
 
-        var tenantId = _tenantResolver.Resolve(Request);
-        if (tenantId == null)
+        if (!_tenantResolver.TryResolve(Request, out var tenantId))
         {
             Response.Cookies.Delete(Cookies.Identity);
             return StatusCode(StatusCodes.Status403Forbidden);

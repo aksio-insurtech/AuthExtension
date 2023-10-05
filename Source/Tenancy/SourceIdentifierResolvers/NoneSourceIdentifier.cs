@@ -26,9 +26,10 @@ public class NoneSourceIdentifier : ISourceIdentifier
     }
 
     /// <inheritdoc/>
-    public string Resolve(JsonObject options, HttpRequest request)
+    public bool TryResolve(JsonObject options, HttpRequest request, out string sourceIdentifier)
     {
         _logger.SettingSourceIdentifierToEmpty();
-        return string.Empty;
+        sourceIdentifier = string.Empty;
+        return true;
     }
 }

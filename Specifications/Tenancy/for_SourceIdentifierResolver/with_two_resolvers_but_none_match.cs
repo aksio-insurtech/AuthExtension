@@ -14,7 +14,8 @@ public class with_two_resolvers_but_none_match : a_sourceidentifier_resolver
 {
     Config _config;
     DefaultHttpContext _httpContext;
-    string? _result;
+    string _result;
+    bool _success;
 
     void Establish()
     {
@@ -42,8 +43,8 @@ public class with_two_resolvers_but_none_match : a_sourceidentifier_resolver
         _httpContext = GetHttpContext(null, "/other/route");
     }
 
-    void Because() => _result = _resolver.Resolve(_config, _httpContext.Request);
+    void Because() => _success = _resolver.TryResolve(_config, _httpContext.Request, out _result);
 
     [Fact]
-    void should_resolve_to_the_source_identifier() => _result.ShouldBeNull();
+    void should_not_resolve_to_the_source_identifier() => _success.ShouldBeFalse();
 }

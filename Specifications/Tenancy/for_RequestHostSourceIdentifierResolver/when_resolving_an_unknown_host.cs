@@ -15,6 +15,7 @@ public class when_resolving_an_unknown_host : Specification
     JsonObject _options;
     HttpContext _context;
     string _result;
+    bool _success;
     string _requestHost = "customer.site.app";
     string _mappedSourceIdentifier = "2233";
 
@@ -36,8 +37,8 @@ public class when_resolving_an_unknown_host : Specification
         _resolver = new(Mock.Of<ILogger<RequestHostSourceIdentifier>>());
     }
 
-    void Because() => _result = _resolver.Resolve(_options, _context.Request);
+    void Because() => _success = _resolver.TryResolve(_options, _context.Request, out _result);
 
     [Fact]
-    void should_not_resolve() => _result.ShouldBeNull();
+    void should_not_resolve() => _success.ShouldBeFalse();
 }

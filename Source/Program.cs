@@ -40,7 +40,7 @@ builder.Services.AddTransient<RolesImpersonationAuthorizer>();
 builder.Services.AddTransient<GroupsImpersonationAuthorizer>();
 builder.Services.AddSingleton<IImpersonationFlow, ImpersonationFlow>();
 
-foreach (var sourceIdentifier in new Types().FindMultiple<ISourceIdentifier>())
+foreach (var sourceIdentifier in Types.Instance.FindMultiple<ISourceIdentifier>())
 {
     builder.Services.AddSingleton(typeof(ISourceIdentifier), sourceIdentifier);
 }

@@ -21,6 +21,7 @@ public interface ISourceIdentifier
     /// </summary>
     /// <param name="options">The instance config.</param>
     /// <param name="request"><see cref="HttpRequest"/> to resolve from.</param>
-    /// <returns>Resolved source identifier (string.Empty instructs caller to use TenantId.NotSet), or null if unable to resolve.</returns>
-    string? Resolve(JsonObject options, HttpRequest request);
+    /// <param name="sourceIdentifier">The resolved source identifier.</param>
+    /// <returns>True if successful, false if unable to resolve.</returns>
+    bool TryResolve(JsonObject options, HttpRequest request, out string sourceIdentifier);
 }

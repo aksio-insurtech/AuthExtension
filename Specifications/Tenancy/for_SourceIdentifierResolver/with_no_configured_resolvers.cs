@@ -27,8 +27,8 @@ public class with_an_unknown_resolver : a_sourceidentifier_resolver
 
     void Because() =>
         _exception = Catch.Exception<TenantResolutionStrategyNotConfigured>(
-            () => _resolver.Resolve(_config, _httpContext.Request));
+            () => _resolver.TryResolve(_config, _httpContext.Request, out _));
 
     [Fact]
-    void threw_the_expected_exception() => _exception.ShouldNotBeNull();
+    void threw_the_expected_exception() => _exception!.ShouldNotBeNull();
 }

@@ -13,6 +13,7 @@ public class when_resolving_directly : specified_identifier_specification
     JsonObject _options;
     string _expectedSourceIdentifier = "someTenantIdentifier";
     string _resolvedTenant;
+    bool _success;
 
     void Establish()
     {
@@ -20,7 +21,10 @@ public class when_resolving_directly : specified_identifier_specification
             JsonSerializer.Serialize(new SpecifiedSourceIdentifierOptions() { SourceIdentifier = _expectedSourceIdentifier }));
     }
 
-    void Because() => _resolvedTenant = Resolver.Resolve(_options, null!);
+    void Because() => _success = Resolver.TryResolve(_options, null!, out _resolvedTenant);
+
+    [Fact]
+    void should_report_success() => _success.ShouldBeTrue();
 
     [Fact]
     void returned_correct_tenant() => _resolvedTenant.ShouldEqual(_expectedSourceIdentifier);

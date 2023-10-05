@@ -65,8 +65,7 @@ public class RequestAugmenter : Controller
     {
         // First determine the tenant id, it will be populated for all strategies except "None" where it will be NotSet.
         // If null, requirements for setting a tenant is not present and the user is not authorized.
-        var tenantId = ResolveTenantId();
-        if (tenantId == null)
+        if (!TryResolveTenantId(out var tenantId))
         {
             _logger.UnauthorizedBecauseNoTenantIdWasResolved();
             return StatusCode(StatusCodes.Status401Unauthorized);
@@ -108,19 +107,19 @@ public class RequestAugmenter : Controller
 
     /// <summary>
     /// Attempts to resolve the tenant id, and set the Response.Header for tenantid based on the result.
-    /// Will return null if it fails to determine one, and Response.Header for tenantid is removed.
+    /// Will return false if it fails to determine one, and Response.Header for tenantid is removed.
     /// </summary>
-    /// <returns>The resolved tenant. TenantId.NotSet if resolver type is None, and null if not able to resolve tenant.</returns>
-    TenantId? ResolveTenantId()
+    /// <param name="tenantId">The resolved tenant, TenantId.NotSet if resolver type is None.</param>
+    /// <returns>True if successful, false if unable to resolve tenant.</returns>
+    bool TryResolveTenantId(out TenantId tenantId)
     {
-        var tenantId = _tenantResolver.Resolve(Request);
-        if (tenantId == null)
+        if (!_tenantResolver.TryResolve(Request, out tenantId))
         {
             Response.Headers.Remove(Headers.TenantId);
-            return null;
+            return false;
         }
 
         Response.Headers[Headers.TenantId] = tenantId.ToString();
-        return tenantId;
+        return true;
     }
 }

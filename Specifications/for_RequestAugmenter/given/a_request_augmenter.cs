@@ -17,7 +17,7 @@ namespace Aksio.IngressMiddleware.for_RequestAugmenter.given;
 
 public class a_request_augmenter : Specification
 {
-    protected static readonly TenantId TenantId = new(Guid.Parse("117a700a-f271-49af-a301-5d54cc2a8c9d"));
+    protected static TenantId TenantId = new(Guid.Parse("117a700a-f271-49af-a301-5d54cc2a8c9d"));
     protected Mock<IIdentityDetailsResolver> IdentityDetailsResolver;
     protected Mock<IImpersonationFlow> ImpersonationFlow;
     protected Mock<ITenantResolver> TenantResolver;
@@ -35,7 +35,7 @@ public class a_request_augmenter : Specification
         IdentityDetailsResolver = new();
         ImpersonationFlow = new();
         TenantResolver = new();
-        TenantResolver.Setup(_ => _.Resolve(IsAny<HttpRequest>())).Returns(TenantId);
+        TenantResolver.Setup(_ => _.TryResolve(IsAny<HttpRequest>(), out TenantId)).Returns(true);
         BearerTokens = new();
         MutualTls = new();
         EndtraidRoles = new();

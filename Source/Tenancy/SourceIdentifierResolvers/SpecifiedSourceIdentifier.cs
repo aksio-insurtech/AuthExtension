@@ -27,15 +27,17 @@ public class SpecifiedSourceIdentifier : ISourceIdentifier
     }
 
     /// <inheritdoc/>
-    public string? Resolve(JsonObject options, HttpRequest request)
+    public bool TryResolve(JsonObject options, HttpRequest request, out string sourceIdentifier)
     {
         var config = options.Deserialize<SpecifiedSourceIdentifierOptions>(Globals.JsonSerializerOptions)!;
         if (string.IsNullOrWhiteSpace(config?.SourceIdentifier))
         {
-            return null;
+            sourceIdentifier = string.Empty;
+            return false;
         }
 
         _logger.SettingSourceIdentifierAsSpecified(config.SourceIdentifier);
-        return config.SourceIdentifier;
+        sourceIdentifier = config.SourceIdentifier;
+        return true;
     }
 }

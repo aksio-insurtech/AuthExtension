@@ -27,7 +27,7 @@ public class RequestHostSourceIdentifier : ISourceIdentifier
     }
 
     /// <inheritdoc/>
-    public string? Resolve(JsonObject options, HttpRequest request)
+    public bool TryResolve(JsonObject options, HttpRequest request, out string sourceIdentifier)
     {
         var config = options.Deserialize<RequestHostSourceIdentifierOptions>(Globals.JsonSerializerOptions)!;
 
@@ -36,11 +36,13 @@ public class RequestHostSourceIdentifier : ISourceIdentifier
             if (configuredHost.Key.Equals(request.Host.Host, StringComparison.InvariantCultureIgnoreCase))
             {
                 _logger.SettingSourceIdentifierBasedOnConfiguredHost(configuredHost.Value, request.Host.Host);
-                return configuredHost.Value;
+                sourceIdentifier = configuredHost.Value;
+                return true;
             }
         }
 
         _logger.HostNotMatched();
-        return null;
+        sourceIdentifier = string.Empty;
+        return false;
     }
 }
