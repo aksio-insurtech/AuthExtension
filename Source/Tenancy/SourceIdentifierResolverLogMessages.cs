@@ -15,4 +15,11 @@ public static partial class SourceIdentifierResolverLogMessages
     internal static partial void ResolvedSourceIdentifierWithStrategy(
         this ILogger<SourceIdentifierResolver> logger,
         string sourceIdentifier, string strategy);
+
+    [LoggerMessage(
+        1,
+        LogLevel.Information,
+        "Could not resolve source identifier with any configured strategy.")]
+    internal static partial void CouldNotResolveSourceIdentifierWithAnyConfiguredStrategy(
+        this ILogger<SourceIdentifierResolver> logger);
 }

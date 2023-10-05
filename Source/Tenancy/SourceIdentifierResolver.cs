@@ -42,6 +42,7 @@ public class SourceIdentifierResolver : ISourceIdentifierResolver
             }
         }
 
+        _logger.CouldNotResolveSourceIdentifierWithAnyConfiguredStrategy();
         return null;
     }
 }

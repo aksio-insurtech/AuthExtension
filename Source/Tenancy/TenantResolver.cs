@@ -35,14 +35,14 @@ public class TenantResolver : ITenantResolver
         var sourceIdentifier = _resolver.Resolve(_config, request);
         if (sourceIdentifier == null)
         {
-            _logger.TenantIdNotResolved();
+            // Logged by source identifier resolver.
             return null;
         }
 
-        // string.Empty signifies that no lookup was done, but it is acceptable (used by NoneSourceIdentifierResolver).
+        // string.Empty signifies that no tenant lookup was done, but it is acceptable (used by NoneSourceIdentifierResolver).
         if (sourceIdentifier.Length == 0)
         {
-            _logger.TenantIdNotResolved();
+            _logger.SourceIdentifierEmptyUsingTenantIdNotSet();
             return TenantId.NotSet;
         }
 
@@ -51,7 +51,7 @@ public class TenantResolver : ITenantResolver
         var tenantId = _config.Tenants.FirstOrDefault(_ => _.Value.SourceIdentifiers.Any(t => t == sourceIdentifier)).Key;
         if (tenantId == Guid.Empty)
         {
-            _logger.TenantIdNotResolved();
+            _logger.TenantIdNotResolved(sourceIdentifier);
             return null;
         }
 
