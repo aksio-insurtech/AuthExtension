@@ -41,20 +41,25 @@ public class OAuthBearerTokens : IOAuthBearerTokens
     {
         if (!_config.OAuthBearerTokens.IsEnabled)
         {
+            // This should never occur, as IsEnabled() is called first.
+            // If this happens, there is a bug in the code!
             _logger.OAuthBearerTokensValidationNotEnabled();
             return new StatusCodeResult(StatusCodes.Status401Unauthorized);
         }
 
+        // Get caller address, for logging purposes.
+        var clientIp = request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "(n/a)";
+
         if (request.Headers.Authorization.Count == 0)
         {
-            _logger.MissingHeader();
+            _logger.MissingAuthorizationHeader(clientIp);
             return Unauthorized(response, "Missing header", "Authorization header missing");
         }
 
         var strings = request.Headers.Authorization.ToString()?.Split(' ');
         if (strings?.Length != 2 || !strings[0].StartsWith("Bearer"))
         {
-            _logger.MissingBearerInHeader();
+            _logger.MissingBearerInHeader(clientIp);
             return Unauthorized(
                 response,
                 "Missing Bearer in header",
@@ -65,13 +70,15 @@ public class OAuthBearerTokens : IOAuthBearerTokens
 
         if (!await _oauthValidator.RefreshJwks())
         {
-            return Unauthorized(response, "OAuth authority problem", "Cannot refresh json webkeky set");
+            _logger.CannotRefreshJsonWebkeySet(clientIp);
+            return Unauthorized(response, "OAuth authority problem", "Cannot refresh json webkey set");
         }
 
         try
         {
             if (!_oauthValidator.ValidateToken(token, out var jwtToken))
             {
+                _logger.InvalidToken(token, clientIp);
                 return Unauthorized(response, "invalid_token", "Given token is invalid");
             }
 
@@ -79,15 +86,16 @@ public class OAuthBearerTokens : IOAuthBearerTokens
         }
         catch (SecurityTokenExpiredException ex)
         {
-            _logger.TokenExpired(ex.Expires);
+            _logger.TokenExpired(ex.Expires, clientIp);
             return Unauthorized(response, "token_expired", $"Token has expired, it expired at {ex.Expires} (UTC)");
         }
         catch (Exception ex)
         {
-            _logger.CouldNotValidateToken(ex);
+            _logger.CouldNotValidateToken(ex, clientIp);
             return Unauthorized(response, "invalid_token", $"Could not validate token ; {ex.Message}");
         }
 
+        _logger.LoggedInWithToken(token, clientIp);
         return new OkResult();
     }
 
@@ -104,7 +112,6 @@ public class OAuthBearerTokens : IOAuthBearerTokens
     IActionResult Unauthorized(HttpResponse response, string message, string description)
     {
         response.Headers.Add("WWW-Authenticate", $"Bearer, error=\"{message}\", error_description=\"{description}\"");
-        _logger.Unauthorized(message, description);
         return new StatusCodeResult(StatusCodes.Status401Unauthorized);
     }
 }
