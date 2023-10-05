@@ -1,3 +1,13 @@
+# [v6.0.0] - 2023-10-5 [PR: #75](https://github.com/aksio-insurtech/IngressMiddleware/pull/75)
+
+## Summary
+
+Due to the need for a more flexible solution, the tenancy resolution system is structurally changed from accepting one resolver to accepting a list of resolvers.
+
+### Changed
+
+- Changed the tenancy resolution system to support multiple methods pr. request, so that if one method fails another can catch it.
+
 # [v5.1.0] - 2023-9-28 [PR: #74](https://github.com/aksio-insurtech/IngressMiddleware/pull/74)
 
 ## Summary
