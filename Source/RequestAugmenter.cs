@@ -26,6 +26,7 @@ public class RequestAugmenter : Controller
     readonly IOAuthBearerTokens _bearerTokens;
     readonly IMutualTLS _mutualTls;
     readonly IRoleAuthorizer _roleAuthorizer;
+    readonly ILogger<RequestAugmenter> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RequestAugmenter"/> class.
@@ -36,13 +37,15 @@ public class RequestAugmenter : Controller
     /// <param name="bearerTokens"><see cref="IOAuthBearerTokens"/>.</param>
     /// <param name="mutualTls"><see cref="IMutualTLS"/>.</param>
     /// <param name="roleAuthorizer"><see cref="IRoleAuthorizer"/>.</param>
+    /// <param name="logger">The logger.</param>
     public RequestAugmenter(
         IIdentityDetailsResolver identityDetailsResolver,
         IImpersonationFlow impersonationFlow,
         ITenantResolver tenantResolver,
         IOAuthBearerTokens bearerTokens,
         IMutualTLS mutualTls,
-        IRoleAuthorizer roleAuthorizer)
+        IRoleAuthorizer roleAuthorizer,
+        ILogger<RequestAugmenter> logger)
     {
         _identityDetailsResolver = identityDetailsResolver;
         _impersonationFlow = impersonationFlow;
@@ -50,6 +53,7 @@ public class RequestAugmenter : Controller
         _bearerTokens = bearerTokens;
         _mutualTls = mutualTls;
         _roleAuthorizer = roleAuthorizer;
+        _logger = logger;
     }
 
     /// <summary>
@@ -64,6 +68,7 @@ public class RequestAugmenter : Controller
         var tenantId = ResolveTenantId();
         if (tenantId == null)
         {
+            _logger.UnauthorizedBecauseNoTenantIdWasResolved();
             return StatusCode(StatusCodes.Status401Unauthorized);
         }
 

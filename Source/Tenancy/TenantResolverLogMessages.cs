@@ -20,7 +20,7 @@ static partial class TenantResolverLogMessages
         string sourceIdentifier,
         IEnumerable<string> strategies);
 
-    [LoggerMessage(4, LogLevel.Information, "TenantId is not resolved, setting to empty. Source identifier was {SourceIdentifier}")]
+    [LoggerMessage(4, LogLevel.Information, "TenantId is not resolved. Source identifier was {SourceIdentifier}")]
     internal static partial void TenantIdNotResolved(this ILogger<TenantResolver> logger, string sourceIdentifier);
 
     [LoggerMessage(5, LogLevel.Information, "Source identifier is empty, setting tenant id to NotSet")]

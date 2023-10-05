@@ -63,6 +63,7 @@ public class Impersonator : Controller
     {
         var principal = ClientPrincipal.FromBase64(Request.Headers[Headers.PrincipalId], Request.Headers[Headers.Principal]);
         _logger.PerformingImpersonation(principal.UserId, principal.UserDetails);
+
         var claims = Request.Query.ToClaims();
         var filtered = principal.Claims.Where(_ => !claims.Any(c => c.Type == _.Type));
         var newPrincipal = principal with

@@ -34,7 +34,7 @@ static partial class RoleAuthorizerLogMessages
     [LoggerMessage(
         3,
         LogLevel.Information,
-        "Client logged in with without roles. Principal id {PrincipalId}, client address = {ClientIp}")]
+        "Client logged in with without roles, as no authorization is required. Principal id {PrincipalId}, client address = {ClientIp}")]
     internal static partial void AcceptingClientWithoutRole(
         this ILogger<RoleAuthorizer> logger,
         string principalId,
