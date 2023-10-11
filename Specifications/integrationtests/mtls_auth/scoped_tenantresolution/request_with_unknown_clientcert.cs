@@ -21,5 +21,5 @@ public class request_with_unknown_clientcert : factory_with_mtls_auth
     }
 
     [Fact]
-    void access_granted() => _responseMessage.IsSuccessStatusCode.ShouldBeFalse();
+    void access_denied() => _responseMessage.IsSuccessStatusCode.ShouldBeFalse();
 }

@@ -13,6 +13,13 @@ namespace Aksio.IngressMiddleware.Configuration;
 public class Config
 {
     /// <summary>
+    /// A list of URI's to always approve if request is to "/".
+    /// The 'X-Original-URI' hoster will be checked against any addresses configured here.
+    /// This is initially used to approve the call to /id-porten/authorized by the Container App auth ingress (so, we approve the to request what they really want from us).
+    /// </summary>
+    public IEnumerable<string> AlwaysApproveUris { get; set; } = new List<string>();
+
+    /// <summary>
     /// Gets or sets the <see cref="OpenIDConnectConfig"/> configuration related to IdPorten.
     /// </summary>
     public OpenIDConnectConfig IdPorten { get; set; } = new();

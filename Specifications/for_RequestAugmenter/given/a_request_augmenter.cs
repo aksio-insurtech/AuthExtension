@@ -45,6 +45,7 @@ public class a_request_augmenter : Specification
         var logger = LoggerFactory.CreateLogger<RequestAugmenter>();
 
         Augmenter = new(
+            new(),
             IdentityDetailsResolver.Object,
             ImpersonationFlow.Object,
             TenantResolver.Object,
