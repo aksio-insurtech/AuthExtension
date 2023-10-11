@@ -11,12 +11,12 @@ public static partial class RequestHostSourceIdentifierLogMessages
     [LoggerMessage(
         0,
         LogLevel.Information,
-        "Setting source identifier to '{SourceIdentifier}' based on configured host ({Host})")]
+        "Setting source identifier to '{SourceIdentifier}' based on request host ({RequestHost})")]
     internal static partial void SettingSourceIdentifierBasedOnConfiguredHost(
         this ILogger<RequestHostSourceIdentifier> logger,
         string sourceIdentifier,
-        string host);
+        string requestHost);
 
-    [LoggerMessage(1, LogLevel.Debug, "Host not matched")]
-    internal static partial void HostNotMatched(this ILogger<RequestHostSourceIdentifier> logger);
+    [LoggerMessage(1, LogLevel.Debug, "Request host {RequestHost} did not match any configured hosts.")]
+    internal static partial void HostNotMatched(this ILogger<RequestHostSourceIdentifier> logger, string requestHost);
 }
