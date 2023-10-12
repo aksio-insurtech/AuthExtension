@@ -41,7 +41,7 @@ public class RequestHostSourceIdentifier : ISourceIdentifier
             }
         }
 
-        _logger.HostNotMatched();
+        _logger.HostNotMatched(request.Host.Host);
         sourceIdentifier = string.Empty;
         return false;
     }

@@ -16,6 +16,6 @@ public static partial class ClaimsSourceIdentifierLogMessages
         this ILogger<ClaimsSourceIdentifier> logger,
         string sourceIdentifier);
 
-    [LoggerMessage(1, LogLevel.Debug, "TenantId claim did not match")]
+    [LoggerMessage(1, LogLevel.Debug, "TenantId claim did not match any source identifiers")]
     internal static partial void TenantClaimNotMatched(this ILogger<ClaimsSourceIdentifier> logger);
 }

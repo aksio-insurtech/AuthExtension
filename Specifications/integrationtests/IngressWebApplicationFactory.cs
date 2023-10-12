@@ -50,6 +50,9 @@ public class IngressWebApplicationFactory : WebApplicationFactory<Program>
                     services.Remove(service);
                     services.Add(new(testService.Interface, testService.Implementation));
                 }
+
+                // Adds any controllers in this test assembly, used for idporten callback testing.
+                services.AddControllers().AddApplicationPart(GetType().Assembly);
             });
     }
 }

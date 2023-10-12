@@ -20,5 +20,5 @@ public class request_when_having_a_invalid_principal : multi_resolution_host
     }
 
     [Fact]
-    void access_granted() => _responseMessage.IsSuccessStatusCode.ShouldBeFalse();
+    void access_denied() => _responseMessage.IsSuccessStatusCode.ShouldBeFalse();
 }

@@ -1,8 +1,11 @@
 // Copyright (c) Aksio Insurtech. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Web;
 using Aksio.Execution;
 using Aksio.IngressMiddleware.BearerTokens;
+using Aksio.IngressMiddleware.Configuration;
+using Aksio.IngressMiddleware.Helpers;
 using Aksio.IngressMiddleware.Identities;
 using Aksio.IngressMiddleware.Impersonation;
 using Aksio.IngressMiddleware.MutualTLS;
@@ -20,6 +23,7 @@ namespace Aksio.IngressMiddleware;
 [Route("/")]
 public class RequestAugmenter : Controller
 {
+    readonly Config _config;
     readonly IIdentityDetailsResolver _identityDetailsResolver;
     readonly IImpersonationFlow _impersonationFlow;
     readonly ITenantResolver _tenantResolver;
@@ -31,6 +35,7 @@ public class RequestAugmenter : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="RequestAugmenter"/> class.
     /// </summary>
+    /// <param name="config">The configuration.</param>
     /// <param name="identityDetailsResolver"><see cref="IIdentityDetailsResolver"/>.</param>
     /// <param name="impersonationFlow"><see cref="IImpersonationFlow"/> (for the impersonation process).</param>
     /// <param name="tenantResolver"><see cref="ITenantResolver"/>.</param>
@@ -39,6 +44,7 @@ public class RequestAugmenter : Controller
     /// <param name="roleAuthorizer"><see cref="IRoleAuthorizer"/>.</param>
     /// <param name="logger">The logger.</param>
     public RequestAugmenter(
+        Config config,
         IIdentityDetailsResolver identityDetailsResolver,
         IImpersonationFlow impersonationFlow,
         ITenantResolver tenantResolver,
@@ -47,6 +53,7 @@ public class RequestAugmenter : Controller
         IRoleAuthorizer roleAuthorizer,
         ILogger<RequestAugmenter> logger)
     {
+        _config = config;
         _identityDetailsResolver = identityDetailsResolver;
         _impersonationFlow = impersonationFlow;
         _tenantResolver = tenantResolver;
@@ -63,7 +70,13 @@ public class RequestAugmenter : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        // First determine the tenant id, it will be populated for all strategies except "None" where it will be NotSet.
+        // This is here to enable the pre-approval of idPorten's authorization endpoint call.
+        if (IsPreApprovedUri())
+        {
+            return Ok();
+        }
+
+        // Determine the tenant id, it will be populated for all strategies except "None" where it will be NotSet.
         // If null, requirements for setting a tenant is not present and the user is not authorized.
         if (!TryResolveTenantId(out var tenantId))
         {
@@ -103,6 +116,39 @@ public class RequestAugmenter : Controller
 
         // Finally check the entra id requirement.
         return _roleAuthorizer.Handle(Request);
+    }
+
+    /// <summary>
+    /// If this is a request to "/", with a X-Original-URI header: validate the X-Original-URI against the AlwaysApproveUris list.
+    /// </summary>
+    /// <returns>True if it matches any configured always approved uris, false if not.</returns>
+    bool IsPreApprovedUri()
+    {
+        // Get caller address, for logging purposes.
+        var clientIp = Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "(n/a)";
+
+        var path = Request.GetOriginalUri()?.PathAndQuery;
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return false;
+        }
+
+        path = HttpUtility.UrlDecode(path);
+
+        // Strip away query parameters if present
+        if (path.Contains('?'))
+        {
+            path = path.Split('?')[0];
+        }
+
+        var uri = $"{Request.Host}{path}";
+        if (_config.AlwaysApproveUris.Any(approved => approved.Equals(uri, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            _logger.AcceptingPreApprovedUri(uri, clientIp);
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>

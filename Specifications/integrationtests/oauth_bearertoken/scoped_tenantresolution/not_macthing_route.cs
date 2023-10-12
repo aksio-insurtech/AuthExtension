@@ -18,5 +18,5 @@ public class not_macthing_route : factory_with_oauth_bearertoken_auth_with_route
     }
 
     [Fact]
-    void access_granted() => _responseMessage.IsSuccessStatusCode.ShouldBeFalse();
+    void access_denied() => _responseMessage.IsSuccessStatusCode.ShouldBeFalse();
 }
