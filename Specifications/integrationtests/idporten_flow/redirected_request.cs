@@ -29,7 +29,7 @@ public class redirected_request : factory_with_idporten
             HttpMethod.Get,
             $"https://auth.hostname/id-porten/authorize?{string.Join("&", args.Select(kvp => $"{kvp.Key}={kvp.Value}"))}");
 
-        // Denne følger innover ser det ut til?!
+        // Request and follow redirects.
         _responseMessage = await IngressClient.SendAsync(requestMessage);
         while (_responseMessage.StatusCode == HttpStatusCode.Redirect)
         {
