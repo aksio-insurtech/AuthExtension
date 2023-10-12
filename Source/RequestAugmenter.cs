@@ -124,6 +124,9 @@ public class RequestAugmenter : Controller
     /// <returns>True if it matches any configured always approved uris, false if not.</returns>
     bool IsPreApprovedUri()
     {
+        // Get caller address, for logging purposes.
+        var clientIp = Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "(n/a)";
+        
         var path = Request.GetOriginalUri()?.PathAndQuery;
         if (string.IsNullOrWhiteSpace(path))
         {
@@ -140,6 +143,7 @@ public class RequestAugmenter : Controller
         var uri = $"{Request.Host}{path}";
         if (_config.AlwaysApproveUris.Any(approved => approved.Equals(uri, StringComparison.InvariantCultureIgnoreCase)))
         {
+            _logger.AcceptingPreApprovedUri(uri, clientIp);
             return true;
         }
 
