@@ -15,13 +15,11 @@ public class accesslisted_request_with_invalid_uri : factory_with_approveduris
     async Task Because()
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://{ApprovedHost}/");
-        requestMessage.Headers.Add(Headers.OriginalUri, $"/some/other/exciting/thing");
-        
+        requestMessage.Headers.Add(Headers.OriginalUri, "/some/other/exciting/thing");
+
         _responseMessage = await IngressClient.SendAsync(requestMessage);
     }
 
     [Fact]
     void access_denied() => _responseMessage.IsSuccessStatusCode.ShouldBeFalse();
 }
-
-

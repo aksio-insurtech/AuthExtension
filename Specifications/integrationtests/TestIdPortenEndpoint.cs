@@ -13,7 +13,7 @@ public class TestIdPortenEndpoint : Controller
     /// That url is then handled by the Azure Container App ingress, which in turn redirects to https://tenanthostname.
     /// So, this endpoint will fake the entire thing by just redirecting to the base-url in redirect_uri.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Redirect.</returns>
     [HttpGet]
     [Route("/idporten_authorization")]
     public IActionResult IdPortenAuthorization()

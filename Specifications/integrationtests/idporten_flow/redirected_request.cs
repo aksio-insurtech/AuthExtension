@@ -9,10 +9,10 @@ namespace Aksio.IngressMiddleware.integrationtests.idporten_flow;
 /// <summary>
 /// Test scenario with Idporten flow.
 /// </summary>
-public class request_with_unknown_clientcert : factory_with_idporten
+public class redirected_request : factory_with_idporten
 {
-    HttpResponseMessage _responseMessage;
     readonly List<string> _redirectLog = new();
+    HttpResponseMessage _responseMessage;
 
     async Task Because()
     {

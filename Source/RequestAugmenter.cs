@@ -126,18 +126,19 @@ public class RequestAugmenter : Controller
     {
         // Get caller address, for logging purposes.
         var clientIp = Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? "(n/a)";
-        
+
         var path = Request.GetOriginalUri()?.PathAndQuery;
         if (string.IsNullOrWhiteSpace(path))
         {
             return false;
         }
+
         path = HttpUtility.UrlDecode(path);
-        
+
         // Strip away query parameters if present
-        if (path.Contains("?"))
+        if (path.Contains('?'))
         {
-            path = path.Split("?").First();
+            path = path.Split('?')[0];
         }
 
         var uri = $"{Request.Host}{path}";

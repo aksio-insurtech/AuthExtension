@@ -16,7 +16,7 @@ public class accesslisted_request_with_valid_uri : factory_with_approveduris
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://{ApprovedHost}/");
         requestMessage.Headers.Add(Headers.OriginalUri, $"{ApprovedUri}?blah=blah&other=params");
-        
+
         _responseMessage = await IngressClient.SendAsync(requestMessage);
     }
 
