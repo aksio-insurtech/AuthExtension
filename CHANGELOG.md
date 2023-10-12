@@ -1,3 +1,14 @@
+# [v6.1.0] - 2023-10-12 [PR: #76](https://github.com/aksio-insurtech/IngressMiddleware/pull/76)
+
+## Summary
+
+Improved logging to aid in finding configuration issues, and added configuration option to have a list of uri's that are pre-approved and will not even be subject to tenancy resolution.
+
+## Added
+
+- Added configuration option AlwaysApproveUris, which allows us to add a list of preconfigured uri's the ingress should simply accept - even without checking tenancy. This is needed for the idPorten auth flow, because the Azure Container App ingress will first ask us if we accept the connection, even though it is for ourselves (id-porten/authorize). This fixes the currently broken idPorten login.
+
+
 # [v6.0.0] - 2023-10-5 [PR: #75](https://github.com/aksio-insurtech/IngressMiddleware/pull/75)
 
 ## Summary
