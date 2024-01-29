@@ -33,7 +33,6 @@ public class IdPorten : Controller
         var query = Request.Query.ToDictionary(_ => _.Key, _ => _.Value);
         var tenant = GetTenant();
         query["onbehalfof"] = tenant.Value.OnBehalfOf;
-        query["code_challenge_method"] = "none";
 
         var queryString = query.ToQueryString();
         var url = $"{_config.IdPorten.AuthorizationEndpoint}?{queryString}";
