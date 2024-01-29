@@ -1,3 +1,7 @@
+# [v6.1.0-principal-logging] - 2024-1-29 [PR: #0]()
+
+No release notes
+
 # [v6.1.0] - 2023-10-12 [PR: #76](https://github.com/aksio-insurtech/IngressMiddleware/pull/76)
 
 ## Summary
