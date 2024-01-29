@@ -1,3 +1,7 @@
+# [v6.1.0-principal-logging.1] - 2024-1-29 [PR: #0]()
+
+No release notes
+
 # [v6.1.0-principal-logging] - 2024-1-29 [PR: #0]()
 
 No release notes
