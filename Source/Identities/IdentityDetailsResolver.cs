@@ -90,8 +90,6 @@ public class IdentityDetailsResolver : IIdentityDetailsResolver
 
         _logger.ResolvingIdentityDetails(principalId, tenantId);
 
-        Console.WriteLine($"Principal : {principal}");
-
         client.DefaultRequestHeaders.Add(Headers.Principal, principal);
         client.DefaultRequestHeaders.Add(Headers.PrincipalId, principalId);
         client.DefaultRequestHeaders.Add(Headers.PrincipalName, principalName);

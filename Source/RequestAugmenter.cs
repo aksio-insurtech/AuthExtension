@@ -70,6 +70,8 @@ public class RequestAugmenter : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
+        Console.WriteLine("Principal: " + Request.Headers[Headers.Principal]);
+
         // This is here to enable the pre-approval of idPorten's authorization endpoint call.
         if (IsPreApprovedUri())
         {
