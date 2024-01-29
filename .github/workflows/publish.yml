@@ -93,6 +93,8 @@ jobs:
         with:
           user-name: 'Aksio Build'
           user-email: 'build@aksio.no'
+          version: ${{ github.event.inputs.version }}
+          release-notes: ${{ github.event.inputs.release-notes }}
 
   publish-docker-production:
     if: needs.release.outputs.publish == 'true'
