@@ -83,4 +83,31 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
         }
         return new RawClientPrincipal(IdentityProvider, nameType, roleType, Claims.ToRawClaims());
     }
+
+    /// <summary>
+    /// Fetches the email address or identifier from the principal, supporting then both users and applications.
+    /// </summary>
+    /// <returns>The preferred_username, appid or object id.</returns>
+    public string GetClientEmailOrIdentifier()
+    {
+        var email = Claims.FirstOrDefault(_ => _.Type == "preferred_username")?.Value;
+        if (!string.IsNullOrEmpty(email))
+        {
+            return email;
+        }
+
+        var appId = Claims.FirstOrDefault(_ => _.Type == "appid")?.Value;
+        if (!string.IsNullOrEmpty(appId))
+        {
+            return $"(appid) {appId}";
+        }
+
+        var oid = Claims.FirstOrDefault(_ => _.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+        if (!string.IsNullOrEmpty(oid))
+        {
+            return $"(objectidentifier) {appId}";
+        }
+
+        return string.Empty;
+    }
 }

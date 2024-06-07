@@ -9,7 +9,7 @@ using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
 namespace Aksio.IngressMiddleware.integrationtests.role_authorization.given;
 
-public class factory_with_role_auth_with_scoped_tenancyresolution : Specification
+public class factory_with_host_resolution_and_role_auth_with_scoped_tenancyresolution : Specification
 {
     protected IngressWebApplicationFactory IngressFactory;
     protected HttpClient IngressClient;
@@ -39,21 +39,34 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
                     Guid.Parse("00000000-0000-0000-0000-000000000001"),
                     new()
                     {
-                        SourceIdentifiers = new[] { "sourceid_1", "sourceid_2" },
-                        EntraIdTenants = new[] { "sourceid_1", "sourceid_2" }
+                        SourceIdentifiers = new[] { "0001" },
+                        EntraIdTenants = new[] { EntraId1 }
                     }
                 },
                 {
                     Guid.Parse("00000000-0000-0000-0000-000000000002"),
                     new()
                     {
-                        SourceIdentifiers = new[] { "sourceid_3", "sourceid_4" },
-                        EntraIdTenants = new[] { "sourceid_3", "sourceid_4" }
+                        SourceIdentifiers = new[] { "0002" }
                     }
-                }
+                },
             },
             TenantResolutions = new[]
             {
+                new TenantResolutionConfig()
+                {
+                    Strategy = TenantSourceIdentifierResolverType.Host,
+                    Options = JsonSerializer.Deserialize<JsonObject>(
+                        JsonSerializer.Serialize(
+                            new RequestHostSourceIdentifierOptions()
+                            {
+                                Hostnames = new Dictionary<string, string>()
+                                {
+                                    { "host0001", "0001" },
+                                    { "host0002", "0002" }
+                                }
+                            }))
+                },
                 new TenantResolutionConfig()
                 {
                     Strategy = TenantSourceIdentifierResolverType.Claim
@@ -74,18 +87,17 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
     /// <summary>
     /// Helper to set the claimed tenantid for the request.
     /// </summary>
-    /// <param name="requestMessage">The request.</param>
-    /// <param name="claimedTenantId">Tenant id to claim.</param>
-    /// <param name="roles">The list of "roles" claims to add.</param>
     protected void BuildAndSetPrincipalWithTenantClaim(
         HttpRequestMessage requestMessage,
         string claimedTenantId,
         string authAudience,
+        string preferredUsername,
         params string[] roles)
     {
         var claims = new List<RawClaim>
         {
             new(ClaimsSourceIdentifier.TenantIdClaim, claimedTenantId),
+            new("preferred_username", preferredUsername)
         };
         if (!string.IsNullOrEmpty(authAudience))
         {
