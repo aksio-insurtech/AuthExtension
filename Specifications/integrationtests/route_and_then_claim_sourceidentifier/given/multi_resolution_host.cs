@@ -29,8 +29,20 @@ public class multi_resolution_host : Specification
             Tenants = new()
             {
                 { Guid.NewGuid(), new() { SourceIdentifiers = new[] { "8844" } } },
-                { ExpectedRouteTenantId, new() { SourceIdentifiers = new[] { ExpectedRouteSourceIdentifier } } },
-                { ExpectedEntraIdTenantId, new() { SourceIdentifiers = new[] { ExpectedEntraIdTenantSourceIdentifier } } }
+                {
+                    ExpectedRouteTenantId, new()
+                    {
+                        SourceIdentifiers = new[] { ExpectedRouteSourceIdentifier },
+                        EntraIdTenants = new[] { ExpectedEntraIdTenantSourceIdentifier }
+                    }
+                },
+                {
+                    ExpectedEntraIdTenantId, new()
+                    {
+                        SourceIdentifiers = new[] { ExpectedEntraIdTenantSourceIdentifier },
+                        EntraIdTenants = new[] { ExpectedEntraIdTenantSourceIdentifier }
+                    }
+                }
             },
             TenantResolutions = new[]
             {

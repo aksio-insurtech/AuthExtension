@@ -3,6 +3,7 @@
 
 using System.Text;
 using System.Text.Json;
+using Aksio.IngressMiddleware.Tenancy.SourceIdentifierResolvers;
 
 namespace Aksio.IngressMiddleware.integrationtests.routeSourceIdentifierResolver.given;
 
@@ -10,10 +11,14 @@ public class route_source_specification : Specification
 {
     protected void BuildAndSetPrincipalWithTenantClaim(
         HttpRequestMessage requestMessage,
+        string claimedTenantId,
         string authAudience,
         params string[] roles)
     {
-        var claims = new List<RawClaim>();
+        var claims = new List<RawClaim>()
+        {
+            new(ClaimsSourceIdentifier.TenantIdClaim, claimedTenantId),
+        };
         if (!string.IsNullOrEmpty(authAudience))
         {
             claims.Add(new("aud", authAudience));

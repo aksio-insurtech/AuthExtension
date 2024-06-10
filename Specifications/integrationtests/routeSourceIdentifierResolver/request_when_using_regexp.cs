@@ -15,18 +15,27 @@ public class request_when_using_regexp : route_source_specification
     HttpResponseMessage _responseMessage;
     Guid _expectedTenantId;
     string _expectedSourceIdentifier;
+    string _expectedEntraIdTenantId;
 
     void Establish()
     {
         _expectedTenantId = Guid.NewGuid();
         _expectedSourceIdentifier = "1122";
+        _expectedEntraIdTenantId = Guid.NewGuid().ToString();
 
         var ingressConfig = new Config()
         {
             Tenants = new()
             {
                 { Guid.NewGuid(), new() { SourceIdentifiers = new[] { "8844" } } },
-                { _expectedTenantId, new() { SourceIdentifiers = new[] { _expectedSourceIdentifier } } },
+                {
+                    _expectedTenantId,
+                    new()
+                    {
+                        SourceIdentifiers = new[] { _expectedSourceIdentifier },
+                        EntraIdTenants = new[] { _expectedEntraIdTenantId }
+                    }
+                },
                 { Guid.NewGuid(), new() { SourceIdentifiers = new[] { "9988" } } }
             },
             TenantResolutions = new[]
@@ -58,7 +67,7 @@ public class request_when_using_regexp : route_source_specification
     async Task Because()
     {
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/");
-        BuildAndSetPrincipalWithTenantClaim(requestMessage, "audienceWithNoAuth");
+        BuildAndSetPrincipalWithTenantClaim(requestMessage, _expectedEntraIdTenantId, "audienceWithNoAuth");
 
         requestMessage.Headers.Add(Headers.OriginalUri, $"/{_expectedSourceIdentifier}/blahblah");
 
