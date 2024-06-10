@@ -47,7 +47,7 @@ public class a_sourceidentifier_resolver : Specification
         var claims = new List<RawClaim>();
         if (!string.IsNullOrWhiteSpace(claimedTenantId))
         {
-            claims.Add(new(ClaimsSourceIdentifier.TenantIdClaim, claimedTenantId));
+            claims.Add(new(ClaimsSourceIdentifier.EntraIdTenantIdClaim, claimedTenantId));
         }
 
         var principal = new RawClientPrincipal("testprovider", "testuser", "userdetails", claims);

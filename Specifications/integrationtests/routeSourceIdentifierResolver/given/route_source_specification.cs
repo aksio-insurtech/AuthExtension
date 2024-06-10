@@ -17,7 +17,7 @@ public class route_source_specification : Specification
     {
         var claims = new List<RawClaim>()
         {
-            new(ClaimsSourceIdentifier.TenantIdClaim, claimedTenantId),
+            new(ClaimsSourceIdentifier.EntraIdTenantIdClaim, claimedTenantId),
         };
         if (!string.IsNullOrEmpty(authAudience))
         {

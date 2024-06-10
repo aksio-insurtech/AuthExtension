@@ -14,7 +14,7 @@ public class ClaimsSourceIdentifier : ISourceIdentifier
     /// <summary>
     /// The tenant id claim.
     /// </summary>
-    public const string TenantIdClaim = "http://schemas.microsoft.com/identity/claims/tenantid";
+    public const string EntraIdTenantIdClaim = "http://schemas.microsoft.com/identity/claims/tenantid";
 
     /// <inheritdoc/>
     public TenantSourceIdentifierResolverType ResolverType => TenantSourceIdentifierResolverType.Claim;
@@ -45,7 +45,7 @@ public class ClaimsSourceIdentifier : ISourceIdentifier
             if (node.TryGetPropertyValue("claims", out var claims) && claims is JsonArray claimsAsArray)
             {
                 var tenantObject = claimsAsArray.Cast<JsonObject>()
-                    .FirstOrDefault(_ => _.TryGetPropertyValue("typ", out var type) && type!.ToString() == TenantIdClaim);
+                    .FirstOrDefault(_ => _.TryGetPropertyValue("typ", out var type) && type!.ToString() == EntraIdTenantIdClaim);
                 if (tenantObject is not null && tenantObject.TryGetPropertyValue("val", out var tenantValue) &&
                     tenantValue is not null)
                 {
