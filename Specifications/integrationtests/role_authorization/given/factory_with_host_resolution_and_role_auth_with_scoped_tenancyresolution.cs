@@ -96,7 +96,7 @@ public class factory_with_host_resolution_and_role_auth_with_scoped_tenancyresol
     {
         var claims = new List<RawClaim>
         {
-            new(ClaimsSourceIdentifier.TenantIdClaim, claimedTenantId),
+            new(ClaimsSourceIdentifier.EntraIdTenantIdClaim, claimedTenantId),
             new("preferred_username", preferredUsername)
         };
         if (!string.IsNullOrEmpty(authAudience))

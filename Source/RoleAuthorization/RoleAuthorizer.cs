@@ -43,7 +43,7 @@ public class RoleAuthorizer : IRoleAuthorizer
         var principal = ClientPrincipal.FromBase64(principalId, request.Headers[Headers.Principal]);
 
         var principalEmailOrId = principal.GetClientEmailOrIdentifier();
-        var principalTenantId = principal.Claims.FirstOrDefault(c => c.Type == ClaimsSourceIdentifier.TenantIdClaim)?.Value ??
+        var principalTenantId = principal.Claims.FirstOrDefault(c => c.Type == ClaimsSourceIdentifier.EntraIdTenantIdClaim)?.Value ??
                                 string.Empty;
 
         // Require the audience claim, this will represent the clientId which is used to authorize.

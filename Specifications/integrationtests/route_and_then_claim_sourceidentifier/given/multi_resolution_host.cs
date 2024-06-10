@@ -84,7 +84,7 @@ public class multi_resolution_host : Specification
     {
         var claims = new List<RawClaim>
         {
-            new(ClaimsSourceIdentifier.TenantIdClaim, claimedTenantId),
+            new(ClaimsSourceIdentifier.EntraIdTenantIdClaim, claimedTenantId),
         };
         if (!string.IsNullOrEmpty(authAudience))
         {

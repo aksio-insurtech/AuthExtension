@@ -85,7 +85,7 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
     {
         var claims = new List<RawClaim>
         {
-            new(ClaimsSourceIdentifier.TenantIdClaim, claimedTenantId),
+            new(ClaimsSourceIdentifier.EntraIdTenantIdClaim, claimedTenantId),
         };
         if (!string.IsNullOrEmpty(authAudience))
         {
