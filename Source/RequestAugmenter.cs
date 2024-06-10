@@ -115,7 +115,7 @@ public class RequestAugmenter : Controller
         }
 
         // Finally check the entra id requirement.
-        return _roleAuthorizer.Handle(Request);
+        return _roleAuthorizer.Handle(Request, tenantId);
     }
 
     /// <summary>

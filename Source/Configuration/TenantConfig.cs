@@ -19,10 +19,12 @@ public record TenantConfig
     public string OnBehalfOf { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets a collection of source identifiers of tenants that are allowed to impersonate this tenant.
+    /// Gets or sets a collection of source identifiers used to look up the tenant.
     /// </summary>
-    /// <remarks>
-    /// If the tenant specified is the actual tenant, it is not impersonating that tenant.
-    /// </remarks>
     public string[] SourceIdentifiers { get; set; } = Array.Empty<string>();
+
+    /// <summary>
+    /// Gets or sets a collection of entra id tenant identifiers allowed to log in with this middleware tenant.
+    /// </summary>
+    public string[] EntraIdTenants { get; set; } = Array.Empty<string>();
 }
