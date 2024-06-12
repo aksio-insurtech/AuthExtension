@@ -76,4 +76,15 @@ static partial class RoleAuthorizerLogMessages
         string principalId,
         string principalTenantId,
         string clientIp);
+
+    [LoggerMessage(
+        7,
+        LogLevel.Information,
+        "Client logged in with identity provider {IdentityProvider} (not entra-id). Principal id {PrincipalId}, issuer is {Issuer}, client address = {ClientIp}")]
+    internal static partial void UserLoggedInWithIdentityProvider(
+        this ILogger<RoleAuthorizer> logger,
+        string principalId,
+        string identityProvider,
+        string issuer,
+        string clientIp);
 }

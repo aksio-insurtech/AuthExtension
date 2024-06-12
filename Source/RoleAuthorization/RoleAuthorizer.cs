@@ -46,6 +46,14 @@ public class RoleAuthorizer : IRoleAuthorizer
         var principalTenantId = principal.Claims.FirstOrDefault(c => c.Type == ClaimsSourceIdentifier.EntraIdTenantIdClaim)?.Value ??
                                 string.Empty;
 
+        // Only validate roles for Entra Id logins.
+        // Others should already be validated by the container app ingress in Azure!
+        if (principal.IdentityProvider != "aad")
+        {
+            _logger.UserLoggedInWithIdentityProvider(principalEmailOrId, principal.IdentityProvider, principal.Issuer, clientIp);
+            return new OkResult();
+        }
+
         // Require the audience claim, this will represent the clientId which is used to authorize.
         // In EntraID this is the app registration id.
         if (!principal.Claims.Any(c => c.Type == "aud"))
@@ -76,9 +84,10 @@ public class RoleAuthorizer : IRoleAuthorizer
             }
         }
 
+        // If no roles are required, accept this.
         if (authorizationConfig.NoAuthorizationRequired)
         {
-            _logger.AcceptingClientWithoutRole(principalEmailOrId, principalEmailOrId, clientIp);
+            _logger.AcceptingClientWithoutRole(principalEmailOrId, principalTenantId, clientIp);
             return new OkResult();
         }
 
@@ -87,11 +96,11 @@ public class RoleAuthorizer : IRoleAuthorizer
         var matchedRoles = authorizationConfig.Roles.Intersect(userRoles, StringComparer.OrdinalIgnoreCase).ToList();
         if (!matchedRoles.Any())
         {
-            _logger.UserDidNotHaveAnyMatchingRoles(principalEmailOrId, principalEmailOrId, userRoles, clientIp);
+            _logger.UserDidNotHaveAnyMatchingRoles(principalEmailOrId, principalTenantId, userRoles, clientIp);
             return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
-        _logger.UserLoggedInWithRoles(principalEmailOrId, principalEmailOrId, matchedRoles, clientIp);
+        _logger.UserLoggedInWithRoles(principalEmailOrId, principalTenantId, matchedRoles, clientIp);
         return new OkResult();
     }
 }

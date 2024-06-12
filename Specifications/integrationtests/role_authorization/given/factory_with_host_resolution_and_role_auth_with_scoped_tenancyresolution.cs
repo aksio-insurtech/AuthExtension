@@ -106,7 +106,7 @@ public class factory_with_host_resolution_and_role_auth_with_scoped_tenancyresol
 
         claims.AddRange(roles.Select(r => new RawClaim("roles", r)));
 
-        var principal = new RawClientPrincipal("testprovider", "testuser", "userdetails", claims);
+        var principal = new RawClientPrincipal("aad", "iss", "testuser", "userdetails", claims);
         var jsonPrincipal = JsonSerializer.Serialize(principal, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
         requestMessage.Headers.Add(Headers.Principal, Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonPrincipal)));

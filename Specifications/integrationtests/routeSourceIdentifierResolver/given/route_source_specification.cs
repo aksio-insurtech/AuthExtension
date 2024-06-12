@@ -26,7 +26,7 @@ public class route_source_specification : Specification
 
         claims.AddRange(roles.Select(r => new RawClaim("roles", r)));
 
-        var principal = new RawClientPrincipal("testprovider", "testuser", "userdetails", claims);
+        var principal = new RawClientPrincipal("testprovider", "iss", "testuser", "userdetails", claims);
         var jsonPrincipal = JsonSerializer.Serialize(principal, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
         requestMessage.Headers.Add(Headers.Principal, Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonPrincipal)));
