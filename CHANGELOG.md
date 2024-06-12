@@ -1,3 +1,7 @@
+# [v6.3.0] - 2024-6-12 [PR: #79](https://github.com/aksio-insurtech/IngressMiddleware/pull/79)
+
+
+
 # [v6.2.0] - 2024-6-10 [PR: #0]()
 
 No release notes
