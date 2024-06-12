@@ -11,11 +11,12 @@ namespace Aksio.IngressMiddleware;
 /// Represents a client principal based on the Microsoft Identity Platform.
 /// </summary>
 /// <param name="IdentityProvider">A string representing the identity provider, e.g. aad.</param>
+/// <param name="Issuer">A string representing the token issuer.</param>
 /// <param name="UserId">The unique user identifier from the identity provider.</param>
 /// <param name="UserDetails">The user details, typically the user name.</param>
 /// <param name="UserRoles">Collection of roles for the user.</param>
 /// <param name="Claims">Collection of all the claims for the user.</param>
-public record ClientPrincipal(string IdentityProvider, string UserId, string UserDetails, IEnumerable<string> UserRoles, IEnumerable<Claim> Claims)
+public record ClientPrincipal(string IdentityProvider, string Issuer, string UserId, string UserDetails, IEnumerable<string> UserRoles, IEnumerable<Claim> Claims)
 {
     /// <summary>
     /// The name type.
@@ -30,7 +31,7 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
     /// <summary>
     /// Represents an empty <see cref="ClientPrincipal"/>.
     /// </summary>
-    public static readonly ClientPrincipal Empty = new(string.Empty, string.Empty, string.Empty, Array.Empty<string>(), Array.Empty<Claim>());
+    public static readonly ClientPrincipal Empty = new(string.Empty, string.Empty, string.Empty, string.Empty, Array.Empty<string>(), Array.Empty<Claim>());
 
     /// <summary>
     /// Convert from a base64 encoded string to a <see cref="ClientPrincipal"/>.
@@ -46,8 +47,9 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
 
         var name = string.IsNullOrEmpty(rawPrincipal.name_typ) ? string.Empty : rawPrincipal.claims.FirstOrDefault(_ => _.Type == rawPrincipal.name_typ)?.Value ?? string.Empty;
         var roles = string.IsNullOrEmpty(rawPrincipal.role_typ) ? Enumerable.Empty<string>() : rawPrincipal.claims.Where(_ => _.Type == rawPrincipal.role_typ).Select(_ => _.Value).ToArray();
-        var claims = rawPrincipal.claims?.ToClaims() ?? Enumerable.Empty<Claim>();
-        return new(rawPrincipal.auth_typ, userId ?? string.Empty, name, roles, claims)
+        var claims = rawPrincipal.claims?.ToClaims()?.ToList() ?? new();
+        var issuer = claims.SingleOrDefault(c => c.Type == "iss")?.Value ?? string.Empty;
+        return new(rawPrincipal.auth_typ, issuer, userId ?? string.Empty, name, roles, claims)
         {
             NameType = rawPrincipal.name_typ,
             RoleType = rawPrincipal.role_typ
@@ -60,7 +62,7 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
     /// <returns>A base64 encoded string.</returns>
     public string ToBase64()
     {
-        var rawPrincipal = new RawClientPrincipal(IdentityProvider, string.Empty, string.Empty, Claims.ToRawClaims());
+        var rawPrincipal = new RawClientPrincipal(IdentityProvider, Issuer, string.Empty, string.Empty, Claims.ToRawClaims());
         var json = JsonSerializer.SerializeToUtf8Bytes(rawPrincipal, Globals.JsonSerializerOptions);
         return Convert.ToBase64String(json);
     }
@@ -81,7 +83,7 @@ public record ClientPrincipal(string IdentityProvider, string UserId, string Use
         {
             roleType = Claims.FirstOrDefault(_ => _.Value == UserRoles.First())?.Type ?? string.Empty;
         }
-        return new RawClientPrincipal(IdentityProvider, nameType, roleType, Claims.ToRawClaims());
+        return new RawClientPrincipal(IdentityProvider, Issuer, nameType, roleType, Claims.ToRawClaims());
     }
 
     /// <summary>

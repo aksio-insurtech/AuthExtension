@@ -14,7 +14,7 @@ public class and_route_is_not_impersonate_route_with_supported_identity_provider
 
     void Establish()
     {
-        var rawPrincipal = new RawClientPrincipal("aad", string.Empty, string.Empty, Enumerable.Empty<RawClaim>());
+        var rawPrincipal = new RawClientPrincipal("aad", "iss", string.Empty, string.Empty, Enumerable.Empty<RawClaim>());
         var rawPrincipalAsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(rawPrincipal)));
 
         _httpContext = new();

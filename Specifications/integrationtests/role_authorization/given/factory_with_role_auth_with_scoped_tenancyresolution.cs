@@ -76,6 +76,7 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
     /// </summary>
     /// <param name="requestMessage">The request.</param>
     /// <param name="claimedTenantId">Tenant id to claim.</param>
+    /// <param name="authAudience">The auth audience.</param>
     /// <param name="roles">The list of "roles" claims to add.</param>
     protected void BuildAndSetPrincipalWithTenantClaim(
         HttpRequestMessage requestMessage,
@@ -94,7 +95,7 @@ public class factory_with_role_auth_with_scoped_tenancyresolution : Specificatio
 
         claims.AddRange(roles.Select(r => new RawClaim("roles", r)));
 
-        var principal = new RawClientPrincipal("testprovider", "testuser", "userdetails", claims);
+        var principal = new RawClientPrincipal("aad", "testiss", "testuser", "userdetails", claims);
         var jsonPrincipal = JsonSerializer.Serialize(principal, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
         requestMessage.Headers.Add(Headers.Principal, Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonPrincipal)));

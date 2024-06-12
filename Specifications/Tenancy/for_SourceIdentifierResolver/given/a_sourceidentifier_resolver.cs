@@ -50,7 +50,7 @@ public class a_sourceidentifier_resolver : Specification
             claims.Add(new(ClaimsSourceIdentifier.EntraIdTenantIdClaim, claimedTenantId));
         }
 
-        var principal = new RawClientPrincipal("testprovider", "testuser", "userdetails", claims);
+        var principal = new RawClientPrincipal("testprovider", "iss", "testuser", "userdetails", claims);
         var jsonPrincipal = JsonSerializer.Serialize(principal, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
         httpContext.Request.Headers.Add(Headers.Principal, Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonPrincipal)));

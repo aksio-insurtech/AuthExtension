@@ -14,9 +14,11 @@ public static class JwtSecurityTokenExtensions
     /// Converts a <see cref="JwtSecurityToken"/> to a <see cref="ClientPrincipal"/>.
     /// </summary>
     /// <param name="token"><see cref="JwtSecurityToken"/> to convert.</param>
+    /// <param name="identityProvider">The identity provider.</param>
     /// <returns>Converted <see cref="ClientPrincipal"/>.</returns>
-    public static ClientPrincipal ToClientPrincipal(this JwtSecurityToken token)
+    public static ClientPrincipal ToClientPrincipal(this JwtSecurityToken token, string identityProvider)
         => new(
+            identityProvider,
             token.Issuer,
             token.Subject,
             token.Subject,
