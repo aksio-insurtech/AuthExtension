@@ -110,6 +110,35 @@ public record ClientPrincipal(string IdentityProvider, string Issuer, string Use
             return $"(objectidentifier) {appId}";
         }
 
+        var ssn = Claims.FirstOrDefault(_ => _.Type == "pid")?.Value;
+        if (!string.IsNullOrEmpty(ssn))
+        {
+            return $"(ssn) {AnonymizeSSNForLogging(ssn)}";
+        }
+
+        var nameidentifier = Claims.FirstOrDefault(_ => _.Type.EndsWith("nameidentifier"))?.Value;
+        if (!string.IsNullOrEmpty(nameidentifier))
+        {
+            return $"(nameidentifier) {nameidentifier}";
+        }
+
         return string.Empty;
+    }
+
+    /// <summary>
+    ///     Partially anonymize ssn so that we can log it.
+    /// </summary>
+    /// <param name="socialSecurityNumber">The SSN.</param>
+    /// <returns>SSN with the last five digits replaced with *.</returns>
+    public static string AnonymizeSSNForLogging(string socialSecurityNumber)
+    {
+        if (socialSecurityNumber.Length < 11)
+        {
+            return socialSecurityNumber;
+        }
+
+        var ssn = new StringBuilder(socialSecurityNumber);
+        ssn.Remove(6, 5).Insert(6, "*****");
+        return ssn.ToString();
     }
 }
